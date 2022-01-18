@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "description": "RENTD server-side",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eden1999/RENTD.git"
+  },
+  "keywords": [
+    "RENTD"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eden1999/RENTD/issues"
+  },
+  "homepage": "https://github.com/Eden1999/RENTD#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2"
+  }
+}
