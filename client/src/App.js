@@ -1,9 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import { AxiosInstance } from './Helpers/axios';
+
+const healthCheck = async () => {
+  let res = await AxiosInstance.get(process.env.REACT_APP_SERVER_URL + `health`);
+  alert(res.data)
+}
 
 function App() {
   return (
     <div className="App">
+      <button onClick={() => { healthCheck() }}> health check</button>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

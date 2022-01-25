@@ -13,4 +13,8 @@ router.use('/ratings', ratingsRouter)
 router.use('/orders', ordersRouter)
 router.use('/spacetypes', spacetypesRouter)
 
+router.get('/health', (req, res) => {
+    res.status(200).send('Ok');
+});
+
 module.exports = router
