@@ -1,30 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
-import { AxiosInstance } from './Helpers/axios';
+import { AxiosInstance } from './helpers/axios';
+import ShellView from "./modules/shell/components/ShellView";
 
-const healthCheck = async () => {
-  let res = await AxiosInstance.get(process.env.REACT_APP_SERVER_URL + `health`);
-  alert(res.data)
-}
+// const healthCheck = async () => {
+//   let res = await AxiosInstance.get(process.env.REACT_APP_SERVER_URL + `health`);
+//   alert(res.data)
+// }
 
 function App() {
   return (
     <div className="App">
-      <button onClick={() => { healthCheck() }}> health check</button>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ShellView />
     </div>
   );
 }
