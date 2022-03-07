@@ -1,32 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import { AxiosInstance } from './Helpers/axios';
+import React, {useEffect, useReducer} from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css'
+import { AppContext, reducer } from "./store/AppContext";
+import Login from "./components/UserManagment/Login";
 
-const healthCheck = async () => {
-  let res = await AxiosInstance.get(process.env.REACT_APP_SERVER_URL + `health`);
-  alert(res.data)
-}
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, {isAdmin : false});
 
-function App() {
   return (
-    <div className="App">
-      <button onClick={() => { healthCheck() }}> health check</button>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  <div className="App">
+    <AppContext.Provider value={[state, dispatch]}>
+    <BrowserRouter>
+      <Routes>
+        <Route path='login' element={<Login/>}/>
+      </Routes>
+    </BrowserRouter>
+    </AppContext.Provider>
+  </div>
+  )
 }
 
 export default App;
