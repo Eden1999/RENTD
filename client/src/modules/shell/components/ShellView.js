@@ -1,9 +1,9 @@
-import ShellNavBar from './ShellNavBar';
+import ShellAppBar from './app-bar/ShellAppBar';
 
 function ShellView() {
     return (
         <div>
-            <ShellNavBar />
+            <ShellAppBar />
         </div>
     );
 }
