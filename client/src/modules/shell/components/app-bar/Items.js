@@ -1,7 +1,7 @@
 export default function Items(props) {
     return (
         <div className="hidden sm:block sm:ml-6 self-center">
-            <div className="flex space-x-4">
+            <div className="flex space-x-1">
                 {props.navigation.map((item) => (
                     <a
                         key={item.name}
