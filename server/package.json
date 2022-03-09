@@ -20,11 +20,12 @@
   },
   "homepage": "https://github.com/Eden1999/RENTD#readme",
   "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.10",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "pg": "^8.7.3",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.45"
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.17.0"
   }
 }
