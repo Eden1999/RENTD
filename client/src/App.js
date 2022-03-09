@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
 import { AppContext, reducer } from "./store/AppContext";
 import Login from "./components/UserManagment/Login";
-import { AxiosInstance } from './Helpers/axios';
+import { AxiosInstance } from './helpers/axios';
 import ShellView from "./modules/shell/components/ShellView";
 
 const setToken = (userToken) => {
