@@ -11,6 +11,9 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "env": {
+                "SECRET_KEY": "shhh"
+            },
             "program": "${workspaceFolder}/server/src/index.js"
         }
     ]

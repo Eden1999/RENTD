@@ -1,12 +1,9 @@
 import React, { useState, useCallback, useContext } from "react"
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
-import { AppContext } from "../../store/AppContext";
+import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 
-const Login = (props) => {
-  const navigate = useNavigate();
-  const [ , dispatch] = useContext(AppContext)
+const Login = ({setToken}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -14,18 +11,10 @@ const Login = (props) => {
     const query = {username, password}
 
     axios
-      .get('http://localhost:8000/users/login', {params: query})
+      .post('http://localhost:8000/users/signIn', {params: query})
       .then((res) => {
-        if(res.data.isAdmin) {
-          dispatch({
-            type: "SET_GENERAL_STATE",
-            payload: {
-              username: query.username,
-              isAdmin: true,
-            },
-          })
-
-          navigate('/manage/manageMessages')
+        if(res.data.token) {
+          setToken(res.data.token)
         } else {
           alert("The password you've entered is incorrect! please try again")
         }
@@ -86,5 +75,9 @@ const Login = (props) => {
       </Container>
   )
 }
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired
+};
 
 export default Login;
