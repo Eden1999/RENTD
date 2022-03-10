@@ -1,12 +1,18 @@
+const {sequelize} = require('../config/sequelize');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const getUsersList = (req, res) => {
-
+    sequelize.models.users.findAll().then((user) => {
+        res.send(user).status(200);
+    })
+    .catch((err) => {
+        console.log(err)
+    });
 }
 
 const getUserById = (req, res) => {
-
+    
 }
 
 const registerNewUser = (req, res) => {
