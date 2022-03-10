@@ -4,20 +4,23 @@ import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 import Register from "./Register";
 
-async function loginUser(credentials) {
-  return axios.post('http://localhost:8000/users/signIn', {params: credentials})
-}
- 
 const Login = ({setToken}) => {
   const [registerMode, setRegisterMode] = useState(false)
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = useCallback(async () => {
-    const query = {username, password}
+    const query = {email, password}
 
-    const resToken = await loginUser(query)
-    setToken(resToken.data.token)
+    axios.post('http://localhost:8000/users/signIn', query)
+    .then((res) => {
+        if(res.data.token) {
+            setToken(res.data.token)
+        }
+    })
+    .catch(err =>{
+        alert(err.response.data)
+    })
   })
   
   const handleRegister = useCallback(async () => {
@@ -44,12 +47,12 @@ const Login = ({setToken}) => {
                       margin="normal"
                       required
                       fullWidth
-                      id="username"
-                      label="Username"
-                      name="username"
-                      autoComplete="username"
+                      id="email"
+                      label="email"
+                      name="email"
+                      autoComplete="email"
                       autoFocus
-                      onChange={(event) => setUsername(event.target.value)}
+                      onChange={(event) => setEmail(event.target.value)}
                   />
                   <TextField
                       variant="outlined"

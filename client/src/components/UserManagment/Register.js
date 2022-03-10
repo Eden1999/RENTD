@@ -6,17 +6,16 @@ import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/m
 const Register = ({setToken, setRegisterMode}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
 
     const handleRegister = () => {
-        const query = {username, password}
+        const query = {username, password, email}
 
         axios
-        .post('http://localhost:8000/users/register', {params: query})
+        .post('http://localhost:8000/users/register', query)
         .then((res) => {
             if(res.data.token) {
-            setToken(res.data.token)
-            } else {
-                alert("The password you've entered is incorrect! please try again")
+                setToken(res.data.token)
             }
             setRegisterMode(false)
         })
@@ -39,6 +38,18 @@ const Register = ({setToken, setRegisterMode}) => {
               <Typography component="h1" variant="h5">
                   Register
               </Typography>
+              <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="email"
+                      label="email"
+                      name="email"
+                      autoComplete="enail"
+                      autoFocus
+                      onChange={(event) => setEmail(event.target.value)}
+                  />
                   <TextField
                       variant="outlined"
                       margin="normal"
