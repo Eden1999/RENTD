@@ -7,7 +7,10 @@ module.exports = (sequelize) => {
             primaryKey : true,
             type: DataTypes.BIGINT
         },
-        full_name: {
+        username: {
+            type: DataTypes.STRING
+        },
+        email: {
             type: DataTypes.STRING
         },
         is_host : {

@@ -23,9 +23,10 @@ async function assertDatabaseConnectionOk() {
 
 const app = express()
 app.use(cors())
-app.use(indexRouter)
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(indexRouter)
 
 app.listen(8000, async () => {
     await assertDatabaseConnectionOk()

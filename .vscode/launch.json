@@ -12,7 +12,12 @@
                 "<node_internals>/**"
             ],
             "env": {
-                "SECRET_KEY": "shhh"
+                "SECRET_KEY": "shhh",
+                "PG_DATABASE": "postgres",
+                "PG_HOST": "localhost",
+                "PG_PASSWORD": "shirelronis",
+                "PG_USERNAME": "postgres",
+                "PG_PORT": 5432
             },
             "program": "${workspaceFolder}/server/src/index.js"
         }
