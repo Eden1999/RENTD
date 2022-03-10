@@ -2,32 +2,32 @@ import React, { useState, useCallback, useContext } from "react"
 import axios from 'axios'
 import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
-import Register from "./Register";
 
-async function loginUser(credentials) {
-  return axios.post('http://localhost:8000/users/signIn', {params: credentials})
-}
- 
-const Login = ({setToken}) => {
-  const [registerMode, setRegisterMode] = useState(false)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+const Register = ({setToken, setRegisterMode}) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
-  const handleLogin = useCallback(async () => {
-    const query = {username, password}
+    const handleRegister = () => {
+        const query = {username, password}
 
-    const resToken = await loginUser(query)
-    setToken(resToken.data.token)
-  })
-  
-  const handleRegister = useCallback(async () => {
-    setRegisterMode(true)
-  })
+        axios
+        .post('http://localhost:8000/users/register', {params: query})
+        .then((res) => {
+            if(res.data.token) {
+            setToken(res.data.token)
+            } else {
+                alert("The password you've entered is incorrect! please try again")
+            }
+            setRegisterMode(false)
+        })
+        .catch((err) => {
+            alert(err.response.data)
+        });
+    }
 
   return (          
       <Container component="main" maxWidth="xs">
           <CssBaseline />
-          {registerMode ? <Register setToken={setToken} setRegisterMode={setRegisterMode}/> : null}
           <Box
               sx={{
                   marginTop: 8,
@@ -37,7 +37,7 @@ const Login = ({setToken}) => {
               }}
           >
               <Typography component="h1" variant="h5">
-                  Login
+                  Register
               </Typography>
                   <TextField
                       variant="outlined"
@@ -68,15 +68,6 @@ const Login = ({setToken}) => {
                       variant="contained"
                       color="primary"
                       sx={{ mt: 3, mb: 2 }}
-                      onClick={handleLogin}
-                  >
-                      Login
-                  </Button>
-                  <Button
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      sx={{ mt: 3, mb: 2 }}
                       onClick={handleRegister}
                   >
                       Register
@@ -86,8 +77,9 @@ const Login = ({setToken}) => {
   )
 }
 
-Login.propTypes = {
-  setToken: PropTypes.func.isRequired
+Register.propTypes = {
+  setToken: PropTypes.func.isRequired,
+  setRegisterMode: PropTypes.func.isRequired
 };
 
-export default Login;
+export default Register;

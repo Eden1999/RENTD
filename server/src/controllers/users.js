@@ -10,7 +10,32 @@ const getUserById = (req, res) => {
 }
 
 const registerNewUser = (req, res) => {
+    try {
+        let email = "shirel@gmail.com"
+        let password = "shirelronis"
+        var EnteredPassword = bcrypt.hashSync(password, 10);
 
+        // let query = buildFindQuery(req.query)
+
+        let user = []//[{username: "", EnteredPassword}]
+
+        // TODO: check from db
+        // const data = await client.query(`SELECT * FROM users WHERE email= $1;`, [email]) //Verifying if the user exists in the database
+        // const user = data.rows;
+
+        //TODO: check if user exist
+        if (user.length === 0) {
+            // TODO: sign in for real
+
+            const token = jwt.sign({email}, process.env.SECRET_KEY);
+            res.status(200).send({token})
+        } else {
+            res.status(400).send("User is already exist!");
+        }
+    } catch(err) {
+        console.log('error register user')
+        res.status(err.status || 500).send("error when tring register!")
+    }
 }
 
 const signIn = (req, res) => {
