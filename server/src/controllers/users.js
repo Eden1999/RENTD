@@ -35,8 +35,8 @@ const registerNewUser = async (req, res) => {
                 res.status(400).send("User is already exist!");
             } else {
                 // create new user if not exist
-                sequelize.models.users.create(newUser).then(() => {
-                    const token = jwt.sign({email}, process.env.SECRET_KEY);
+                sequelize.models.users.create(newUser).then((addedNewUser) => {
+                    const token = jwt.sign(addedNewUser.id, process.env.SECRET_KEY);
                     res.status(200).send({token})
                 })
                 .catch((err) => {
@@ -71,7 +71,7 @@ const signIn = async (req, res) => {
                     if (err) {
                         return res.status(500).send("server error")
                     } else if (result === true) { //Checking if credentials match
-                        const token = jwt.sign({email}, process.env.SECRET_KEY);
+                        const token = jwt.sign(user.id, process.env.SECRET_KEY);
                         return res.status(200).send({token})
                     }
                     else {

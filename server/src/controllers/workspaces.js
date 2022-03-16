@@ -1,4 +1,5 @@
 const {sequelize} = require('../config/sequelize');
+const jwt = require("jsonwebtoken");
 
 const getWorkspacesList = (req, res) => {
 
@@ -10,11 +11,13 @@ const getWorkspacesByUserId = (req, res) => {
 }
 
 const createNewWorkspace = (req, res) => {
-    const {name, host_id, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id} = req.body
+    const {token} = req.headers
+    const {name, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id} = req.body
     
+    const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+
     let newWorkspace = {
         name, 
-        host_id,
         location_x, 
         location_y, 
         cost_per_hour, 
@@ -26,14 +29,30 @@ const createNewWorkspace = (req, res) => {
         space_type_id
     }
 
-    sequelize.models.workspaces.create(newWorkspace)
-    .then(() => {
-        return res.status(200).send()
+    // check if user is already exist
+    sequelize.models.users.findOne({ where: {id: decodeId} })
+    .then((user) => {
+        if (user) {
+            newWorkspace.host_id = user.id
+            sequelize.models.workspaces.create(newWorkspace)
+            .then(() => {
+                return res.status(200).send()
+            })
+            .catch((err) => {
+                console.log(err)
+                return res.status(err.status || 500).send(err.message || err.errors[0].message)
+            })
+        } else {
+            let err = 'user not found'
+            console.log(err)
+            return res.status(500).send(err)
+        }
     })
     .catch((err) => {
         console.log(err)
-        return res.status(err.status || 500).send(err.message || err.errors[0].message)
-    })
+        return res.status(err.status || 500).send(err)
+    });
+    
 }
 
 const editWorkspace = (req, res) => {

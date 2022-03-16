@@ -3,7 +3,7 @@ import axios from 'axios'
 import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 
-const NewWorkspace = () => {
+const NewWorkspace = ({token}) => {
     const [errorMessage, setErrorMessage] = useState("erros: ")
   const [name, setName] = useState(null)
   const [host_id, setHostId] = useState(2)
@@ -34,9 +34,13 @@ const NewWorkspace = () => {
 
   const handleSave = useCallback(async () => {
       if (checkUserValidation()) {
-        const query = {name, host_id, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id}
+        const query = {name, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id}
 
-        axios.post('http://localhost:8000/workspaces/create', query)
+        axios.post('http://localhost:8000/workspaces/create', query, {
+            headers: {
+                token
+            }
+        })
         .then((res) => {
             console.log("success")
         })
@@ -114,6 +118,7 @@ const NewWorkspace = () => {
 }
 
 NewWorkspace.propTypes = {
+    token: PropTypes.func.isRequired
 };
 
 export default NewWorkspace;
