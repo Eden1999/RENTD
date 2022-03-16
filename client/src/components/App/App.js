@@ -5,7 +5,9 @@ import { AppContext, reducer } from "../../store/AppContext";
 import Login from "../UserManagment/Login";
 import { AxiosInstance } from '../../helpers/axios';
 import ShellView from "../../modules/shell/components/ShellView";
+import Profile from "../UserManagment/Profile";
 import NewWorkspace from "../WorkspaceManagment/NewWorkspace"
+
 import useToken from './useToken';
 
 const App = () => {
@@ -21,6 +23,7 @@ const App = () => {
     <ShellView />
       <Routes>
         <Route path='manage/newWorkspace' element={<NewWorkspace token={token}/>}/>
+        <Route path='profile' element={<Profile token={token}/>}/>
       </Routes>
     </BrowserRouter>
   </div>
