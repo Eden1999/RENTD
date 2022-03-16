@@ -15,7 +15,7 @@ const NewWorkspace = () => {
   const [wifi, setWifi] = useState(true)
   const [disabled_access, setDisabledAccess] = useState(true)
   const [smoke_friendly, setSmokeFriendly] = useState(true)
-  const [description, setDescription] = useState(true)
+  const [description, setDescription] = useState('')
   const [space_type_id, setSpaceTypeId] = useState(2)
 
   const checkUserValidation = () => {
