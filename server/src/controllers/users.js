@@ -22,7 +22,6 @@ const registerNewUser = async (req, res) => {
 
         // TODO: chnage id and is_host
         let newUser = {
-            id: 2,
             username,
             email,
             is_host: false,

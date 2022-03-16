@@ -58,7 +58,8 @@ ALTER TABLE IF EXISTS public.space_types
 CREATE TABLE IF NOT EXISTS public.users
 (
     id SERIAL,
-    full_name character varying COLLATE pg_catalog."default" NOT NULL,
+    username character varying COLLATE pg_catalog."default" NOT NULL,
+    email character varying COLLATE pg_catalog."default" NOT NULL,
     is_host boolean NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
