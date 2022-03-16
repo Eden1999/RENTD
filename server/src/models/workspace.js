@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
         wifi : {
             type : DataTypes.BOOLEAN
         },
-        diabled_access : {
+        disabled_access : {
             type : DataTypes.BOOLEAN
         },
         space_type_id : {
