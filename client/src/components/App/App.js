@@ -20,7 +20,7 @@ const App = () => {
     <BrowserRouter>
     <ShellView />
       <Routes>
-        <Route path='manage/newWorkspace' element={<NewWorkspace/>}/>
+        <Route path='manage/newWorkspace' element={<NewWorkspace token={token}/>}/>
       </Routes>
     </BrowserRouter>
   </div>
