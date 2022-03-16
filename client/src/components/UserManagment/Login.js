@@ -3,11 +3,17 @@ import axios from 'axios'
 import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 import Register from "./Register";
+import useToken from "../../helpers/useToken";
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from "../../store/AppContext";
 
-const Login = ({setToken}) => {
+const Login = () => {
+  const navigate = useNavigate();
+  const [ , dispatch] = useContext(AppContext)
   const [registerMode, setRegisterMode] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { token, setToken } = useToken();
 
   const handleLogin = useCallback(async () => {
     const query = {email, password}
@@ -17,6 +23,16 @@ const Login = ({setToken}) => {
         if(res.data.token) {
             setToken(res.data.token)
         }
+
+        dispatch({
+            type: "SET_GENERAL_STATE",
+            payload: {
+              user : res.data.user
+            },
+        })
+
+        sessionStorage.setItem('user', JSON.stringify(res.data.user));
+        navigate(res.data.user.is_host ? '/hostHome' : '/guestHome')
     })
     .catch(err =>{
         alert(err.response.data)
@@ -89,8 +105,6 @@ const Login = ({setToken}) => {
   )
 }
 
-Login.propTypes = {
-  setToken: PropTypes.func.isRequired
-};
+Login.propTypes = {};
 
 export default Login;
