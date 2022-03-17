@@ -1,0 +1,11 @@
+.map-marker {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  font-size: large;
+  cursor: pointer;
+}
+
+.hover {
+  background: gray;
+}
