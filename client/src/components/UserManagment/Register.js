@@ -2,8 +2,12 @@ import React, { useState, useCallback, useContext } from "react"
 import axios from 'axios'
 import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
+import { useNavigate } from "react-router";
+import { AppContext } from "../../store/AppContext";
 
 const Register = ({setToken, setRegisterMode}) => {
+    const navigate = useNavigate();
+    const [ , dispatch] = useContext(AppContext)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -17,7 +21,18 @@ const Register = ({setToken, setRegisterMode}) => {
             if(res.data.token) {
                 setToken(res.data.token)
             }
-            setRegisterMode(false)
+
+            dispatch({
+                type: "SET_GENERAL_STATE",
+                payload: {
+                  user : res.data.user
+                },
+            })
+    
+            sessionStorage.setItem('user', JSON.stringify(res.data.user));
+
+            navigate(res.data.user.is_host ? '/hostHome' : '/guestHome')
+
         })
         .catch((err) => {
             alert(err.response.data)

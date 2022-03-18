@@ -12,4 +12,4 @@ export function reducer(
   }
 }
 
-export const AppContext = createContext({isAdmin : false});
+export const AppContext = createContext();

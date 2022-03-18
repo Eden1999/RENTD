@@ -2,8 +2,9 @@ import React, { useState, useCallback, useContext } from "react"
 import axios from 'axios'
 import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
+import useToken from "../../helpers/useToken";
 
-const NewWorkspace = ({token}) => {
+const NewWorkspace = (props) => {
     const [errorMessage, setErrorMessage] = useState("erros: ")
   const [name, setName] = useState(null)
   const [host_id, setHostId] = useState(2)
@@ -17,6 +18,7 @@ const NewWorkspace = ({token}) => {
   const [smoke_friendly, setSmokeFriendly] = useState(true)
   const [description, setDescription] = useState('')
   const [space_type_id, setSpaceTypeId] = useState(2)
+  const { token } = useToken();
 
   const checkUserValidation = () => {
     let errors = '';
@@ -117,8 +119,6 @@ const NewWorkspace = ({token}) => {
   )
 }
 
-NewWorkspace.propTypes = {
-    token: PropTypes.func.isRequired
-};
+NewWorkspace.propTypes = {};
 
 export default NewWorkspace;
