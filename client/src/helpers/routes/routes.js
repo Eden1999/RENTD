@@ -1,4 +1,5 @@
 import Login from "../../components/UserManagment/Login";
+import Profile from "../../components/UserManagment/Profile";
 import Register from "../../components/UserManagment/Register";
 import NewWorkspace from "../../components/WorkspaceManagment/NewWorkspace";
 import { userTypes } from "../consts";
@@ -13,6 +14,11 @@ const routes = [
   {
     path: "/guestHome",
     Component: <div>guestHome</div>,
+    allowed: userTypes.guest
+  },
+  {
+    path: "/profile",
+    Component: <Profile/>,
     allowed: userTypes.guest
   },
   {
