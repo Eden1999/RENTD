@@ -19,6 +19,7 @@ const WorkspacesSearchResults = () => {
     try {
       const query = {};
       const res = await Axios.post("http://localhost:8000/workspaces/search", query);
+      console.log(res.data);
       setWorkspaces(res.data);
     } catch (err) {
       console.log(`Failed to fetch workspaces ${err.message}`);
@@ -51,7 +52,7 @@ const WorkspacesSearchResults = () => {
 
   const onItemClick = useCallback(
     (workspace) => {
-      navigate(`workspaces/${workspace.id}`, { state: { workspace } });
+      navigate(`/workspaces/${workspace.id}`, { state: { workspace } });
     },
     [setHoveredWorkspaceId]
   );

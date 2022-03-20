@@ -94,8 +94,17 @@ const searchWorkspaces = async (req, res) => {
       workspaces.map(async ({ dataValues: workspace }) => {
         const ratings = await sequelize.models.ratings.findAll({
           where: { workspace_id: workspace.id },
+          include: {
+            model: sequelize.models.users,
+          },
         });
-        return { ...workspace, ratings };
+        const host = await sequelize.models.users.findOne({
+          where: { id: workspace.host_id },
+        });
+        const spaceType = await sequelize.models.space_types.findOne({
+          where: { id: workspace.space_type_id },
+        });
+        return { ...workspace, ratings, host, spaceType };
       })
     );
     res.send(workspaces);

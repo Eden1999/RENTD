@@ -3,6 +3,7 @@ import Profile from "../../components/UserManagment/Profile";
 import Register from "../../components/UserManagment/Register";
 import NewWorkspace from "../../components/WorkspaceManagment/NewWorkspace";
 import WorkspacesSearchResults from "../../components/WorkspaceManagment/WorkspacesSearchResults";
+import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
 import { userTypes } from "../consts";
 
 const routes = [
@@ -38,7 +39,7 @@ const routes = [
   },
   {
     path: "/workspaces/:id",
-    Component: <WorkspacesSearchResults />,
+    Component: <WorkspaceDetails />,
     allowed: userTypes.notSigned,
   },
 ];

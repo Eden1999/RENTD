@@ -86,12 +86,12 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     address character varying COLLATE pg_catalog."default" NOT NULL,
     location_x double precision NOT NULL,
     location_y double precision NOT NULL,
-    cost_per_hour numeric NOT NULL DEFAULT 0,
-    capacity numeric NOT NULL,
+    cost_per_hour INTEGER NOT NULL DEFAULT 0,
+    capacity INTEGER NOT NULL,
     description character varying COLLATE pg_catalog."default" NOT NULL,
     wifi boolean,
     disabled_access boolean,
-    space_type_id bigint NOT NULL,
+    space_type_id INTEGER NOT NULL,
     smoke_friendly boolean,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )
