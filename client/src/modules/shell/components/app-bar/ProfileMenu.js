@@ -6,7 +6,7 @@ function classNames(...classes) {
 }
 
 const menuItems = [
-    { name: 'Your Profile', href: '#', active: false },
+    { name: 'Your Profile', href: '/profile', active: false},
     { name: 'Settings', href: '#', active: false },
     { name: 'Sign Out', href: '#', active: false },
 ]
@@ -42,7 +42,7 @@ export default function ProfileMenu() {
                                 key={item.name}>
                                 {({active}) => (
                                     <a
-                                        href="#"
+                                        href={item.href}
                                         className={classNames(active ? 'bg-zinc-600' : '', 'block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white')}
                                     >
                                         {item.name}

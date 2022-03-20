@@ -12,7 +12,31 @@ const getUsersList = (req, res) => {
 }
 
 const getUserById = (req, res) => {
-    
+    const {token} = req.headers
+
+    const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+
+    // check if user is already exist
+    sequelize.models.users.findOne({ where: {id: decodeId} })
+    .then((user) => {
+        if (user) {
+            console.log(`successfuly getting user ${user.id}`)
+
+            let modifiedUser = user.dataValues
+            delete modifiedUser.id
+            delete modifiedUser.password
+
+            return res.status(200).send(modifiedUser)
+        } else {
+            let err = 'user not found'
+            console.log(err)
+            return res.status(500).send(err)
+        }
+    })
+    .catch((err) => {
+        console.log(err)
+        return res.status(err.status || 500).send(err)
+    });
 }
 
 const registerNewUser = async (req, res) => {

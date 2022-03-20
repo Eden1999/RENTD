@@ -5,6 +5,26 @@ const getWorkspacesList = (req, res) => {
 
 }
 
+const getWorkspacesByHostId = (req, res) => {
+    const {hostId} = req.params
+
+    sequelize.models.workspaces.findAll({ where: {host_id: hostId} })
+    .then((workspaces) => {
+        if (workspaces) {
+            workspaces.map(workspace => workspace.dataValues)
+            return res.status(200).send(workspaces)
+        } else {
+            let err = 'workspaces not found'
+            console.log(err)
+            return res.status(500).send(err)
+        }
+    })
+    .catch((err) => {
+        console.log(err)
+        return res.status(err.status || 500).send(err)
+    })
+}
+
 // Should validate the user is host
 const getWorkspacesByUserId = (req, res) => {
 
@@ -63,4 +83,4 @@ const searchWorkspaces = (req, res) => {
 
 }
 
-module.exports = { getWorkspacesList, getWorkspacesByUserId, createNewWorkspace, editWorkspace, searchWorkspaces }
+module.exports = { getWorkspacesList, getWorkspacesByUserId, createNewWorkspace, editWorkspace, searchWorkspaces, getWorkspacesByHostId }
