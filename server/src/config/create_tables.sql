@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     id SERIAL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
     host_id bigint NOT NULL,
+    address character varying COLLATE pg_catalog."default" NOT NULL,
     location_x double precision NOT NULL,
     location_y double precision NOT NULL,
     cost_per_hour numeric NOT NULL DEFAULT 0,
