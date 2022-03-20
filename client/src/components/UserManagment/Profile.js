@@ -45,6 +45,7 @@ const Profile = () => {
                 <br/>
                 <a>password: {user.password}</a>
             </div>
+            {user.is_host && 
             <div className="host-places">
                 <a>My Workspaces</a>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -65,6 +66,29 @@ const Profile = () => {
                     )}
                 </List>
             </div>
+            }
+            {!user.is_host && 
+            <div className="host-places">
+                <a>My Rented Workspaces</a>
+                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                    {workspaces && workspaces.map(workspace => 
+                        <ListItem alignItems="flex-start">
+                        <ListItemAvatar>
+                            <Avatar alt={workspace.name} src={workspace.icon || "/emptyProfileIcon.jpeg"} />
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={workspace.name}
+                            secondary={
+                                <React.Fragment>
+                                    {workspace.description}
+                                </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    )}
+                </List>
+            </div>
+            }
         </div>
     )
 }
