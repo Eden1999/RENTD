@@ -6,6 +6,8 @@ import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 import Avatar from '@mui/material/Avatar';
 import PropTypes from 'prop-types';
 import axios from 'axios'
@@ -45,9 +47,12 @@ const Profile = () => {
                 <br/>
                 <a>password: {user.password}</a>
             </div>
-            {user.is_host && 
+            {!user.is_host && 
             <div className="host-places">
                 <a>My Workspaces</a>
+                <IconButton color="primary">
+  <AddIcon fontSize="large" />
+</IconButton>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                     {workspaces && workspaces.map(workspace => 
                         <ListItem alignItems="flex-start">
