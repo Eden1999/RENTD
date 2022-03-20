@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 import { useNavigate } from "react-router";
 import { AppContext } from "../../store/AppContext";
+import Checkbox from '@mui/material/Checkbox';
 
 const Register = ({setToken, setRegisterMode}) => {
     const navigate = useNavigate();
@@ -11,9 +12,10 @@ const Register = ({setToken, setRegisterMode}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
+    const [isHost, setIsHost] = useState(false)
 
     const handleRegister = () => {
-        const query = {username, password, email}
+        const query = {username, password, email, isHost}
 
         axios
         .post('http://localhost:8000/users/register', query)
@@ -38,6 +40,10 @@ const Register = ({setToken, setRegisterMode}) => {
             alert(err.response.data)
         });
     }
+
+    const handleChaneIsHost = () => [
+        setIsHost(!isHost)
+    ]
 
   return (          
       <Container component="main" maxWidth="xs">
@@ -88,6 +94,12 @@ const Register = ({setToken, setRegisterMode}) => {
                       id="password"
                       autoComplete="current-password"
                       onChange={(event) => setPassword(event.target.value)}
+                  />
+                  <a>are you an host?</a>
+                  <Checkbox
+                    checked={isHost}
+                    onChange={handleChaneIsHost}
+                    inputProps={{ 'aria-label': 'controlled' }}
                   />
                   <Button
                       fullWidth

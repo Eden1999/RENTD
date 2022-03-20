@@ -41,14 +41,14 @@ const getUserById = (req, res) => {
 
 const registerNewUser = async (req, res) => {
     try {
-        const {username, password, email} = req.body
+        const {username, password, email, isHost} = req.body
         var EnteredPassword = bcrypt.hashSync(password, 10);
 
         // TODO: chnage id and is_host
         let newUser = {
             username,
             email,
-            is_host: false,
+            is_host: isHost,
             password: EnteredPassword,
         }
 
