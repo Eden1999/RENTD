@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.users
     email character varying COLLATE pg_catalog."default" NOT NULL,
     is_host boolean NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
+    photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id),
     UNIQUE(username),
     UNIQUE(email)
@@ -83,6 +84,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     id SERIAL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
     host_id bigint NOT NULL,
+    city character varying COLLATE pg_catalog."default" NOT NULL,
     address character varying COLLATE pg_catalog."default" NOT NULL,
     location_x double precision NOT NULL,
     location_y double precision NOT NULL,
@@ -93,6 +95,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     disabled_access boolean,
     space_type_id INTEGER NOT NULL,
     smoke_friendly boolean,
+    photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )
 

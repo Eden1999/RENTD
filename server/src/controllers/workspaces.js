@@ -31,6 +31,8 @@ const createNewWorkspace = (req, res) => {
   const { token } = req.headers;
   const {
     name,
+    city,
+    address,
     location_x,
     location_y,
     cost_per_hour,
@@ -40,12 +42,15 @@ const createNewWorkspace = (req, res) => {
     smoke_friendly,
     description,
     space_type_id,
+    photo,
   } = req.body;
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
   let newWorkspace = {
     name,
+    city,
+    address,
     location_x,
     location_y,
     cost_per_hour,
@@ -55,6 +60,7 @@ const createNewWorkspace = (req, res) => {
     smoke_friendly,
     description,
     space_type_id,
+    photo,
   };
 
   // check if user is already exist

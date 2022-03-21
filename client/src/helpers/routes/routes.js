@@ -19,8 +19,8 @@ const routes = [
   },
   {
     path: "/profile",
-    Component: <Profile/>,
-    allowed: userTypes.guest
+    Component: <Profile />,
+    allowed: userTypes.guest,
   },
   {
     path: "/hostHome",
