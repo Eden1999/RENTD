@@ -96,6 +96,18 @@ CREATE TABLE IF NOT EXISTS public.workspaces
 
 TABLESPACE pg_default;
 
+CREATE TABLE IF NOT EXISTS public.availabilities
+(
+    id SERIAL,
+    startDate timestamp,
+    endDate timestamp,
+    available boolean,
+    workspace_id bigint,
+    user_id bigint
+)
+
+TABLESPACE pg_default;
+
 ALTER TABLE IF EXISTS public.workspaces
     OWNER to postgres;
 
