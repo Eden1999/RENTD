@@ -99,11 +99,13 @@ TABLESPACE pg_default;
 CREATE TABLE IF NOT EXISTS public.availabilities
 (
     id SERIAL,
-    startDate timestamp,
-    endDate timestamp,
+    user_id bigint NOT NULL,
     available boolean,
-    workspace_id bigint,
-    user_id bigint
+    capacity bigint,
+    workspace_id bigint NOT NULL,
+    startDate timestamp with time zone NOT NULL,
+    endDate timestamp with time zone NOT NULL,
+    CONSTRAINT availabilities_pkey PRIMARY KEY (id)
 )
 
 TABLESPACE pg_default;
