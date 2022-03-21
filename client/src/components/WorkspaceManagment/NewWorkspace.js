@@ -22,6 +22,7 @@ const NewWorkspace = (props) => {
     const [description, setDescription] = useState('')
     const [space_type_id, setSpaceTypeId] = useState(2)
     const { token } = useToken();
+    const []
 
     const checkUserValidation = () => {
         let errors = '';
