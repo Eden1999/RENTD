@@ -16,6 +16,20 @@ const Profile = () => {
     // name, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id
     const [{ user }] = useContext(AppContext);
     const [workspaces, setWorkspaces] = useState([])
+    const [date, setDate] = useState(new Date)
+
+    const getWorkspaceAvailabilities = async () => {
+        await axios.get(`http://localhost:8000/availabilities/${user.id}?date=${date}`, {
+        })
+        .then((res) => {
+            console.log("success")
+            setWorkspaces(res.data)
+        })
+        .catch(err =>{
+            alert(err.response.data)
+            setWorkspaces({})
+        })
+    }
 
     const getHostWorkspaces = async () => {
             await axios.get(`http://localhost:8000/workspaces/hosts/${user.id}`, {
@@ -32,7 +46,9 @@ const Profile = () => {
 
     useEffect(() => {
         getHostWorkspaces()
+        // getWorkspaceAvailabilities()
     }, [])
+    
 
     return (
         <div>
