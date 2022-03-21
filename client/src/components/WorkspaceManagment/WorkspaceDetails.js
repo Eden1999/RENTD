@@ -31,8 +31,8 @@ const WorkspaceDetails = () => {
         </div>
         <div className="location">{workspace.location}</div>
       </div>
-      <div className="image">
-        <img src="https://i.pinimg.com/originals/59/b9/b2/59b9b2c1e4e04d3dda1f6d65f93e61d1.jpg" />
+      <div className="photo">
+        <img src={workspace.photo} />
       </div>
       <div className="space-type">
         <h2>
@@ -79,15 +79,20 @@ const WorkspaceDetails = () => {
           <div className="reviews">
             {workspace.ratings.map((rating) => (
               <div key={rating.id} className="review">
-                <div className="user">
-                  <h2>{rating.user.username}</h2>
+                <div className="user-photo">
+                  <img src={rating.user.photo} />
                 </div>
-                <div className="rating">
-                  <Star fontSize="14px" />
-                  <span>{rating.rating}</span>
-                </div>
-                <div className="description">
-                  <span>{rating.comment}</span>
+                <div className="review-content">
+                  <div className="user">
+                    <h2>{rating.user.username}</h2>
+                  </div>
+                  <div className="rating">
+                    <Star fontSize="14px" />
+                    <span>{rating.rating}</span>
+                  </div>
+                  <div className="description">
+                    <span>{rating.comment}</span>
+                  </div>
                 </div>
               </div>
             ))}

@@ -125,8 +125,8 @@ const WorkspacesSearchResults = () => {
               onMouseLeave={onItemStopHover}
               onClick={() => onItemClick(workspace)}
             >
-              <div className="image">
-                <img src={workspace.image} />
+              <div className="photo">
+                <img src={workspace.photo} />
               </div>
               <div className="item-content">
                 <div className="title">
