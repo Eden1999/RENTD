@@ -194,6 +194,18 @@ const NewWorkspace = (props) => {
           margin="normal"
           required
           fullWidth
+          name="capacity"
+          label="capacity"
+          type="capacity"
+          id="capacity"
+          autoComplete="capacity"
+          onChange={(event) => setCapacity(event.target.value)}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
           name="cost per hour"
           label="how much do you take per hour?"
           type="cost per hour"
