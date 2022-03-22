@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     disabled_access boolean,
     space_type_id bigint NOT NULL,
     smoke_friendly boolean,
+    opening_days boolean[] COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )
 
