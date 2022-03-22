@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.ratings
     id bigint NOT NULL,
     workspace_id bigint NOT NULL,
     user_id bigint NOT NULL,
-    rating numeric NOT NULL,
+    rating INTEGER NOT NULL,
     comment character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT ratings_pkey PRIMARY KEY (id)
 )
@@ -39,7 +39,7 @@ ALTER TABLE IF EXISTS public.ratings
 
 CREATE TABLE IF NOT EXISTS public.space_types
 (
-    id bigint NOT NULL,
+    id SERIAL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT space_types_pkey PRIMARY KEY (id)
 )
@@ -62,7 +62,10 @@ CREATE TABLE IF NOT EXISTS public.users
     email character varying COLLATE pg_catalog."default" NOT NULL,
     is_host boolean NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT users_pkey PRIMARY KEY (id)
+    photo character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    UNIQUE(username),
+    UNIQUE(email)
 )
 
 TABLESPACE pg_default;
@@ -81,17 +84,19 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     id SERIAL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
     host_id bigint NOT NULL,
+    city character varying COLLATE pg_catalog."default" NOT NULL,
     address character varying COLLATE pg_catalog."default" NOT NULL,
     location_x double precision NOT NULL,
     location_y double precision NOT NULL,
-    cost_per_hour numeric NOT NULL DEFAULT 0,
-    capacity numeric NOT NULL,
+    cost_per_hour INTEGER NOT NULL DEFAULT 0,
+    capacity INTEGER NOT NULL,
     description character varying COLLATE pg_catalog."default" NOT NULL,
     wifi boolean,
     disabled_access boolean,
-    space_type_id bigint NOT NULL,
+    space_type_id INTEGER NOT NULL,
     smoke_friendly boolean,
     opening_days boolean[] COLLATE pg_catalog."default" NOT NULL,
+    photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )
 
@@ -151,12 +156,12 @@ ALTER TABLE IF EXISTS public.ratings
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
--- Constraint: worspace_id
+-- Constraint: workspace_id
 
--- ALTER TABLE IF EXISTS public.ratings DROP CONSTRAINT IF EXISTS worspace_id;
+-- ALTER TABLE IF EXISTS public.ratings DROP CONSTRAINT IF EXISTS workspace_id;
 
 ALTER TABLE IF EXISTS public.ratings
-    ADD CONSTRAINT worspace_id FOREIGN KEY (workspace_id)
+    ADD CONSTRAINT workspace_id FOREIGN KEY (workspace_id)
     REFERENCES public.workspaces (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION

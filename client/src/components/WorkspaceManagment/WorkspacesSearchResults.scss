@@ -1,0 +1,124 @@
+.workspaces-search-main {
+  .content {
+    min-height: calc(100vh - 80px);
+    width: 45%;
+    padding-left: 24px;
+    padding-top: 60px;
+
+    .workspaces-count {
+      text-align: left;
+
+      h2 {
+        font-size: 20px;
+        font-family: "Circular";
+        margin: 10px 0 15px;
+        font-weight: 400;
+        color: #222222;
+      }
+    }
+
+    .filters {
+      padding-top: 15px;
+      margin-bottom: 25px;
+
+      button {
+        margin-right: 5px;
+        padding: 8px 16px;
+        outline: none;
+        background: transparent;
+
+        &.outlined {
+          border: 1px solid #b0b0b0;
+        }
+
+        &.curved {
+          border-radius: 30px;
+        }
+
+        &:hover {
+          border-color: #222;
+        }
+
+        &[aria-checked="true"] {
+          border-color: #000;
+          background: #dddddd;
+        }
+      }
+    }
+
+    .workspaces .item {
+      border-top: 1px solid #ebebeb;
+      padding: 24px 0;
+      display: flex;
+      background: grey;
+      cursor: pointer;
+
+      &.hover {
+        background: #eeeeee;
+      }
+
+      .photo {
+        width: 300px;
+        height: 200px;
+        margin-left: 10px;
+        border-radius: 10px;
+        overflow: hidden;
+
+        img {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .item-content {
+        width: calc(100% - 300px);
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+
+        h2 {
+          text-align: left;
+          font-size: 18px;
+          font-family: "Circular Book";
+          margin: 5px 0 15px;
+          font-weight: 400;
+        }
+      }
+
+      .details {
+        display: flex;
+        justify-content: space-between;
+        margin-top: auto;
+      }
+
+      .rating {
+        display: flex;
+        margin-top: auto;
+
+        span {
+          font-family: "Circular Medium";
+        }
+      }
+
+      .price {
+        margin-right: 15px;
+      }
+    }
+
+    .separator {
+      width: 48px;
+      height: 2px;
+      background: #ebebeb5e;
+    }
+  }
+
+  .map {
+    width: 50%;
+    height: 93%;
+    position: absolute;
+    right: 0;
+    top: 7%;
+    bottom: 0;
+  }
+}
