@@ -43,7 +43,18 @@ const createNewWorkspace = (req, res) => {
     description,
     space_type_id,
     photo,
+    opening_days,
+    opening_hour,
+    closing_hour
   } = req.body;
+
+  // let openingDate = new Date(opening_hour)
+  // let openingHour = date.getHours()
+  // let openingMinutes = date.getMinutes()
+
+  // let closingDate = new Date(closing_hour)
+  // let closingHour = date.getHours()
+  // let closingMinutes = date.getMinutes()
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
@@ -61,6 +72,9 @@ const createNewWorkspace = (req, res) => {
     description,
     space_type_id,
     photo,
+    opening_days,
+    opening_hour,
+    closing_hour
   };
 
   // check if user is already exist

@@ -95,8 +95,25 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     disabled_access boolean,
     space_type_id INTEGER NOT NULL,
     smoke_friendly boolean,
+    opening_days boolean[] COLLATE pg_catalog."default" NOT NULL,
+    opening_hour character varying,
+    closing_hour character varying,
     photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+CREATE TABLE IF NOT EXISTS public.availabilities
+(
+    id SERIAL,
+    user_id bigint NOT NULL,
+    available boolean,
+    capacity bigint,
+    workspace_id bigint NOT NULL,
+    startDate timestamp with time zone NOT NULL,
+    endDate timestamp with time zone NOT NULL,
+    CONSTRAINT availabilities_pkey PRIMARY KEY (id)
 )
 
 TABLESPACE pg_default;
