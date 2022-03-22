@@ -22,7 +22,7 @@ const NewWorkspace = (props) => {
     const [description, setDescription] = useState('')
     const [space_type_id, setSpaceTypeId] = useState(2)
     const { token } = useToken();
-    const []
+    const [opening_days, setOpeningDays] = useState([false,false,false,false,false,false,false])
 
     const checkUserValidation = () => {
         let errors = '';
@@ -40,7 +40,7 @@ const NewWorkspace = (props) => {
 
     const handleSave = useCallback(async () => {
         if (checkUserValidation()) {
-          const query = {name, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id}
+          const query = {name, location_x, location_y, cost_per_hour, capacity, wifi, disabled_access, smoke_friendly, description, space_type_id, opening_days}
 
           axios.post('http://localhost:8000/workspaces/create', query, {
               headers: {
@@ -68,6 +68,10 @@ const NewWorkspace = (props) => {
 
     const HandleChangeSmokeFriendly = () => {
         setSmokeFriendly(!smoke_friendly)
+    }
+
+    const HandleChangeOpeningDays = (dayNumber) => {
+        setOpeningDays(opening_days[dayNumber] = !opening_days[dayNumber])
     }
 
     return (          
@@ -149,6 +153,37 @@ const NewWorkspace = (props) => {
                     <Checkbox
                       checked={smoke_friendly}
                       onChange={HandleChangeSmokeFriendly}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    <a>set opening days</a>
+                    <a>sunday</a>
+                    <Checkbox
+                      checked={smoke_friendly}
+                      onChange={HandleChangeOpeningDays}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    <a>monday</a>
+                    <Checkbox
+                      checked={smoke_friendly}
+                      onChange={HandleChangeOpeningDays}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    <a>tuesday</a>
+                    <Checkbox
+                      checked={smoke_friendly}
+                      onChange={HandleChangeOpeningDays}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    <a>wednesday</a>
+                    <Checkbox
+                      checked={smoke_friendly}
+                      onChange={HandleChangeOpeningDays}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    <a>sunday</a>
+                    <Checkbox
+                      checked={smoke_friendly}
+                      onChange={HandleChangeOpeningDays}
                       inputProps={{ 'aria-label': 'controlled' }}
                     />
                     <Button
