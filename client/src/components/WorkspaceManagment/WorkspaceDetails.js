@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Star, Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
+import Orders from "./Orders";
 
 import "./WorkspaceDetails.scss";
 
@@ -34,11 +35,12 @@ const WorkspaceDetails = () => {
       <div className="photo">
         <img src={workspace.photo} />
       </div>
-      <div className="space-type">
-        <h2>
-          {workspace.spaceType.name} hosted by {workspace.host.username}
-        </h2>
-      </div>
+      {workspace.spaceType && 
+        <div className="space-type">
+          <h2>
+            {workspace.spaceType.name} hosted by {workspace.host.username}
+          </h2>
+        </div>}
       <div className="capacity">
         <h3>Total of {workspace.capacity} spots</h3>
       </div>
@@ -99,6 +101,8 @@ const WorkspaceDetails = () => {
           </div>
         </>
       )}
+      <a>rent</a>
+      <Orders></Orders>
     </div>
   );
 };
