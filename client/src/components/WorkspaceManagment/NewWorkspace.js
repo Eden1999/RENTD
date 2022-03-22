@@ -1,10 +1,16 @@
 import React, { useState, useCallback, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "../../store/AppContext";
-import PropTypes from "prop-types";
+import PropTypes, { checkPropTypes } from "prop-types";
 import { Container, CssBaseline, Box, Typography, TextField, Button } from "@mui/material";
 import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
+
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+// import TimePicker from '@mui/lab/TimePicker';
+
+import TimePicker from 'react-time-picker';
 
 const NewWorkspace = (props) => {
   const [{ user }] = useContext(AppContext);
@@ -24,7 +30,9 @@ const NewWorkspace = (props) => {
   const [photo, setPhoto] = useState("");
   const [space_type_id, setSpaceTypeId] = useState(1);
   const { token } = useToken();
-  const [opening_days, setOpeningDays] = useState([false,false,false,false,false,false,false])
+  const [opening_days, setOpeningDays] = useState([false, false, false, false, false, false, false])
+  const [opening_hour, setOpeningHour] = useState('10:00');
+  const [closing_hour, setClosingHour] = useState('23:00');
 
   const checkUserValidation = () => {
     let errors = "";
@@ -56,6 +64,9 @@ const NewWorkspace = (props) => {
         description,
         space_type_id,
         photo,
+        opening_days,
+        opening_hour,
+        closing_hour
       };
 
       axios
@@ -87,9 +98,14 @@ const NewWorkspace = (props) => {
     setSmokeFriendly(!smoke_friendly);
   };
 
-  const HandleChangeOpeningDays = (dayNumber) => {
-    opening_days[dayNumber] = !opening_days[dayNumber]
-    setOpeningDays(opening_days)
+  const HandleChangeOpeningDays = ({target: {checked, id}}) => {
+    let newArray = [...opening_days]
+    newArray[id] = checked
+    setOpeningDays(newArray)
+  //   setOpeningDays(opening_days=>({
+  //     ...opening_days,
+  //     [id]: checked
+  //  }))
   }
 
   const convertToBase64 = (file) => {
@@ -205,36 +221,63 @@ const NewWorkspace = (props) => {
           inputProps={{ "aria-label": "controlled" }}
         />
         <a>set opening days</a>
-                    <a>sunday</a>
-                    <Checkbox
-                      checked={smoke_friendly}
-                      onChange={HandleChangeOpeningDays}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                    <a>monday</a>
-                    <Checkbox
-                      checked={smoke_friendly}
-                      onChange={HandleChangeOpeningDays}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                    <a>tuesday</a>
-                    <Checkbox
-                      checked={smoke_friendly}
-                      onChange={HandleChangeOpeningDays}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                    <a>wednesday</a>
-                    <Checkbox
-                      checked={smoke_friendly}
-                      onChange={HandleChangeOpeningDays}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                    <a>sunday</a>
-                    <Checkbox
-                      checked={smoke_friendly}
-                      onChange={HandleChangeOpeningDays}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
+        <a>sunday</a>
+        <Checkbox
+          checked={opening_days[0]}
+          id={0}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>monday</a>
+        <Checkbox
+          checked={opening_days[1]}
+          id={1}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>tuesday</a>
+        <Checkbox
+          checked={opening_days[2]}
+          id={2}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>wednesday</a>
+        <Checkbox
+          checked={opening_days[3]}
+          id={3}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>thursday</a>
+        <Checkbox
+          checked={opening_days[4]}
+          id={4}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>friday</a>
+        <Checkbox
+          checked={opening_days[5]}
+          id={5}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>saturday</a>
+        <Checkbox
+          checked={opening_days[6]}
+          id={6}
+          onChange={HandleChangeOpeningDays}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <a>set hours</a>
+          <a>opening hour</a>
+          <TimePicker
+            onChange={setOpeningHour}
+            value={opening_hour}/>
+          <TimePicker
+            onChange={setClosingHour}
+            value={closing_hour}/>
         <input
           type="file"
           label="Photo"

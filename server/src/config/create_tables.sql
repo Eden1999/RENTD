@@ -96,6 +96,8 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     space_type_id INTEGER NOT NULL,
     smoke_friendly boolean,
     opening_days boolean[] COLLATE pg_catalog."default" NOT NULL,
+    opening_hour character varying,
+    closing_hour character varying,
     photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )
