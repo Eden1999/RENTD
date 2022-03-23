@@ -102,7 +102,9 @@ const WorkspaceDetails = () => {
         </>
       )}
       <a>rent</a>
-      <Orders></Orders>
+      <Orders
+        workspace={workspace}
+      />
     </div>
   );
 };

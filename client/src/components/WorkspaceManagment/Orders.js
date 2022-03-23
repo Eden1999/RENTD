@@ -5,25 +5,40 @@ import Paper from '@mui/material/Paper';
 import {
   Scheduler,
   DayView,
+  Toolbar,
+  DateNavigator,
+  TodayButton,
   Appointments,
   AppointmentTooltip,
 } from '@devexpress/dx-react-scheduler-material-ui';
+import { ViewState } from '@devexpress/dx-react-scheduler';
 
-const Orders = ({date, workspace}) => {
+const convertHourToFloat = (dateString) => {
+    let hour = parseInt(dateString.split(':')[0])
+    let minutes = parseInt(dateString.split(':')[1])
+
+    let minutesFloat = parseFloat(minutes) / 60
+
+    let time = hour + minutesFloat
+
+    return time
+}
+
+const Orders = ({workspace}) => {
     const [orders, setOrders] = useState([])
 
-    const getOrdersForWorkspace = async () => {
-        await axios.get(`http://localhost:8000/availabilities:${workspace.id}?${date}`, {
-        })
-        .then((res) => {
-            console.log("success")
-            setOrders(res.data)
-        })
-        .catch(err =>{
-            alert(err.response.data)
-            setOrders({})
-        })
-    }
+    // const getOrdersForWorkspace = async () => {
+    //     await axios.get(`http://localhost:8000/availabilities:${workspace.id}?${date}`, {
+    //     })
+    //     .then((res) => {
+    //         console.log("success")
+    //         setOrders(res.data)
+    //     })
+    //     .catch(err =>{
+    //         alert(err.response.data)
+    //         setOrders({})
+    //     })
+    // }
 
     useEffect(() => {
         // getOrdersForWorkspace(workspaceId)
@@ -31,14 +46,20 @@ const Orders = ({date, workspace}) => {
 
     return (
         <Paper>
-        <Scheduler data={orders}>
-        <DayView
-            startDayHour={8}
-            endDayHour={13}
-        />
-        <Appointments />
-        <AppointmentTooltip />
-        </Scheduler>
+            <Scheduler data={orders}>
+            <ViewState
+                defaultCurrentDate={new Date()}
+            />
+            <DayView
+                startDayHour={convertHourToFloat(workspace.opening_hour)}
+                endDayHour={convertHourToFloat(workspace.closing_hour)}
+            />
+            <Toolbar />
+            <DateNavigator />
+            <TodayButton />
+            <Appointments />
+            <AppointmentTooltip />
+            </Scheduler>
         </Paper>
     )
 }
