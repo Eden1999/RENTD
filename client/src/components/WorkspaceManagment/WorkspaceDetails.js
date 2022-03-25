@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Star, Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
-import Orders from "./Orders";
+import Orders from "./Orders/Orders";
 
 import "./WorkspaceDetails.scss";
 
@@ -101,10 +101,11 @@ const WorkspaceDetails = () => {
           </div>
         </>
       )}
-      <a>rent</a>
-      <Orders
-        workspace={workspace}
-      />
+      <div>
+        <Orders
+          workspace={workspace}
+        />
+      </div>
     </div>
   );
 };
