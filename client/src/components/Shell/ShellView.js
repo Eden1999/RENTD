@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import ProtectedRoute from '../../../helpers/routes/ProtectedRoute';
-import routes from '../../../helpers/routes/routes';
-import ShellAppBar from './app-bar/ShellAppBar';
+import ProtectedRoute from '../../helpers/routes/ProtectedRoute';
+import routes from '../../helpers/routes/routes';
+import ShellAppBar from './AppBar/ShellAppBar';
 
 function ShellView() {
     return (
