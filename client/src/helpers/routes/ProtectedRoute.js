@@ -4,8 +4,8 @@ import { AppContext } from "../../store/AppContext";
 import { defaultRoutes, userTypes } from "../consts";
 import useToken from '../useToken';
 
-const classifyUser = (token, user) => {
-    if(token && Object.keys(user).length) {
+const classifyUser = (user) => {
+    if(Object.keys(user).length) {
         return user?.is_host ? userTypes.host : userTypes.guest
     } else {
         return userTypes.notSigned;
@@ -13,14 +13,13 @@ const classifyUser = (token, user) => {
 }
 
 const ProtectedRoute = (props) => {
-    const { token } = useToken();
     const [{ user }] = useContext(AppContext);
     const {allowedUserType } = props;
 
 
-    return classifyUser(token, user) === allowedUserType ? 
+    return allowedUserType.includes(classifyUser(user)) ? 
             <Outlet /> : 
-            <Navigate to={defaultRoutes[classifyUser(token, user)]}/>;
+            <Navigate to={defaultRoutes[classifyUser(user)]}/>;
 }
 
 ProtectedRoute.propTypes = {}

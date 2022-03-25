@@ -10,37 +10,37 @@ const routes = [
   {
     path: "/login",
     Component: <Login />,
-    allowed: userTypes.notSigned,
+    allowed: [userTypes.notSigned],
   },
   {
     path: "/guestHome",
     Component: <div>guestHome</div>,
-    allowed: userTypes.guest,
+    allowed: [userTypes.guest],
   },
   {
     path: "/profile",
     Component: <Profile />,
-    allowed: userTypes.guest,
+    allowed: [userTypes.guest, userTypes.host],
   },
   {
     path: "/hostHome",
     Component: <div>hostHome</div>,
-    allowed: userTypes.host,
+    allowed: [userTypes.host],
   },
   {
     path: "/manage/newWorkspace",
     Component: <NewWorkspace />,
-    allowed: userTypes.host,
+    allowed: [userTypes.host],
   },
   {
     path: "/search",
     Component: <WorkspacesSearchResults />,
-    allowed: userTypes.notSigned,
+    allowed: [userTypes.notSigned],
   },
   {
     path: "/workspaces/:id",
     Component: <WorkspaceDetails />,
-    allowed: userTypes.notSigned,
+    allowed: [userTypes.notSigned],
   },
 ];
 
