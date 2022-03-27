@@ -7,6 +7,7 @@ function ShellView() {
     return (
         <div>
             <BrowserRouter>
+                <div className={'h-screen flex flex-col bg-zinc-700'}>
                     <ShellAppBar />
                     <Routes>
                         { routes.map((route) => {
@@ -18,6 +19,7 @@ function ShellView() {
                         })}
                         <Route path="*" element={<Navigate to="/login" replace />} />
                     </Routes>
+                </div>
             </BrowserRouter>
         </div>
     );

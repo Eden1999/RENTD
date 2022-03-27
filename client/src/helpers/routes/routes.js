@@ -2,7 +2,7 @@ import Login from "../../components/UserManagment/Login";
 import Profile from "../../components/UserManagment/Profile";
 import Register from "../../components/UserManagment/Register";
 import NewWorkspace from "../../components/WorkspaceManagment/NewWorkspace";
-import WorkspacesSearchResults from "../../components/WorkspaceManagment/WorkspacesSearchResults";
+import WorkspacesView from "../../components/WorkspaceManagment/WorkspacesView";
 import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
 import { userTypes } from "../consts";
 
@@ -34,13 +34,13 @@ const routes = [
   },
   {
     path: "/search",
-    Component: <WorkspacesSearchResults />,
+    Component: <WorkspacesView />,
     allowed: [userTypes.notSigned, userTypes.guest],
   },
   {
     path: "/workspaces/:id",
     Component: <WorkspaceDetails />,
-    allowed: [userTypes.notSigned, userTypes.guest],
+    allowed: [userTypes.notSigned],
   },
 ];
 
