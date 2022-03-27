@@ -58,32 +58,55 @@ const Orders = ({workspace}) => {
 
     axios.post('http://localhost:8000/orders/create', query)
     .then((res) => {
-        // if(res.data.token) {
-        //     setToken(res.data.token)
-        // }
+      console.log(res)
+      let newArray = orders
+      newArray[newArray.length - 1].id = res.data.id
+      setOrders(newArray)
+      // res.data.id
+        // TODO: SOME COGO TOAST?
+    })
+    .catch(err =>{
+      //TODO: DO NOT SAVE
+        alert(err.response.data)
+    })
+  })
 
-        // dispatch({
-        //     type: "SET_GENERAL_STATE",
-        //     payload: {
-        //       user : res.data.user
-        //     },
-        // })
+  const HandalingUpdateOrder = useCallback(async (e) => {
+    let newOrder = {
+      startdate: e.appointmentData.startDate,
+      enddate: e.appointmentData.endDate,
+      capacity: e.appointmentData.capacity,
+      user_id: user.id,
+      workspace_id: workspace.id,
+      id: e.appointmentData.id
+    }
+    
+    console.log(newOrder)
 
-        // sessionStorage.setItem('user', JSON.stringify(res.data.user));
-        // navigate(res.data.user.is_host ? '/hostHome' : '/guestHome')
+    const query = newOrder
+
+    axios.put(`http://localhost:8000/orders/${newOrder.id}`, query)
+    .then((res) => {
+        console.log('successfully updates')
     })
     .catch(err =>{
         alert(err.response.data)
     })
   })
 
-  const HandalingUpdateOrder = (e) => {
-    // add order
-  }
+  const HandalingDeleteOrder = useCallback(async (e) => {
+    let id = e.appointmentData.id
+    
+    console.log(`try delete id ${id}`)
 
-  const HandalingDeleteOrder = (e) => {
-    // add order
-  }
+    axios.delete(`http://localhost:8000/orders/${id}`)
+    .then((res) => {
+        console.log('successfully deleted')
+    })
+    .catch(err =>{
+        alert(err.response.data)
+    })
+  })
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
