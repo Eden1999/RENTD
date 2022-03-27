@@ -1,26 +1,20 @@
-import React from 'react';
-import Query from 'devextreme/data/query';
+import React, { useContext } from 'react';
 import './styles.css'
-
-// import {formatDate} from 'devextreme/localization';
-import { ordersData } from './data.js';
-
-function getOrderById(id) {
-  return Query(ordersData).filter(['id', id]).toArray()[0];
-}
+import { AppContext } from "../../../store/AppContext"
 
 const Appointment = (model) => {
   const { targetedAppointmentData } = model.data;
-
-  const orderData = getOrderById(targetedAppointmentData.id) || {};
+  const [{ user }] = useContext(AppContext);
 
   return (
     <div className="showtime-preview">
-      <div> {orderData.text}</div>
+      {/* <div> {orderData.text}</div> */}
       <div>
         capacity: <strong>{ targetedAppointmentData.capacity }</strong>
-        userName
-        user phone
+        <br/>
+        userName: <strong>{ user.username }</strong>
+        <br/>
+        user phone: <strong>{ user.phone }</strong>
       </div>
     </div>
   );

@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import Query from 'devextreme/data/query';
+// import Query from 'devextreme/data/query';
 
-import { ordersData } from './data.js';
 import './styles.css'
 import PropTypes from 'prop-types';
 
 import Appointment from './Appointment.js';
 
 
-function getOrdersById(id) {
-  return Query(ordersData).filter(['id', id]).toArray()[0];
-}
+// function getOrdersById(id) {
+//   return Query(ordersData).filter(['id', id]).toArray()[0];
+// }
 
 const AppointmentTooltip = ({orderData}) => {
-  const [order, setOrder] = useState(getOrdersById(orderData.id))
+  const [order, setOrder] = useState({})
 
   return (
     <div className="movie-tooltip">

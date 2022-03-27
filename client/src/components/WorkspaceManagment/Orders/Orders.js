@@ -1,23 +1,15 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
-import Query from 'devextreme/data/query';
 import axios from 'axios'
 
 import { AppContext } from "../../../store/AppContext"
 import AppointmentTooltip from './AppointmentTooltip.js';
-import { ordersData } from './data.js';
 import Appointment from './Appointment.js';
 
 import './styles.css'
 
 const views = ['day', 'week'];
 const groups = ['theatreId'];
-
-
-
-const getOrderById = (id) => {
-  return Query(ordersData).filter(['id', id]).toArray()[0];
-}
 
 const convertHourToFloat = (dateString) => {
   let hour = parseInt(dateString.split(':')[0])
@@ -130,7 +122,6 @@ const Orders = ({workspace}) => {
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
-    let orderInfo = getOrderById(e.appointmentData.id) || {};
     let { startDate, endDate, userName } = e.appointmentData;
 
     form.option('items', [
@@ -141,7 +132,7 @@ const Orders = ({workspace}) => {
         name: 'userName',
         editorType: 'dxTextBox',
         editorOptions: {
-          value: orderInfo.userName || 'shirel',
+          value: user.username || 'shirel',
           readOnly: true
       },
       }, {
