@@ -7,14 +7,23 @@ module.exports = (sequelize) => {
             primaryKey : true,
             type: DataTypes.BIGINT
         },
-        user_id: {
-            type: DataTypes.BIGINT
+        startdate: {
+            type: DataTypes.TIME
+        },
+        enddate: {
+            type: DataTypes.TIME
+        },
+        available : {
+            type: DataTypes.BOOLEAN
+        },
+        capacity: {
+            type : DataTypes.BIGINT
         },
         workspace_id : {
-            type: DataTypes.BIGINT
+            type : DataTypes.BIGINT
         },
-        date : {
-            type : DataTypes.DATE
+        user_id : {
+            type : DataTypes.BIGINT
         }
     }, {
         freezeTableName: true // Model tableName will be the same as the model name

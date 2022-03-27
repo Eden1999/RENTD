@@ -17,7 +17,7 @@ const sequelize = new Sequelize(database, username, password, {
 });
 
 const modelDefiners = [
-	require('../models/order'),
+	require('../models/orders'),
 	require('../models/rating'),
 	require('../models/spacetype'),
   require('../models/user'),

@@ -35,12 +35,12 @@ const routes = [
   {
     path: "/search",
     Component: <WorkspacesSearchResults />,
-    allowed: [userTypes.notSigned],
+    allowed: [userTypes.notSigned, userTypes.guest],
   },
   {
     path: "/workspaces/:id",
     Component: <WorkspaceDetails />,
-    allowed: [userTypes.notSigned],
+    allowed: [userTypes.notSigned, userTypes.guest],
   },
 ];
 
