@@ -30,8 +30,6 @@ const convertCapacityArrayToObject = (capacity) => {
   return capacityArr
 }
 
-
-
 const Orders = ({workspace}) => {
   const [orders, setOrders] = useState([])
   const [currentDate, setCurrentDate] = useState(new Date())
