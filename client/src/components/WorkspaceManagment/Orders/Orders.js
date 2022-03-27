@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
 import Query from 'devextreme/data/query';
+import axios from 'axios'
 
+import { AppContext } from "../../../store/AppContext"
 import AppointmentTooltip from './AppointmentTooltip.js';
 import { ordersData } from './data.js';
 import Appointment from './Appointment.js';
@@ -39,12 +41,41 @@ const Orders = ({workspace}) => {
   const [orders, setOrders] = useState(ordersData)
   const [currentDate, setCurrentDate] = useState(new Date())
   const [capacity, setCapacity] = useState(convertCapacityArrayToObject(workspace.capacity))
+  const [{ user }] = useContext(AppContext);
 
-  const HandalingAddOrder = (e) => {
-    let newOrder = e.appointmentData
+  const HandalingAddOrder = useCallback(async (e) => {
+    let newOrder = {
+      startdate: e.appointmentData.startDate,
+      enddate: e.appointmentData.endDate,
+      capacity: e.appointmentData.capacity,
+      user_id: user.id,
+      workspace_id: workspace.id
+    }
+    
     console.log(newOrder)
-    // add order
-  }
+
+    const query = newOrder
+
+    axios.post('http://localhost:8000/orders/create', query)
+    .then((res) => {
+        // if(res.data.token) {
+        //     setToken(res.data.token)
+        // }
+
+        // dispatch({
+        //     type: "SET_GENERAL_STATE",
+        //     payload: {
+        //       user : res.data.user
+        //     },
+        // })
+
+        // sessionStorage.setItem('user', JSON.stringify(res.data.user));
+        // navigate(res.data.user.is_host ? '/hostHome' : '/guestHome')
+    })
+    .catch(err =>{
+        alert(err.response.data)
+    })
+  })
 
   const HandalingUpdateOrder = (e) => {
     // add order
