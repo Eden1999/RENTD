@@ -1,7 +1,39 @@
 const { sequelize } = require("../config/sequelize");
 
 const getOrdersByWorkspaceId = (req, res) => {
+    const {workspaceId, date} = req.params
 
+    sequelize.models.orders.findAll({ where: {
+        workspace_id: workspaceId,
+        // startDate: {
+        //     $gte: date
+        // },
+        // endDate: {
+        //     lte: date
+        // }
+    }})
+    .then((orders) => {
+        if (orders) {
+            orders.map(order => {
+                let newOrder = order.dataValues
+                
+                newOrder.startDate = order.startdate
+                delete newOrder.startdate
+
+                newOrder.endDate = order.enddate
+                delete newOrder.enddate
+            })
+            return res.status(200).send(orders)
+        } else {
+            let err = 'orders not found'
+            console.log(err)
+            return res.status(500).send(err)
+        }
+    })
+    .catch((err) => {
+        console.log(err)
+        return res.status(err.status || 500).send(err)
+    })
 }
 
 const getOrdersByUserId = (req, res) => {

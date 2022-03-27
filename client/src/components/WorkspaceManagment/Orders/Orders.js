@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useCallback, useContext, useEffect } from 'react';
 import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
 import Query from 'devextreme/data/query';
 import axios from 'axios'
@@ -12,6 +12,8 @@ import './styles.css'
 
 const views = ['day', 'week'];
 const groups = ['theatreId'];
+
+
 
 const getOrderById = (id) => {
   return Query(ordersData).filter(['id', id]).toArray()[0];
@@ -37,11 +39,29 @@ const convertCapacityArrayToObject = (capacity) => {
   return capacityArr
 }
 
+
+
 const Orders = ({workspace}) => {
-  const [orders, setOrders] = useState(ordersData)
+  const [orders, setOrders] = useState([])
   const [currentDate, setCurrentDate] = useState(new Date())
   const [capacity, setCapacity] = useState(convertCapacityArrayToObject(workspace.capacity))
   const [{ user }] = useContext(AppContext);
+
+  const getOrders = async (workspace_id) => {
+    await axios.get(`http://localhost:8000/orders/${workspace_id}`)
+    .then((res) => {
+      console.log("get all orders successfully")
+        setOrders(res.data)
+    })
+    .catch(err =>{
+      alert(err.response.data)
+      setOrders([])
+    })
+  }
+
+  useEffect(() => {
+    getOrders(workspace.id)
+  }, [])
 
   const HandalingAddOrder = useCallback(async (e) => {
     let newOrder = {
