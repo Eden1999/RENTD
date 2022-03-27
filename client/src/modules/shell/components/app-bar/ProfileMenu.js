@@ -1,8 +1,8 @@
 import {Menu, Transition} from "@headlessui/react";
 import { Fragment, useContext } from 'react';
-import { AppContext } from "store/AppContext";
+import { AppContext } from "../../../../store/AppContext";
 import { useNavigate } from 'react-router-dom';
-import { signOut } from "helpers/helpFunctions";
+import { signOut } from "../../../../helpers/helpFunctions";
 
 
 function classNames(...classes) {
