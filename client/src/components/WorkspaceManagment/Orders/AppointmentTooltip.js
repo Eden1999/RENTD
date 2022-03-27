@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Query from 'devextreme/data/query';
 
-import { orders } from './data.js';
+import { ordersData } from './data.js';
 import './styles.css'
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import Appointment from './Appointment.js';
 
 
 function getOrdersById(id) {
-  return Query(orders).filter(['id', id]).toArray()[0];
+  return Query(ordersData).filter(['id', id]).toArray()[0];
 }
 
 const AppointmentTooltip = ({orderData}) => {

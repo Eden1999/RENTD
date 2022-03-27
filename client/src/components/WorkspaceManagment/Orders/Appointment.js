@@ -3,10 +3,10 @@ import Query from 'devextreme/data/query';
 import './styles.css'
 
 // import {formatDate} from 'devextreme/localization';
-import { orders } from './data.js';
+import { ordersData } from './data.js';
 
 function getOrderById(id) {
-  return Query(orders).filter(['id', id]).toArray()[0];
+  return Query(ordersData).filter(['id', id]).toArray()[0];
 }
 
 const Appointment = (model) => {

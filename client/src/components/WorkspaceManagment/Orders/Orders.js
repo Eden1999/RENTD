@@ -3,7 +3,7 @@ import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
 import Query from 'devextreme/data/query';
 
 import AppointmentTooltip from './AppointmentTooltip.js';
-import { orders } from './data.js';
+import { ordersData } from './data.js';
 import Appointment from './Appointment.js';
 
 import './styles.css'
@@ -12,7 +12,7 @@ const views = ['day', 'week'];
 const groups = ['theatreId'];
 
 const getOrderById = (id) => {
-  return Query(orders).filter(['id', id]).toArray()[0];
+  return Query(ordersData).filter(['id', id]).toArray()[0];
 }
 
 const convertHourToFloat = (dateString) => {
@@ -36,8 +36,23 @@ const convertCapacityArrayToObject = (capacity) => {
 }
 
 const Orders = ({workspace}) => {
+  const [orders, setOrders] = useState(ordersData)
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [capacity, setCapacity] = useState(workspace.capacity)
+  const [capacity, setCapacity] = useState(convertCapacityArrayToObject(workspace.capacity))
+
+  const HandalingAddOrder = (e) => {
+    let newOrder = e.appointmentData
+    console.log(newOrder)
+    // add order
+  }
+
+  const HandalingUpdateOrder = (e) => {
+    // add order
+  }
+
+  const HandalingDeleteOrder = (e) => {
+    // add order
+  }
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
@@ -81,11 +96,11 @@ const Orders = ({workspace}) => {
           text: 'capacity',
         },
         editorType: 'dxSelectBox',
-        dataField: 'id',
+        dataField: 'capacity',
         editorOptions: {
           items: convertCapacityArrayToObject(workspace.capacity),
           displayExpr: 'number',
-          valueExpr: 'id',
+          valueExpr: 'number',
           onValueChanged(args) {
             capacity = args.value
           },
@@ -115,6 +130,9 @@ const Orders = ({workspace}) => {
             appointmentComponent={Appointment}
             // appointmentTooltipComponent={AppointmentTooltip}
             onAppointmentFormOpening={onOrderFormOpening}
+            onAppointmentAdded={HandalingAddOrder}
+            onAppointmentUpdated={HandalingUpdateOrder}
+            onAppointmentDeleted={HandalingDeleteOrder}
           >
             <Editing allowAdding={true} />
             <Resource
