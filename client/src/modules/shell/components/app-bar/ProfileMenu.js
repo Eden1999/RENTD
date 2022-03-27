@@ -1,5 +1,9 @@
 import {Menu, Transition} from "@headlessui/react";
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
+import { AppContext } from "store/AppContext";
+import { useNavigate } from 'react-router-dom';
+import { signOut } from "helpers/helpFunctions";
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -8,10 +12,14 @@ function classNames(...classes) {
 const menuItems = [
     { name: 'Your Profile', href: '/profile', active: false},
     { name: 'Settings', href: '#', active: false },
-    { name: 'Sign Out', href: '#', active: false },
+    { name: 'Sign Out', href: '/login', active: false, onClick : (dispatch) => {signOut(dispatch)} },
 ]
 
+
 export default function ProfileMenu() {
+    const [ , dispatch] = useContext(AppContext);
+    const navigate = useNavigate();
+
     return (
         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <Menu as="div" className="ml-3 relative">
@@ -41,12 +49,15 @@ export default function ProfileMenu() {
                             <Menu.Item
                                 key={item.name}>
                                 {({active}) => (
-                                    <a
-                                        href={item.href}
+                                    <div 
+                                        onClick={() => {
+                                            item.onClick && item.onClick(dispatch);
+                                            navigate(item.href);
+                                        }}
                                         className={classNames(active ? 'bg-zinc-600' : '', 'block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white')}
                                     >
                                         {item.name}
-                                    </a>
+                                    </div>
                                 )}
                             </Menu.Item>
                         ))}
