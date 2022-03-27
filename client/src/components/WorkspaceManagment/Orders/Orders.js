@@ -3,7 +3,6 @@ import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
 import axios from 'axios'
 
 import { AppContext } from "../../../store/AppContext"
-import AppointmentTooltip from './AppointmentTooltip.js';
 import Appointment from './Appointment.js';
 
 import './styles.css'
@@ -193,7 +192,6 @@ const Orders = ({workspace}) => {
             crossScrollingEnabled={true}
             cellDuration={30}
             appointmentComponent={Appointment}
-            // appointmentTooltipComponent={AppointmentTooltip}
             onAppointmentFormOpening={onOrderFormOpening}
             onAppointmentAdded={HandalingAddOrder}
             onAppointmentUpdated={HandalingUpdateOrder}
