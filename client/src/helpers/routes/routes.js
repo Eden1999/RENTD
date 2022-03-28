@@ -4,6 +4,7 @@ import Register from "../../components/UserManagment/Register";
 import NewWorkspace from "../../components/WorkspaceManagment/NewWorkspace";
 import WorkspacesSearchResults from "../../components/WorkspaceManagment/WorkspacesSearchResults";
 import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
+import HomepageView from '../../components/Homepage/HomepageView'
 import { userTypes } from "../consts";
 
 const routes = [
@@ -14,8 +15,8 @@ const routes = [
   },
   {
     path: "/guestHome",
-    Component: <div>guestHome</div>,
-    allowed: [userTypes.guest],
+    Component: <HomepageView />,
+    allowed: [userTypes.guest, userTypes.notSigned],
   },
   {
     path: "/profile",
