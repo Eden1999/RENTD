@@ -7,11 +7,9 @@ const App = () => {
   const [state, dispatch] = useReducer(reducer, {user : JSON.parse(sessionStorage.getItem('user')) || {}});
 
   return (
-    <div className="App">
       <AppContext.Provider value={[state, dispatch]}>
             <ShellView />
       </AppContext.Provider>
-    </div>
   )
 }
 
