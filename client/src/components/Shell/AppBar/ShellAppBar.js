@@ -12,7 +12,7 @@ const navigation = [
 
 export default function ShellAppBar() {
     return (
-        <Disclosure as="nav" className="bg-zinc-800">
+        <Disclosure as="nav" className="bg-zinc-700">
             {({ open }) => (
             <>
                 <div className="mx-auto px-2 sm:px-6 lg:px-8">
