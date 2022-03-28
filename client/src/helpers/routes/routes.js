@@ -6,6 +6,7 @@ import WorkspacesView from "../../components/WorkspaceManagment/WorkspacesView";
 import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
 import HomepageView from '../../components/Homepage/HomepageView'
 import { userTypes } from "../consts";
+import MySpaces from "../../components/Host/MySpaces";
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
   {
     path: "/hostHome",
     Component: <div>hostHome</div>,
+    allowed: [userTypes.host],
+  },
+  {
+    path: "/my-spaces",
+    Component: <MySpaces />,
     allowed: [userTypes.host],
   },
   {
