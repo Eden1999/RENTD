@@ -125,6 +125,21 @@ const signIn = async (req, res) => {
   }
 };
 
-const editUser = (req, res) => {};
+const editUser = async ({body}, res) => {
+  const { id, photo } = body;
+
+  try {
+    const user = await sequelize.models.users.findOne({ where: { id } });
+    if(!user) {
+      res.status(500).send(`Could not update. User with id: ${id} does not exists`)
+    } else {
+      user.set({ photo });
+      const updatedUser = await user.save();
+      res.status(200).send({user: updatedUser});
+    }
+  } catch (err) {
+    res.status(err.status || 500).send(`Could not update. An error occurred while trying to save user with id: ${id}`);
+  }
+};
 
 module.exports = { getUsersList, getUserById, registerNewUser, signIn, editUser };

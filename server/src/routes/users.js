@@ -11,6 +11,6 @@ router.post('/register', UsersController.registerNewUser);
 
 router.post('/signIn', UsersController.signIn);
 
-router.put('/edit', UsersController.editUser);
+router.put('/', UsersController.editUser);
 
 module.exports = router;
