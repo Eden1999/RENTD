@@ -5,7 +5,7 @@ import WorkspacesToolbar from "./WorkspacesToolbar";
 const WorkspacesSearchData = () => {
     return (
         <div className={'flex-1 flex flex-col'}>
-            <div className={'h-20'}>
+            <div className={'h-20 mt-8'}>
                 <WorkspacesToolbar />
             </div>
             <div className={'flex-1'}>
