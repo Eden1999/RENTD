@@ -163,6 +163,7 @@ const Orders = ({workspace}) => {
           items: convertCapacityArrayToObject(workspace.capacity),
           displayExpr: 'number',
           valueExpr: 'number',
+          value: 1,
           onValueChanged(args) {
             capacity = args.value
           },
