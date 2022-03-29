@@ -20,26 +20,6 @@ const getWorkspacesList = (req, res) => {
       });
 };
 
-const getWorkspacesById = (req, res) => {
-  const { workspaceId } = req.params;
-
-  sequelize.models.workspaces
-    .findAll({ where: { id: workspaceId } })
-    .then((workspace) => {
-      if (workspace) {
-        res.send(workspace).status(200);
-      } else {
-        let err = "workspace not found";
-        console.log(err);
-        return res.status(500).send(err);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(err.status || 500).send(err);
-    });
-};
-
 const getWorkspacesByHostId = (req, res) => {
   const { hostId } = req.params;
 
@@ -172,7 +152,6 @@ const searchWorkspaces = async (req, res) => {
 };
 
 module.exports = {
-  getWorkspacesById,
   getWorkspacesList,
   getWorkspacesByUserId,
   createNewWorkspace,
