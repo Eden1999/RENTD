@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, {useState, useCallback, useContext, useEffect} from "react";
 import axios from "axios";
 import { AppContext } from "../../store/AppContext";
 import PropTypes, { checkPropTypes } from "prop-types";
-import { Container, CssBaseline, Box, Typography, TextField, Button } from "@mui/material";
+import {Container, CssBaseline, Box, Typography, TextField, Button, Autocomplete} from "@mui/material";
 import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
 
@@ -11,6 +11,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 // import TimePicker from '@mui/lab/TimePicker';
 
 import TimePicker from 'react-time-picker';
+import Axios from "axios";
 
 const NewWorkspace = (props) => {
   const [{ user }] = useContext(AppContext);
@@ -28,11 +29,24 @@ const NewWorkspace = (props) => {
   const [smoke_friendly, setSmokeFriendly] = useState(true);
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
-  const [space_type_id, setSpaceTypeId] = useState(1);
+  const [spaceType, setSpaceType] = useState({});
   const { token } = useToken();
   const [opening_days, setOpeningDays] = useState([false, false, false, false, false, false, false])
   const [opening_hour, setOpeningHour] = useState('10:00');
   const [closing_hour, setClosingHour] = useState('23:00');
+  const [spaceTypes, setSpaceTypes] = useState([{id:1,name:''}]);
+
+  // Get space types from the server to the environment selector
+  useEffect(async () => {
+    try {
+      const query = {};
+      const res = await Axios.get("http://localhost:8000/spacetypes", query);
+      setSpaceTypes(res.data);
+      setSpaceType(res.data[0]);
+    } catch (err) {
+      console.log(`Failed to fetch spaceTypes ${err.message}`);
+    }
+  }, []);
 
   const checkUserValidation = () => {
     let errors = "";
@@ -41,7 +55,7 @@ const NewWorkspace = (props) => {
     //Name
     if (!name) {
       isFormValid = false;
-      errors = errors + " name annot be empty ";
+      errors = errors + " name cannot be empty ";
       setErrorMessage(errors);
     }
 
@@ -62,7 +76,7 @@ const NewWorkspace = (props) => {
         disabled_access,
         smoke_friendly,
         description,
-        space_type_id,
+        space_type_id: spaceType.id,
         photo,
         opening_days,
         opening_hour,
@@ -232,6 +246,25 @@ const NewWorkspace = (props) => {
           onChange={HandleChangeSmokeFriendly}
           inputProps={{ "aria-label": "controlled" }}
         />
+        <div className="mb-6">
+          <label htmlFor="environment"
+                 className="block mb-2 text-sm font-medium text-zinc-400">
+            Environment:
+          </label>
+          <Autocomplete
+              id="environment"
+              options={spaceTypes}
+              getOptionLabel={option => option.name}
+              className="block shadow-sm-light bg-zinc-700 border
+                               border-zinc-600 rounded-lg"
+              renderInput={(params =>
+                      <TextField
+                          variant="outlined"
+                          {...params} />
+              )}
+              onChange={(event, value) => setSpaceType(value)}
+          />
+        </div>
         <a>set opening days</a>
         <a>sunday</a>
         <Checkbox

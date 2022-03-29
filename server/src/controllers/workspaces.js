@@ -1,7 +1,9 @@
 const { sequelize } = require("../config/sequelize");
+const { Op } = require('@sequelize/core');
 const jwt = require("jsonwebtoken");
 
 const getWorkspacesList = (req, res) => {
+
   sequelize.models.workspaces
       .findAll()
       .then((workspaces) => {
@@ -125,8 +127,17 @@ const editWorkspace = (req, res) => {};
 
 const searchWorkspaces = async (req, res) => {
   try {
-    const query = req.body;
-    let workspaces = await sequelize.models.workspaces.findAll({ where: query });
+    const { city, capacity, space_type_id} = req.query;
+    console.log(city);
+    let workspaces = await sequelize.models.workspaces.findAll({
+      where: {
+        city: city,
+        space_type_id: space_type_id,
+        capacity: {
+          [Op.gte]: capacity
+        }
+      }
+    });
     workspaces = await Promise.all(
       workspaces.map(async ({ dataValues: workspace }) => {
         const ratings = await sequelize.models.ratings.findAll({

@@ -2,9 +2,12 @@ import React, {useEffect, useState} from "react";
 import WorkspacesListItem from "./WorkspacesListItem";
 import Axios from "axios";
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
+import {useLocation} from "react-router-dom";
 
 const WorkspacesList = () => {
     const [workspaces, setWorkspaces] = useState([]);
+
+    const workspaceParams = useLocation();
 
     const filters =  {
         wifi: {
@@ -50,8 +53,7 @@ const WorkspacesList = () => {
 
     useEffect(async () => {
         try {
-            const query = {};
-            const res = await Axios.post("http://localhost:8000/workspaces/search", query);
+            const res = await Axios.post("http://localhost:8000/workspaces/search", null, {params : workspaceParams.state});
             setWorkspaces(res.data);
         } catch (err) {
             console.log(`Failed to fetch workspaces ${err.message}`);
