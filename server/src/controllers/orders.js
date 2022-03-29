@@ -1,15 +1,28 @@
 const { sequelize } = require("../config/sequelize");
 
-const getOrdersByWorkspaceId = (req, res) => {
-    const {workspaceId, date} = req.params
+const getOrdersByWorkspaceId = async (req, res) => {
+    const {workspaceId} = req.params
+    const {currentDate} = req.query
 
-    sequelize.models.orders.findAll({ where: {
+    let date = new Date(currentDate)
+    let first = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
+    let last = first + 6; // last day is the first day + 6
+
+    let firstday = new Date(date.setDate(first)).toUTCString
+    let lastday = new Date(date.setDate(last)).toUTCString
+
+    let resOrders = []
+
+    await sequelize.models.orders.findAll({ where: {
         workspace_id: workspaceId,
-        // startDate: {
-        //     $gte: date
+        // startdate: {
+        //     $between: [firstday, lastday]
+        //   }
+        // startdate: {
+        //     $gte: new Date()
         // },
-        // endDate: {
-        //     lte: date
+        // enddate: {
+        //     $lte: lastday
         // }
     }})
     .then((orders) => {
@@ -22,13 +35,40 @@ const getOrdersByWorkspaceId = (req, res) => {
 
                 newOrder.endDate = order.enddate
                 delete newOrder.enddate
+
+                await axios.get(`http://localhost:8000/users/${order.user_id}`)
+                .then((res) => {
+                    console.log("success")
+                })
+                .catch(err =>{
+                    alert(err.response.data)
+                })
+                // await sequelize.models.users
+                // .findOne({ where: { id: order.user_id } })
+                // .then((user) => {
+                //     if (user) {
+                //         newOrder.userName = user.dataValues.username
+                //         resOrders.push(newOrder)
+                //     }
+                // })
+                // .catch((err) => {
+                //     let errUser = 'user not found'
+                //     console.log(errUser)
+                //     return res.status(500).send(errUser)
+                // })
             })
-            return res.status(200).send(orders)
         } else {
             let err = 'orders not found'
             console.log(err)
             return res.status(500).send(err)
         }
+
+        if (resOrders) {
+            resOrders.map((order) => {
+                
+            })
+        }
+        return res.status(200).send(resOrders)
     })
     .catch((err) => {
         console.log(err)

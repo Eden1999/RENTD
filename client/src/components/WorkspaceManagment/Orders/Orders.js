@@ -37,7 +37,7 @@ const Orders = ({workspace}) => {
   const [{ user }] = useContext(AppContext);
 
   const getOrders = async (workspace_id) => {
-    await axios.get(`http://localhost:8000/orders/${workspace_id}`)
+    await axios.get(`http://localhost:8000/orders/${workspace_id}?currentDate=${currentDate}`)
     .then((res) => {
       console.log("get all orders successfully")
         setOrders(res.data)
@@ -49,8 +49,12 @@ const Orders = ({workspace}) => {
   }
 
   useEffect(() => {
-    getOrders(workspace.id)
+    getOrders(workspace.id, currentDate)
   }, [])
+
+  useEffect(() => {
+    getOrders(workspace.id, currentDate)
+  }, [currentDate])
 
   const HandalingAddOrder = useCallback(async (e) => {
     let newOrder = {
@@ -103,6 +107,12 @@ const Orders = ({workspace}) => {
     })
   })
 
+  const handlePropertyChange = (e) => {
+    if(e.name === "currentDate") {
+      setCurrentDate(e.value)
+    }
+  }
+
   const HandalingDeleteOrder = useCallback(async (e) => {
     let id = e.appointmentData.id
     
@@ -119,17 +129,17 @@ const Orders = ({workspace}) => {
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
-    let { startDate, endDate, userName } = e.appointmentData;
+    let { startDate, endDate, username } = e.appointmentData;
 
     form.option('items', [
       {
         label: {
           text: 'User Name',
         },
-        name: 'userName',
+        name: 'username',
         editorType: 'dxTextBox',
         editorOptions: {
-          value: user.username || 'shirel',
+          value: username || 'shirel',
           readOnly: true
       },
       }, {
@@ -177,6 +187,7 @@ const Orders = ({workspace}) => {
         <div id="app">
           <Scheduler
             // timeZone="America/Los_Angeles"
+            onOptionChanged={handlePropertyChange}
             dataSource={orders}
             views={views}
             defaultCurrentView="day"

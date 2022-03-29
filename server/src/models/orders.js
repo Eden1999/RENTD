@@ -8,10 +8,10 @@ module.exports = (sequelize) => {
             type: DataTypes.BIGINT
         },
         startdate: {
-            type: DataTypes.TIME
+            type: DataTypes.DATE
         },
         enddate: {
-            type: DataTypes.TIME
+            type: DataTypes.DATE
         },
         available : {
             type: DataTypes.BOOLEAN

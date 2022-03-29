@@ -1,11 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useLocation } from "react-router-dom";
 import { Star, Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
 import Orders from "./Orders/Orders";
+import { AppContext } from "../../store/AppContext"
 
 import "./WorkspaceDetails.scss";
 
 const WorkspaceDetails = () => {
+  const [{ user }] = useContext(AppContext);
+
   const {
     state: { workspace },
   } = useLocation();
@@ -102,9 +105,11 @@ const WorkspaceDetails = () => {
         </>
       )}
       <div>
-        <Orders
-          workspace={workspace}
-        />
+        {user && 
+          <Orders
+            workspace={workspace}
+          />
+        }
       </div>
     </div>
   );
