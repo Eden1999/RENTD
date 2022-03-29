@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     disabled_access boolean,
     space_type_id INTEGER NOT NULL,
     smoke_friendly boolean,
-    opening_days boolean[] COLLATE pg_catalog."default" NOT NULL,
+    opening_days boolean[] NOT NULL,
     opening_hour character varying,
     closing_hour character varying,
     photo character varying COLLATE pg_catalog."default" NOT NULL,
@@ -178,3 +178,12 @@ ALTER TABLE IF EXISTS public.workspaces
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+
+INSERT INTO public.space_types(
+	id, name)
+	VALUES
+	('1','Restaurant'),
+	('2','Coffee Shop'),
+	('3','Office'),
+	('4','Bar')
+	;
