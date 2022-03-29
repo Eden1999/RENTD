@@ -5,7 +5,7 @@ const OrdersController = require('../controllers/orders');
 
 router.get('/:workspaceId', OrdersController.getOrdersByWorkspaceId);
 
-router.get('/:userId', OrdersController.getOrdersByUserId);
+router.get('/user/:userId', OrdersController.getOrdersByUserId);
 
 router.post('/create', OrdersController.createNewOrder);
 

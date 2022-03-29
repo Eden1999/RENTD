@@ -12,7 +12,7 @@ const navigationByRole = {
         { name: 'My Spaces', href: 'my-spaces', current: false },
     ],
     guest: [
-        { name: 'History', href: '#', current: false },
+        { name: 'History', href: '/history', current: false },
         { name: 'Favorites', href: '#', current: false },
     ]
 }

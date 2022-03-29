@@ -5,6 +5,7 @@ import NewWorkspace from "../../components/WorkspaceManagment/NewWorkspace";
 import WorkspacesView from "../../components/WorkspaceManagment/WorkspacesView";
 import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
 import HomepageView from '../../components/Homepage/HomepageView'
+import OrdersHistory from "components/History/OrdersHistory";
 import { userTypes } from "../consts";
 import MySpaces from "../../components/Host/MySpaces";
 
@@ -47,7 +48,12 @@ const routes = [
   {
     path: "/workspaces/:id",
     Component: <WorkspaceDetails />,
-    allowed: [userTypes.notSigned],
+    allowed: [userTypes.guest, userTypes.host],
+  },
+  {
+    path: "/history",
+    Component: <OrdersHistory />,
+    allowed: [userTypes.guest],
   },
 ];
 

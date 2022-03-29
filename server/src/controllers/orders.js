@@ -37,7 +37,30 @@ const getOrdersByWorkspaceId = (req, res) => {
 }
 
 const getOrdersByUserId = (req, res) => {
+    const { userId } = req.params;
 
+    sequelize.models.orders
+      .findAll({ 
+            include : [{
+                model : sequelize.models.workspaces,
+                required : true
+            }],
+            where: { user_id: userId }
+        })
+      .then((orders) => {
+        if (orders) {
+          orders.map((order) => order.dataValues);
+          return res.status(200).send(orders);
+        } else {
+          let err = "orders not found";
+          console.log(err);
+          return res.status(500).send(err);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err);
+      });
 }
 
 const deleteOrder = (req, res) => {
