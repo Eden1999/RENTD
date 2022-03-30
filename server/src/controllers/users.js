@@ -14,7 +14,6 @@ const getUsersList = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-  const { id } = req.params
   const { token } = req.headers;
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
