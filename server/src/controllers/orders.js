@@ -1,4 +1,5 @@
 const { sequelize } = require("../config/sequelize");
+const user = require("../models/user");
 
 const getOrdersByWorkspaceId = async (req, res) => {
     const {workspaceId} = req.params
@@ -13,67 +14,37 @@ const getOrdersByWorkspaceId = async (req, res) => {
 
     let resOrders = []
 
-    await sequelize.models.orders.findAll({ where: {
-        workspace_id: workspaceId,
-        // startdate: {
-        //     $between: [firstday, lastday]
-        //   }
-        // startdate: {
-        //     $gte: new Date()
-        // },
-        // enddate: {
-        //     $lte: lastday
-        // }
-    }})
-    .then((orders) => {
-        if (orders) {
-            orders.map(order => {
-                let newOrder = order.dataValues
-                
-                newOrder.startDate = order.startdate
-                delete newOrder.startdate
-
-                newOrder.endDate = order.enddate
-                delete newOrder.enddate
-
-                await axios.get(`http://localhost:8000/users/${order.user_id}`)
-                .then((res) => {
-                    console.log("success")
+    sequelize.models.orders.findAll({
+        where: {
+            workspace_id: workspaceId
+        },
+        include: [{
+            model: sequelize.models.users,
+            required: true
+           }]
+        })
+        .then((orders) => {
+            if (orders) {
+                orders.map(order => {
+                    let newOrder = order.dataValues
+                    
+                    newOrder.startDate = order.startdate
+                    delete newOrder.startdate
+    
+                    newOrder.endDate = order.enddate
+                    delete newOrder.enddate
                 })
-                .catch(err =>{
-                    alert(err.response.data)
-                })
-                // await sequelize.models.users
-                // .findOne({ where: { id: order.user_id } })
-                // .then((user) => {
-                //     if (user) {
-                //         newOrder.userName = user.dataValues.username
-                //         resOrders.push(newOrder)
-                //     }
-                // })
-                // .catch((err) => {
-                //     let errUser = 'user not found'
-                //     console.log(errUser)
-                //     return res.status(500).send(errUser)
-                // })
-            })
-        } else {
-            let err = 'orders not found'
+                return res.status(200).send(orders)
+            } else {
+                let err = 'orders not found'
+                console.log(err)
+                return res.status(500).send(err)
+            }
+        })
+        .catch((err) => {
             console.log(err)
-            return res.status(500).send(err)
-        }
-
-        if (resOrders) {
-            resOrders.map((order) => {
-                
-            })
-        }
-        return res.status(200).send(resOrders)
-    })
-    .catch((err) => {
-        console.log(err)
-        return res.status(err.status || 500).send(err)
-    })
+            return res.status(err.status || 500).send(err)
+        })
 }
 
 const getOrdersByUserId = (req, res) => {
@@ -112,13 +83,14 @@ const updateOrder = (req, res) => {
 }
 
 const createNewOrder = (req, res) => {
-    const { startdate, enddate, capacity, user_id, workspace_id } = req.body;
+    const { startdate, enddate, capacity, user_id, username, workspace_id } = req.body;
 
     let newOrder = {
         startdate,
         enddate,
         capacity,
         user_id,
+        username,
         workspace_id,
         available: false
     }

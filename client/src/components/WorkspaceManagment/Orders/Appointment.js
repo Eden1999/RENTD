@@ -12,7 +12,7 @@ const Appointment = (model) => {
       <div>
         capacity: <strong>{ targetedAppointmentData.capacity }</strong>
         <br/>
-        userName: <strong>{ user.username }</strong>
+        userName: <strong>{ targetedAppointmentData.user.username }</strong>
         <br/>
         user phone: <strong>{ user.phone }</strong>
       </div>
