@@ -5,8 +5,9 @@ import { Container, CssBaseline, Box, Typography, TextField, Button } from "@mui
 import { useNavigate } from "react-router";
 import { AppContext } from "../../store/AppContext";
 import Checkbox from "@mui/material/Checkbox";
+import useToken from "../../helpers/useToken";
 
-const Register = ({ setToken, setRegisterMode }) => {
+const Register = () => {
   const navigate = useNavigate();
   const [, dispatch] = useContext(AppContext);
   const [username, setUsername] = useState("");
@@ -14,6 +15,7 @@ const Register = ({ setToken, setRegisterMode }) => {
   const [email, setEmail] = useState("");
   const [isHost, setIsHost] = useState(false);
   const [photo, setPhoto] = useState("");
+  const { token, setToken } = useToken();
 
   const handleRegister = () => {
     const query = { username, password, email, isHost, photo };
