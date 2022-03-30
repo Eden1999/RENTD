@@ -34,7 +34,7 @@ const Register = ({ setToken, setRegisterMode }) => {
 
         sessionStorage.setItem("user", JSON.stringify(res.data.user));
 
-        navigate(res.data.user.is_host ? "/hostHome" : "/guestHome");
+        navigate(res.data.user.is_host ? "/my-spaces" : "/homepage");
       })
       .catch((err) => {
         alert(err.response.data);
