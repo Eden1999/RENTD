@@ -1,6 +1,6 @@
 import {Container, IconButton} from "@mui/material";
 import WorkspacesList from "./WorkspacesList";
-import {Add, AddCircleOutline} from "@mui/icons-material";
+import {AddCircleOutline} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 
 const MySpaces = () => {

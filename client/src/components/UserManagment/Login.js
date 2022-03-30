@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useContext } from "react"
 import axios from 'axios'
-import PropTypes from 'prop-types';
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 import Register from "./Register";
 import useToken from "../../helpers/useToken";
