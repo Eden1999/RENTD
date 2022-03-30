@@ -6,7 +6,7 @@ import ShellAppBar from './AppBar/ShellAppBar';
 function ShellView() {
     return (
         <BrowserRouter>
-            <div className="h-screen flex flex-col bg-zinc-800">
+            <div className="min-h-screen flex flex-col bg-zinc-800">
                 <ShellAppBar />
                     <Routes>
                         { routes.map((route) => {
