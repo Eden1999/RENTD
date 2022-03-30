@@ -15,13 +15,13 @@ const getUsersList = (req, res) => {
 
 const getUserById = (req, res) => {
   const { id } = req.params
-  // const { token } = req.headers;
+  const { token } = req.headers;
 
-  // const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+  const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
   // check if user is already exist
   sequelize.models.users
-    .findOne({ where: { id: id } })
+    .findOne({ where: { id: decodeId } })
     .then((user) => {
       if (user) {
         console.log(`successfuly getting user ${user.id}`);

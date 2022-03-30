@@ -129,17 +129,17 @@ const Orders = ({workspace}) => {
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
-    let { startDate, endDate, username } = e.appointmentData;
+    let { startDate, endDate, userName } = e.appointmentData;
 
     form.option('items', [
       {
         label: {
           text: 'User Name',
         },
-        name: 'username',
+        name: 'userName',
         editorType: 'dxTextBox',
         editorOptions: {
-          value: username || 'shirel',
+          value: user.userName || 'shirel',
           readOnly: true
       },
       }, {
