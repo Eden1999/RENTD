@@ -1,18 +1,23 @@
 import { useNavigate } from "react-router"
 
 export default function Items(props) {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     return (
         <div className="hidden sm:block sm:ml-6 self-center">
             <div className="flex space-x-1">
                 {props.navigation.map((item) => (
                     <div
                         key={item.name}
-                        onClick={() => {navigate(item.href)}}
+                        onClick={() => {
+                            props.setCurrentItem(item);
+                            navigate(item.href);
+                        }}
                         className={
-                            item.current ? 'bg-zinc-600 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                            item == props.currentItem ? 'text-gray-300 bg-zinc-600 hover:text-white hover:cursor-pointer px-3 py-2 rounded-md text-sm font-bold' :
+                                'text-gray-300 hover:bg-zinc-600 hover:text-white hover:cursor-pointer px-3 py-2 rounded-md text-sm font-medium'
                         }
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={item == props.currentItem ? 'page' : undefined}
                     >
                         {item.name}
                     </div>

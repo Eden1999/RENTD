@@ -44,7 +44,7 @@ export default function ProfileMenu() {
                     leaveTo="transform opacity-0 scale-95"
                 >
                     <Menu.Items
-                        className="bg-zinc-700 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        className="bg-zinc-700 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none hover:cursor-pointer">
                         {menuItems.map((item) => (
                             <Menu.Item
                                 key={item.name}>
