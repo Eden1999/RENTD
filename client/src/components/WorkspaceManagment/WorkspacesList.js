@@ -40,8 +40,10 @@ const WorkspacesList = () => {
         const newFilteredWorkspaces = workspaces.filter((workspace) => {
             let isFilteredIn = true;
             Object.entries(checkedFilters).forEach(([filterType, checked]) => {
+                if(checked) {
                     (isFilteredIn &= (workspace[filterType] === checked))
                 }
+            }
             );
 
             return isFilteredIn;
