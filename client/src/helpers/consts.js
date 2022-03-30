@@ -5,7 +5,7 @@ export const userTypes = {
 }
 
 export const defaultRoutes = {
-    'HOST' : 'hostHome',
-    'GUEST' : 'guestHome',
+    'HOST' : 'my-spaces',
+    'GUEST' : 'homepage',
     'NOT_SIGNED' : 'login'
 }

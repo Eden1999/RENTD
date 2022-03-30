@@ -16,7 +16,7 @@ const routes = [
     allowed: [userTypes.notSigned],
   },
   {
-    path: "/guestHome",
+    path: "/homepage",
     Component: <HomepageView />,
     allowed: [userTypes.guest, userTypes.notSigned],
   },
@@ -24,11 +24,6 @@ const routes = [
     path: "/profile",
     Component: <Profile />,
     allowed: [userTypes.guest, userTypes.host],
-  },
-  {
-    path: "/hostHome",
-    Component: <div>hostHome</div>,
-    allowed: [userTypes.host],
   },
   {
     path: "/my-spaces",
