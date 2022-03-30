@@ -1,19 +1,21 @@
 import React, {useState, useCallback, useContext, useEffect} from "react";
 import axios from "axios";
 import { AppContext } from "../../store/AppContext";
-import PropTypes, { checkPropTypes } from "prop-types";
-import {Container, CssBaseline, Box, Typography, TextField, Button, Autocomplete} from "@mui/material";
+import {Container, CssBaseline, Box, TextField, Button, Autocomplete, OutlinedInput} from "@mui/material";
 import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
-
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-// import TimePicker from '@mui/lab/TimePicker';
+import './NewWorkspace.scss'
 
 import TimePicker from 'react-time-picker';
 import Axios from "axios";
+import { useNavigate } from "react-router";
+
+const daysCheckBox = [{dayName : 'sunday'}, {dayName : 'monday'},
+{dayName : 'tuesday'}, {dayName : 'wednesday'}, {dayName : 'thursday'}, {dayName : 'friday'}
+, {dayName : 'saturday'}]
 
 const NewWorkspace = (props) => {
+  const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
   const [errorMessage, setErrorMessage] = useState("erros: ");
   const [name, setName] = useState(null);
@@ -91,6 +93,7 @@ const NewWorkspace = (props) => {
         })
         .then((res) => {
           console.log("success");
+          navigate('/my-spaces');
         })
         .catch((err) => {
           alert(err.response.data);
@@ -152,100 +155,111 @@ const NewWorkspace = (props) => {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5">
-          Create new Workspace
-        </Typography>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="name"
-          label="name"
-          name="name"
-          autoComplete="name"
-          autoFocus
-          onChange={(event) => setName(event.target.value)}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="city"
-          label="city"
-          type="city"
+       <div className={'mt-8 text-3xl text-zinc-200'}>Create new Workspace</div>
+       <OutlinedInput
+        id="name"
+        autoComplete="name"
+        required
+        fullWidth
+        sx={{color:'white'}}
+        className="block shadow-sm-light bg-zinc-700 border
+                    border-zinc-600 rounded-lg mb-6"
+        placeholder="name"
+        onChange={(event) => setName(event.target.value)}/>
+        <OutlinedInput
           id="city"
           autoComplete="city"
+          required
+          fullWidth
+          sx={{color:'white'}}
+          className="block shadow-sm-light bg-zinc-700 border
+                    border-zinc-600 rounded-lg mb-6"
+          name="city"
+          placeholder="city"
+          type="city"
           onChange={(event) => setCity(event.target.value)}
         />
-        <TextField
-          variant="outlined"
-          margin="normal"
+        <OutlinedInput
           required
           fullWidth
           name="address"
-          label="address"
+          placeholder="address"
+          sx={{color:'white'}}
+          className="block shadow-sm-light bg-zinc-700 border
+                    border-zinc-600 rounded-lg mb-6"
           type="address"
           id="address"
           autoComplete="address"
           onChange={(event) => setAddress(event.target.value)}
         />
-        <TextField
-          variant="outlined"
-          margin="normal"
+        <OutlinedInput
           required
           fullWidth
+          sx={{color:'white'}}
+          className="block shadow-sm-light bg-zinc-700 border
+                    border-zinc-600 rounded-lg mb-6"
           name="description"
-          label="description"
+          placeholder="description"
           type="description"
           id="description"
           autoComplete="description"
           onChange={(event) => setDescription(event.target.value)}
         />
-        <TextField
+        <OutlinedInput
           variant="outlined"
-          margin="normal"
+          sx={{color:'white'}}
+          className="block shadow-sm-light bg-zinc-700 border
+                    border-zinc-600 rounded-lg mb-6"
           required
           fullWidth
           name="capacity"
-          label="capacity"
+          placeholder="capacity"
           type="capacity"
           id="capacity"
           autoComplete="capacity"
           onChange={(event) => setCapacity(event.target.value)}
         />
-        <TextField
+        <OutlinedInput
           variant="outlined"
-          margin="normal"
+          sx={{color:'white'}}
+          className="block shadow-sm-light bg-zinc-700 border
+                    border-zinc-600 rounded-lg mb-6"
           required
           fullWidth
           name="cost per hour"
-          label="how much do you take per hour?"
+          placeholder="how much do you take per hour?"
           type="cost per hour"
           id="cost per hour"
           autoComplete="cost per hour"
           onChange={(event) => setCostPerHour(event.target.value)}
         />
-        Do you have any from the next:
-        <a>wifi</a>
+        <a className="text-zinc-400">Do you have any from the next:</a>
+        <div className="all-checkbox">
+        <div className="single-checkbox">
+        <a className="text-zinc-400">wifi</a>
         <Checkbox
           checked={wifi}
           onChange={handleChangeIsWifi}
           inputProps={{ "aria-label": "controlled" }}
         />
-        <a>disabled access</a>
+        </div>
+        <div className="single-checkbox">
+        <a className="text-zinc-400">disabled access</a>
         <Checkbox
           checked={disabled_access}
           onChange={handleChangeDisabledAccess}
           inputProps={{ "aria-label": "controlled" }}
         />
-        <a>smoke friendly</a>
+        </div>
+        <div className="single-checkbox">
+        <a className="text-zinc-400">smoke friendly</a>
         <Checkbox
           checked={smoke_friendly}
           onChange={HandleChangeSmokeFriendly}
           inputProps={{ "aria-label": "controlled" }}
         />
+        </div>
+        </div>
         <div className="mb-6">
           <label htmlFor="environment"
                  className="block mb-2 text-sm font-medium text-zinc-400">
@@ -255,7 +269,7 @@ const NewWorkspace = (props) => {
               id="environment"
               options={spaceTypes}
               getOptionLabel={option => option.name}
-              className="block shadow-sm-light bg-zinc-700 border
+              className="w-64 block shadow-sm-light bg-zinc-700 border
                                border-zinc-600 rounded-lg"
               renderInput={(params =>
                       <TextField
@@ -265,58 +279,22 @@ const NewWorkspace = (props) => {
               onChange={(event, value) => setSpaceType(value)}
           />
         </div>
-        <a>set opening days</a>
-        <a>sunday</a>
-        <Checkbox
-          checked={opening_days[0]}
-          id={0}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>monday</a>
-        <Checkbox
-          checked={opening_days[1]}
-          id={1}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>tuesday</a>
-        <Checkbox
-          checked={opening_days[2]}
-          id={2}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>wednesday</a>
-        <Checkbox
-          checked={opening_days[3]}
-          id={3}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>thursday</a>
-        <Checkbox
-          checked={opening_days[4]}
-          id={4}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>friday</a>
-        <Checkbox
-          checked={opening_days[5]}
-          id={5}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>saturday</a>
-        <Checkbox
-          checked={opening_days[6]}
-          id={6}
-          onChange={HandleChangeOpeningDays}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <a>set hours</a>
-          <a>opening hour</a>
+        <a className="text-zinc-400">set opening days</a>
+        <div className="all-checkbox">
+          {daysCheckBox.map((day, index) => {
+            return <div key={index} className="single-checkbox">
+              <a className="text-zinc-400">{day.dayName}</a>
+              <Checkbox
+                checked={opening_days[index]}
+                id={index.toString()}
+                onChange={HandleChangeOpeningDays}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </div>
+          })}
+        </div>
+        <a className="text-zinc-400">set hours</a>
+          <a className="text-zinc-400">opening hour</a>
           <TimePicker
             onChange={setOpeningHour}
             value={opening_hour}/>
@@ -339,6 +317,9 @@ const NewWorkspace = (props) => {
           color="primary"
           sx={{ mt: 3, mb: 2 }}
           onClick={handleSave}
+          className="text-white 2xl:text-lg text-sm bg-blue-600 hover:bg-blue-700 focus:ring-4
+                          focus:outline-none focus:ring-blue-800 font-medium rounded-lg
+                          px-5 py-2.5 text-center"
         >
           Save
         </Button>
