@@ -90,7 +90,6 @@ const createNewOrder = (req, res) => {
         enddate,
         capacity,
         user_id,
-        username,
         workspace_id,
         available: false
     }
