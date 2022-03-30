@@ -39,13 +39,12 @@ const Login = () => {
   })
   
   const handleRegister = useCallback(async () => {
-    setRegisterMode(true)
+      navigate('/register');
   })
 
   return (          
       <Container component="main" maxWidth="xs">
           <CssBaseline />
-          {registerMode ? <Register setToken={setToken} setRegisterMode={setRegisterMode}/> : null}
           <Box
               sx={{
                   marginTop: 8,

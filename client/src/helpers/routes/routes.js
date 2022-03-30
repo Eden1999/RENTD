@@ -16,6 +16,11 @@ const routes = [
     allowed: [userTypes.notSigned],
   },
   {
+    path: "/register",
+    Component: <Register />,
+    allowed: [userTypes.notSigned],
+  },
+  {
     path: "/homepage",
     Component: <HomepageView />,
     allowed: [userTypes.guest, userTypes.notSigned],
