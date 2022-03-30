@@ -1,13 +1,23 @@
-import {Container} from "@mui/material";
+import {Container, IconButton} from "@mui/material";
 import WorkspacesList from "./WorkspacesList";
+import {Add, AddCircleOutline} from "@mui/icons-material";
+import {Link} from "react-router-dom";
 
 const MySpaces = () => {
     return (
         <Container className={'h-full'}>
             <div className={'flex h-full'}>
                 <div className={'flex flex-1 flex-col mr-10'}>
-                    <div className={'mt-8 text-3xl text-zinc-200'}>My workspaces</div>
-
+                    <div className={'flex justify-between mt-8 text-3xl text-zinc-200'}>
+                        <span>
+                            My workspaces
+                        </span>
+                        <Link to={'/manage/newWorkspace'}>
+                            <IconButton aria-label="new workspace" color='primary'>
+                                <AddCircleOutline />
+                            </IconButton>
+                        </Link>
+                    </div>
                     <div className={'flex mt-10'}>
                         <WorkspacesList />
                     </div>
