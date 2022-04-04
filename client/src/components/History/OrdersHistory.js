@@ -21,14 +21,14 @@ const OrdersHistory = () => {
   }, []);
 
   const onItemClick = (workspace) => {
-    navigate(`/workspaces/${workspace.id}`, { workspace });
+    navigate(`/workspaces/${workspace.id}`, { state: { workspace } });
   }
   
   return (
     <div>
       <div className="orders-title uppercase tracking-wide text-sm text-gray-500 font-semibold">Here are the orders you've been made!</div>
       {orders.map((order) => (
-        <div key={order.id} className="order max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl bg-zinc-300/20">
+        <div onClick={() => {onItemClick(order.workspace)}} key={order.id} className="order max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl bg-zinc-300/20">
         <div className="md:flex">
           <div className="md:flex-shrink-0">
             <img className="h-48 w-full object-cover md:w-48" src={order.workspace.photo} alt="Man looking at item at a store"/>
