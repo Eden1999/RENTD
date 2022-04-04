@@ -47,9 +47,30 @@ const getOrdersByUserId = (req, res) => {
             }],
             where: { user_id: userId }
         })
-      .then((orders) => {
+      .then(async (orders) => {
         if (orders) {
           orders.map((order) => order.dataValues);
+
+          orders = await Promise.all(
+                orders.map(async ({ dataValues: order }) => {
+                const ratings = await sequelize.models.ratings.findAll({
+                    where: { workspace_id: order.workspace.dataValues.id },
+                    include: {
+                    model: sequelize.models.users,
+                    },
+                });
+                const host = await sequelize.models.users.findOne({
+                    where: { id: order.workspace.dataValues.host_id },
+                });
+                const spaceType = await sequelize.models.space_types.findOne({
+                    where: { id: order.workspace.dataValues.space_type_id },
+                });
+
+                return {...order,workspace : {...order.workspace.dataValues, ratings, host, spaceType }};
+                })
+            );
+
+
           return res.status(200).send(orders);
         } else {
           let err = "orders not found";
