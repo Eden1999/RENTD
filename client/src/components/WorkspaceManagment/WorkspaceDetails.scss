@@ -47,6 +47,10 @@
     color: #111;
   }
 
+  .review-content { 
+    display: flex;
+    flex-direction: column;
+  }
   .capacity,
   .description {
     text-align: left;
@@ -108,6 +112,7 @@
       text-align: left;
       flex: 1;
       display: flex;
+      justify-content: space-between;
       min-width: 50%;
       max-width: 50%;
       margin-bottom: 5%;

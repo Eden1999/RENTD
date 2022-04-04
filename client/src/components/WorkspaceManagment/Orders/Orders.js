@@ -174,7 +174,7 @@ const Orders = ({workspace}) => {
 
     return (
       <div className="demo-container">
-        <div className="long-title"><h3>Renting Timeline</h3></div>
+        <div className="text-white long-title"><h3>Renting Timeline</h3></div>
         <div id="app">
           <Scheduler
             // timeZone="America/Los_Angeles"
