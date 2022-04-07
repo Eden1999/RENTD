@@ -74,13 +74,18 @@ const WorkspaceHandler = () => {
       setSmokeFriendly(workspace.smoke_friendly)
       setDescription(workspace.description)
       setPhoto(workspace.photo || "")
-      setSpaceType(workspace.spaceType)
+      setSpaceType(spaceTypes.find(type => type.id === workspace.space_type_id))
       setOpeningDays(workspace.opening_days || [false, false, false, false, false, false, false])
       setOpeningHour(workspace.opening_hour)
       setClosingHour(workspace.closing_hour)
-      setSpaceType(workspace.spaceType)
     }
   }, [workspace]);
+
+  useEffect(() => {
+    if (workspace) {
+      setSpaceType(spaceTypes.find(type => type.id === workspace.space_type_id))  
+    }
+  }, [workspace, spaceTypes])
 
   const checkUserValidation = () => {
     let errors = "";
@@ -328,9 +333,9 @@ const WorkspaceHandler = () => {
               renderInput={(params =>
                       <TextField
                           variant="outlined"
-                          value={spaceType}
                           {...params} />
               )}
+              value={spaceType}
               onChange={(event, value) => setSpaceType(value)}
           />
         </div>
