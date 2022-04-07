@@ -6,6 +6,7 @@ import {Container, CssBaseline, Box, TextField, Button, Autocomplete, OutlinedIn
 import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
 import './NewWorkspace.scss'
+import _ from 'lodash';
 
 import TimePicker from 'react-time-picker';
 import Axios from "axios";
@@ -17,13 +18,11 @@ const daysCheckBox = [{dayName : 'sunday'}, {dayName : 'monday'},
 , {dayName : 'saturday'}]
 
 const WorkspaceHandler = () => {
-  const {
-    state: { workspace },
-  } = useLocation();
-
+  let location = useLocation()
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
   const [errorMessage, setErrorMessage] = useState("erros: ");
+  const [workspace, setWorkspace] = useState({});
   const [isInCreateMode, setIsInCreateMode] = useState(true) 
   const [name, setName] = useState("");
   const [host_id, setHostId] = useState(user.host_id);
@@ -45,6 +44,11 @@ const WorkspaceHandler = () => {
   const [closing_hour, setClosingHour] = useState('23:00');
   const [spaceTypes, setSpaceTypes] = useState([{id:1,name:''}]);
 
+  useEffect(() => {
+    console.log('hey')
+    setWorkspace(_.get(location, 'state.workspace'))
+  }, [location]);
+
   // Get space types from the server to the environment selector
   useEffect(async () => {
     try {
@@ -58,7 +62,7 @@ const WorkspaceHandler = () => {
   }, []);
 
   useEffect(() => {
-    if (workspace) {
+    if (!_.isEmpty(workspace)) {
       setIsInCreateMode(false)
       setName(workspace.name)
       setCity(workspace.city || "")
@@ -76,7 +80,7 @@ const WorkspaceHandler = () => {
       setClosingHour(workspace.closing_hour)
       setSpaceType(workspace.spaceType)
     }
-  }, []);
+  }, [workspace]);
 
   const checkUserValidation = () => {
     let errors = "";
