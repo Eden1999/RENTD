@@ -228,6 +228,39 @@ const searchWorkspaces = async (req, res) => {
   }
 };
 
+const deleteWorkspace = async (req, res) => {
+  const { id } = req.params;
+
+  const { token } = req.headers;
+
+  const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+
+  // check if user is already exist
+  sequelize.models.users
+    .findOne({ where: { id: decodeId } })
+    .then((user) => {
+      if (user) {
+        sequelize.models.workspaces
+          .destroy({where: {id: id}})
+          .then(() => {
+            return res.status(200).send();
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(err.status || 500).send(err.message || err.errors[0].message);
+          });
+      } else {
+        let err = "user not found";
+        console.log(err);
+        return res.status(500).send(err);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(err.status || 500).send(err);
+    });
+}
+
 module.exports = {
   getWorkspacesList,
   getWorkspacesByUserId,
@@ -235,4 +268,5 @@ module.exports = {
   editWorkspace,
   searchWorkspaces,
   getWorkspacesByHostId,
+  deleteWorkspace
 };

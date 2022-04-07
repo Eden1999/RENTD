@@ -15,5 +15,7 @@ router.post('/search', WorkspacesController.searchWorkspaces)
 
 router.put('/edit/:workspaceId', WorkspacesController.editWorkspace);
 
+router.delete('/:id', WorkspacesController.deleteWorkspace)
+
 
 module.exports = router;
