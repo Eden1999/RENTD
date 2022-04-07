@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useContext, useEffect} from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 import { AppContext } from "../../store/AppContext";
 import {Container, CssBaseline, Box, TextField, Button, Autocomplete, OutlinedInput} from "@mui/material";
 import useToken from "../../helpers/useToken";
@@ -9,16 +10,22 @@ import './NewWorkspace.scss'
 import TimePicker from 'react-time-picker';
 import Axios from "axios";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 
 const daysCheckBox = [{dayName : 'sunday'}, {dayName : 'monday'},
 {dayName : 'tuesday'}, {dayName : 'wednesday'}, {dayName : 'thursday'}, {dayName : 'friday'}
 , {dayName : 'saturday'}]
 
-const NewWorkspace = (props) => {
+const WorkspaceHandler = () => {
+  const {
+    state: { workspace },
+  } = useLocation();
+
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
   const [errorMessage, setErrorMessage] = useState("erros: ");
-  const [name, setName] = useState(null);
+  const [isInCreateMode, setIsInCreateMode] = useState(true) 
+  const [name, setName] = useState("");
   const [host_id, setHostId] = useState(user.host_id);
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
@@ -31,7 +38,7 @@ const NewWorkspace = (props) => {
   const [smoke_friendly, setSmokeFriendly] = useState(true);
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
-  const [spaceType, setSpaceType] = useState({});
+  const [spaceType, setSpaceType] = useState({id:1,name:''});
   const { token } = useToken();
   const [opening_days, setOpeningDays] = useState([false, false, false, false, false, false, false])
   const [opening_hour, setOpeningHour] = useState('10:00');
@@ -47,6 +54,27 @@ const NewWorkspace = (props) => {
       setSpaceType(res.data[0]);
     } catch (err) {
       console.log(`Failed to fetch spaceTypes ${err.message}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (workspace) {
+      setIsInCreateMode(false)
+      setName(workspace.name)
+      setCity(workspace.city || "")
+      setAddress(workspace.address || "")
+      setCostPerHour(workspace.cost_per_hour)
+      setCapacity(workspace.capacity)
+      setWifi(workspace.wifi)
+      setDisabledAccess(workspace.disabled_access)
+      setSmokeFriendly(workspace.smoke_friendly)
+      setDescription(workspace.description)
+      setPhoto(workspace.photo || "")
+      setSpaceType(workspace.spaceType)
+      setOpeningDays(workspace.opening_days || [false, false, false, false, false, false, false])
+      setOpeningHour(workspace.opening_hour)
+      setClosingHour(workspace.closing_hour)
+      setSpaceType(workspace.spaceType)
     }
   }, []);
 
@@ -85,7 +113,8 @@ const NewWorkspace = (props) => {
         closing_hour
       };
 
-      axios
+      if (isInCreateMode) {
+        axios
         .post("http://localhost:8000/workspaces/create", query, {
           headers: {
             token,
@@ -98,6 +127,21 @@ const NewWorkspace = (props) => {
         .catch((err) => {
           alert(err.response.data);
         });
+      } else {
+        axios
+        .put(`http://localhost:8000/workspaces/edit/${workspace.id}`, query, {
+          headers: {
+            token,
+          },
+        })
+        .then((res) => {
+          console.log("success");
+          navigate('/my-spaces');
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
+      }
     } else {
       alert(`${errorMessage}`);
     }
@@ -155,7 +199,7 @@ const NewWorkspace = (props) => {
           alignItems: "center",
         }}
       >
-       <div className={'mt-8 text-3xl text-zinc-200'}>Create new Workspace</div>
+       <div className={'mt-8 text-3xl text-zinc-200'}>{workspace ? `Edit Workspace` : 'Create new Workspace'}</div>
        <OutlinedInput
         id="name"
         autoComplete="name"
@@ -165,6 +209,7 @@ const NewWorkspace = (props) => {
         className="block shadow-sm-light bg-zinc-700 border
                     border-zinc-600 rounded-lg mb-6"
         placeholder="name"
+        value={name}
         onChange={(event) => setName(event.target.value)}/>
         <OutlinedInput
           id="city"
@@ -177,6 +222,7 @@ const NewWorkspace = (props) => {
           name="city"
           placeholder="city"
           type="city"
+          value={city}
           onChange={(event) => setCity(event.target.value)}
         />
         <OutlinedInput
@@ -190,6 +236,7 @@ const NewWorkspace = (props) => {
           type="address"
           id="address"
           autoComplete="address"
+          value={address}
           onChange={(event) => setAddress(event.target.value)}
         />
         <OutlinedInput
@@ -203,6 +250,7 @@ const NewWorkspace = (props) => {
           type="description"
           id="description"
           autoComplete="description"
+          value={description}
           onChange={(event) => setDescription(event.target.value)}
         />
         <OutlinedInput
@@ -217,6 +265,7 @@ const NewWorkspace = (props) => {
           type="capacity"
           id="capacity"
           autoComplete="capacity"
+          value={capacity}
           onChange={(event) => setCapacity(event.target.value)}
         />
         <OutlinedInput
@@ -231,6 +280,7 @@ const NewWorkspace = (props) => {
           type="cost per hour"
           id="cost per hour"
           autoComplete="cost per hour"
+          value={cost_per_hour}
           onChange={(event) => setCostPerHour(event.target.value)}
         />
         <a className="text-zinc-400">Do you have any from the next:</a>
@@ -274,6 +324,7 @@ const NewWorkspace = (props) => {
               renderInput={(params =>
                       <TextField
                           variant="outlined"
+                          value={spaceType}
                           {...params} />
               )}
               onChange={(event, value) => setSpaceType(value)}
@@ -328,6 +379,8 @@ const NewWorkspace = (props) => {
   );
 };
 
-NewWorkspace.propTypes = {};
+WorkspaceHandler.propTypes = {
+  workspace: PropTypes.object,
+};
 
-export default NewWorkspace;
+export default WorkspaceHandler;

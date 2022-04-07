@@ -1,7 +1,7 @@
 import Login from "../../components/UserManagment/Login";
 import Profile from "../../components/UserManagment/Profile";
 import Register from "../../components/UserManagment/Register";
-import NewWorkspace from "../../components/WorkspaceManagment/NewWorkspace";
+import WorkspaceHandler from "../../components/WorkspaceManagment/WorkspaceHandler";
 import WorkspacesView from "../../components/WorkspaceManagment/WorkspacesView";
 import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
 import HomepageView from '../../components/Homepage/HomepageView'
@@ -37,7 +37,12 @@ const routes = [
   },
   {
     path: "/manage/newWorkspace",
-    Component: <NewWorkspace />,
+    Component: <WorkspaceHandler />,
+    allowed: [userTypes.host],
+  },
+  {
+    path: "/manage/editWorkspace",
+    Component: <WorkspaceHandler />,
     allowed: [userTypes.host],
   },
   {

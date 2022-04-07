@@ -13,7 +13,7 @@ router.post('/create', WorkspacesController.createNewWorkspace);
 
 router.post('/search', WorkspacesController.searchWorkspaces)
 
-router.put('/edit/:workspaceId', WorkspacesController.createNewWorkspace);
+router.put('/edit/:workspaceId', WorkspacesController.editWorkspace);
 
 
 module.exports = router;

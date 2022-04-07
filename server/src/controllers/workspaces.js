@@ -122,7 +122,75 @@ const createNewWorkspace = (req, res) => {
     });
 };
 
-const editWorkspace = (req, res) => {};
+const editWorkspace = (req, res) => {
+  const { workspaceId } = req.params;
+
+  const { token } = req.headers;
+  const {
+    name,
+    city,
+    address,
+    location_x,
+    location_y,
+    cost_per_hour,
+    capacity,
+    wifi,
+    disabled_access,
+    smoke_friendly,
+    description,
+    space_type_id,
+    photo,
+    opening_days,
+    opening_hour,
+    closing_hour,
+  } = req.body;
+
+  const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+
+  let updateWorkspace = {
+    name,
+    city,
+    address,
+    location_x,
+    location_y,
+    cost_per_hour,
+    capacity,
+    wifi,
+    disabled_access,
+    smoke_friendly,
+    description,
+    space_type_id,
+    photo,
+    opening_days,
+    opening_hour,
+    closing_hour,
+  };
+
+  // check if user is already exist
+  sequelize.models.users
+    .findOne({ where: { id: decodeId } })
+    .then((user) => {
+      if (user) {
+        sequelize.models.workspaces
+          .update(updateWorkspace, {where: {id: workspaceId}})
+          .then(() => {
+            return res.status(200).send();
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(err.status || 500).send(err.message || err.errors[0].message);
+          });
+      } else {
+        let err = "user not found";
+        console.log(err);
+        return res.status(500).send(err);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(err.status || 500).send(err);
+    });
+}
 
 const searchWorkspaces = async (req, res) => {
   try {
