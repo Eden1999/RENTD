@@ -21,15 +21,31 @@ const getWorkspacesList = (req, res) => {
     });
 };
 
-const getWorkspacesByHostId = (req, res) => {
+const getWorkspacesByHostId = async (req, res) => {
   const { hostId } = req.params;
 
   sequelize.models.workspaces
     .findAll({ where: { host_id: hostId } })
-    .then((workspaces) => {
+    .then(async (workspaces) => {
       if (workspaces) {
-        workspaces.map((workspace) => workspace.dataValues);
-        return res.status(200).send(workspaces);
+        const fullWorkspaces = await Promise.all(
+          workspaces.map(async ({ dataValues: workspace }) => {
+            const ratings = await sequelize.models.ratings.findAll({
+              where: { workspace_id: workspace.id },
+              include: {
+                model: sequelize.models.users,
+              },
+            });
+            const host = await sequelize.models.users.findOne({
+              where: { id: workspace.host_id },
+            });
+            const spaceType = await sequelize.models.space_types.findOne({
+              where: { id: workspace.space_type_id },
+            });
+            return { ...workspace, ratings, host, spaceType };
+          })
+        );
+        return res.status(200).send(fullWorkspaces);
       } else {
         let err = "workspaces not found";
         console.log(err);
@@ -172,7 +188,7 @@ const editWorkspace = (req, res) => {
     .then((user) => {
       if (user) {
         sequelize.models.workspaces
-          .update(updateWorkspace, {where: {id: workspaceId}})
+          .update(updateWorkspace, { where: { id: workspaceId } })
           .then(() => {
             return res.status(200).send();
           })
@@ -190,7 +206,7 @@ const editWorkspace = (req, res) => {
       console.log(err);
       return res.status(err.status || 500).send(err);
     });
-}
+};
 
 const searchWorkspaces = async (req, res) => {
   try {
@@ -241,7 +257,7 @@ const deleteWorkspace = async (req, res) => {
     .then((user) => {
       if (user) {
         sequelize.models.workspaces
-          .destroy({where: {id: id}})
+          .destroy({ where: { id: id } })
           .then(() => {
             return res.status(200).send();
           })
@@ -259,7 +275,7 @@ const deleteWorkspace = async (req, res) => {
       console.log(err);
       return res.status(err.status || 500).send(err);
     });
-}
+};
 
 module.exports = {
   getWorkspacesList,
@@ -268,5 +284,5 @@ module.exports = {
   editWorkspace,
   searchWorkspaces,
   getWorkspacesByHostId,
-  deleteWorkspace
+  deleteWorkspace,
 };
