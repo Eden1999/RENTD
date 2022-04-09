@@ -3,7 +3,7 @@ import WorkspacesListItem from "../WorkspaceManagment/WorkspacesListItem";
 import Axios from "axios";
 import {AppContext} from "../../store/AppContext";
 
-const WorkspacesList = () => {
+const WorkspacesList = ({isEditable}) => {
     const [workspaces, setWorkspaces] = useState([]);
     const [{user}] = useContext(AppContext);
 
@@ -29,7 +29,7 @@ const WorkspacesList = () => {
         <div className={'text-white flex flex-col flex-1'}>
             {
                 workspaces && workspaces.map((workspace) => (
-                    <WorkspacesListItem workspace={workspace} onDelete={onDelete}/>
+                    <WorkspacesListItem workspace={workspace} onDelete={onDelete} isEditable={isEditable}/>
                     )
                 )
             }

@@ -8,7 +8,7 @@ import { AppContext } from "../../store/AppContext";
 import axios from 'axios'
 import useToken from "../../helpers/useToken";
 
-const WorkspacesListItem = ({ workspace, onDelete }) => {
+const WorkspacesListItem = ({ workspace, isEditable, onDelete }) => {
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
   const { token, setToken } = useToken();
@@ -60,7 +60,7 @@ const WorkspacesListItem = ({ workspace, onDelete }) => {
       <img src={workspace.photo} className={"h-28 w-48 bg-zinc-400 rounded-md"} />
       <div className={"flex flex-col text-left flex-1 ml-8"}>
         <span className={"text-xl text-zinc-100"}>{workspace.name}</span>
-        {user.is_host && (<span>
+        {isEditable && (<span>
             <IconButton id="editIcon" aria-label="edit workspace" color='primary' onClick={(e) => onEditClick(e, workspace)}>
               <EditIcon />
             </IconButton>

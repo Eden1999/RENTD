@@ -19,7 +19,7 @@ const MySpaces = () => {
                         </Link>
                     </div>
                     <div className={'flex mt-10'}>
-                        <WorkspacesList />
+                        <WorkspacesList isEditable={true}/>
                     </div>
                 </div>
 
