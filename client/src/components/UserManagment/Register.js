@@ -148,8 +148,8 @@ const Register = () => {
 };
 
 Register.propTypes = {
-  setToken: PropTypes.func.isRequired,
-  setRegisterMode: PropTypes.func.isRequired,
+  // setToken: PropTypes.func.isRequired,
+  // setRegisterMode: PropTypes.func.isRequired,
 };
 
 export default Register;
