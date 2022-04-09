@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState, useCallback} from "react";
 import WorkspacesListItem from "../WorkspaceManagment/WorkspacesListItem";
 import Axios from "axios";
 import {AppContext} from "../../store/AppContext";
@@ -6,6 +6,14 @@ import {AppContext} from "../../store/AppContext";
 const WorkspacesList = () => {
     const [workspaces, setWorkspaces] = useState([]);
     const [{user}] = useContext(AppContext);
+
+    const onDelete = (id) => {
+        setWorkspaces(workspaces => {
+            let newArray = workspaces
+            workspaces = newArray.filter(obj => obj.id !== id)
+            return workspaces
+        })
+    }
 
     useEffect(async () => {
         try {
@@ -20,8 +28,8 @@ const WorkspacesList = () => {
     return (
         <div className={'text-white flex flex-col flex-1'}>
             {
-                workspaces.map((workspace) => (
-                    <WorkspacesListItem workspace={workspace}/>
+                workspaces && workspaces.map((workspace) => (
+                    <WorkspacesListItem workspace={workspace} onDelete={onDelete}/>
                     )
                 )
             }

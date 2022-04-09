@@ -8,7 +8,7 @@ import { AppContext } from "../../store/AppContext";
 import axios from 'axios'
 import useToken from "../../helpers/useToken";
 
-const WorkspacesListItem = ({ workspace }) => {
+const WorkspacesListItem = ({ workspace, onDelete }) => {
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
   const { token, setToken } = useToken();
@@ -31,6 +31,7 @@ const WorkspacesListItem = ({ workspace }) => {
       token,
     }},)
     .then((res) => {
+      onDelete(workspace.id)
       navigate('/my-spaces');
     })
     .catch(err =>{
