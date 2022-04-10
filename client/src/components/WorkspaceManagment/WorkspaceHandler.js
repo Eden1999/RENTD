@@ -22,32 +22,41 @@ const WorkspaceHandler = () => {
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
   const [errorMessage, setErrorMessage] = useState("erros: ");
-  const [workspace, setWorkspace] = useState({});
+  const [workspace, setWorkspace] = useState({
+    name: "",
+    host_id: user.host_id,
+    city: "",
+    address: "",
+    cost_per_hour: 10,
+    capacity: 20,
+    wifi: true,
+    disabled_access: true,
+    smoke_friendly: true,
+    location_x: 1.0,
+    location_y: 1.0,
+    description: "",
+    photo: "",
+    spaceType: {id:1,name:''},
+    opening_days: [false, false, false, false, false, false, false],
+    opening_hour: '10:00',
+    closing_hour: '23:00',
+    spaceTypes: [{id:1,name:''}]
+  });
   const [isInCreateMode, setIsInCreateMode] = useState(true) 
-  const [name, setName] = useState("");
-  const [host_id, setHostId] = useState(user.host_id);
-  const [city, setCity] = useState("");
-  const [address, setAddress] = useState("");
   const [location_x, setLocationX] = useState(1.0);
   const [location_y, setLocationY] = useState(1.0);
-  const [cost_per_hour, setCostPerHour] = useState(10);
-  const [capacity, setCapacity] = useState(20);
-  const [wifi, setWifi] = useState(true);
-  const [disabled_access, setDisabledAccess] = useState(true);
-  const [smoke_friendly, setSmokeFriendly] = useState(true);
-  const [description, setDescription] = useState("");
-  const [photo, setPhoto] = useState("");
-  const [spaceType, setSpaceType] = useState({id:1,name:''});
   const { token } = useToken();
-  const [opening_days, setOpeningDays] = useState([false, false, false, false, false, false, false])
-  const [opening_hour, setOpeningHour] = useState('10:00');
-  const [closing_hour, setClosingHour] = useState('23:00');
   const [spaceTypes, setSpaceTypes] = useState([{id:1,name:''}]);
 
   useEffect(() => {
     console.log('hey')
-    setWorkspace(_.get(location, 'state.workspace'))
-  }, [location]);
+    const workspace = _.get(location, 'state.workspace')
+
+    if (!_.isEmpty(workspace)) {
+      setWorkspace(workspace)
+      setIsInCreateMode(false)
+    }
+  }, [location, spaceTypes]);
 
   // Get space types from the server to the environment selector
   useEffect(async () => {
@@ -55,44 +64,18 @@ const WorkspaceHandler = () => {
       const query = {};
       const res = await Axios.get("http://localhost:8000/spacetypes", query);
       setSpaceTypes(res.data);
-      setSpaceType(res.data[0]);
+      setWorkspace(workspace => ({...workspace, spaceType: res.data[0]}))
     } catch (err) {
       console.log(`Failed to fetch spaceTypes ${err.message}`);
     }
   }, []);
-
-  useEffect(() => {
-    if (!_.isEmpty(workspace)) {
-      setIsInCreateMode(false)
-      setName(workspace.name)
-      setCity(workspace.city || "")
-      setAddress(workspace.address || "")
-      setCostPerHour(workspace.cost_per_hour)
-      setCapacity(workspace.capacity)
-      setWifi(workspace.wifi)
-      setDisabledAccess(workspace.disabled_access)
-      setSmokeFriendly(workspace.smoke_friendly)
-      setDescription(workspace.description)
-      setPhoto(workspace.photo || "")
-      setSpaceType(spaceTypes.find(type => type.id === workspace.space_type_id))
-      setOpeningDays(workspace.opening_days || [false, false, false, false, false, false, false])
-      setOpeningHour(workspace.opening_hour)
-      setClosingHour(workspace.closing_hour)
-    }
-  }, [workspace]);
-
-  useEffect(() => {
-    if (workspace) {
-      setSpaceType(spaceTypes.find(type => type.id === workspace.space_type_id))  
-    }
-  }, [workspace, spaceTypes])
 
   const checkUserValidation = () => {
     let errors = "";
     let isFormValid = true;
 
     //Name
-    if (!name) {
+    if (!workspace.name) {
       isFormValid = false;
       errors = errors + " name cannot be empty ";
       setErrorMessage(errors);
@@ -103,28 +86,11 @@ const WorkspaceHandler = () => {
 
   const handleSave = useCallback(async () => {
     if (checkUserValidation()) {
-      const query = {
-        name,
-        city,
-        address,
-        location_x,
-        location_y,
-        cost_per_hour,
-        capacity,
-        wifi,
-        disabled_access,
-        smoke_friendly,
-        description,
-        space_type_id: spaceType.id,
-        photo,
-        opening_days,
-        opening_hour,
-        closing_hour
-      };
 
+      workspace.space_type_id = workspace.spaceType.id
       if (isInCreateMode) {
         axios
-        .post("http://localhost:8000/workspaces/create", query, {
+        .post("http://localhost:8000/workspaces/create", {workspace}, {
           headers: {
             token,
           },
@@ -132,20 +98,22 @@ const WorkspaceHandler = () => {
         .then((res) => {
           console.log("success");
           navigate('/my-spaces');
+          // navigate(-1)
         })
         .catch((err) => {
           alert(err.response.data);
         });
       } else {
         axios
-        .put(`http://localhost:8000/workspaces/edit/${workspace.id}`, query, {
+        .put(`http://localhost:8000/workspaces/edit/${workspace.id}`, {workspace}, {
           headers: {
             token,
           },
         })
-        .then((res) => {
+        .then(() => {
           console.log("success");
           navigate('/my-spaces');
+          // navigate(-1, { state: { workspace }, replace: true })
         })
         .catch((err) => {
           alert(err.response.data);
@@ -157,25 +125,29 @@ const WorkspaceHandler = () => {
   });
 
   const handleChangeIsWifi = () => {
-    setWifi(!wifi);
+    setWorkspace(workspace => ({...workspace, wifi: !workspace.wifi}))
   };
 
+  const setOpeningHour = (value) => {
+    setWorkspace(workspace => ({...workspace, opening_hour: value}))
+  }
+
+  const setClosingHour = (value) => {
+    setWorkspace(workspace => ({...workspace, closing_hour: value}))
+  }
+
   const handleChangeDisabledAccess = () => {
-    setDisabledAccess(!disabled_access);
+    setWorkspace(workspace => ({...workspace, disabled_access: !workspace.disabled_access}))
   };
 
   const HandleChangeSmokeFriendly = () => {
-    setSmokeFriendly(!smoke_friendly);
+    setWorkspace(workspace => ({...workspace, smoke_friendly: !workspace.smoke_friendly}))
   };
 
   const HandleChangeOpeningDays = ({target: {checked, id}}) => {
-    let newArray = [...opening_days]
+    let newArray = [...workspace.opening_days]
     newArray[id] = checked
-    setOpeningDays(newArray)
-  //   setOpeningDays(opening_days=>({
-  //     ...opening_days,
-  //     [id]: checked
-  //  }))
+    setWorkspace(workspace => ({...workspace, opening_days: newArray}))
   }
 
   const convertToBase64 = (file) => {
@@ -194,7 +166,7 @@ const WorkspaceHandler = () => {
   const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
     const base64Photo = await convertToBase64(file);
-    setPhoto(base64Photo);
+    setWorkspace(workspace => ({...workspace, photo: base64Photo}))
   };
 
   return (
@@ -208,7 +180,7 @@ const WorkspaceHandler = () => {
           alignItems: "center",
         }}
       >
-       <div className={'mt-8 text-3xl text-zinc-200'}>{workspace ? `Edit Workspace` : 'Create new Workspace'}</div>
+       <div className={'mt-8 text-3xl text-zinc-200'}>{isInCreateMode ? 'Create new Workspace' : `Edit Workspace`}</div>
        <OutlinedInput
         id="name"
         autoComplete="name"
@@ -218,8 +190,10 @@ const WorkspaceHandler = () => {
         className="block shadow-sm-light bg-zinc-700 border
                     border-zinc-600 rounded-lg mb-6"
         placeholder="name"
-        value={name}
-        onChange={(event) => setName(event.target.value)}/>
+        value={workspace.name}
+        onChange={(event) => {
+          setWorkspace(workspace => ({...workspace, name: event.target.value}))
+        }}/>
         <OutlinedInput
           id="city"
           autoComplete="city"
@@ -231,8 +205,10 @@ const WorkspaceHandler = () => {
           name="city"
           placeholder="city"
           type="city"
-          value={city}
-          onChange={(event) => setCity(event.target.value)}
+          value={workspace.city}
+          onChange={(event) => {
+            setWorkspace(workspace => ({...workspace, city: event.target.value}))
+          }}
         />
         <OutlinedInput
           required
@@ -245,8 +221,10 @@ const WorkspaceHandler = () => {
           type="address"
           id="address"
           autoComplete="address"
-          value={address}
-          onChange={(event) => setAddress(event.target.value)}
+          value={workspace.address}
+          onChange={(event) => {
+            setWorkspace(workspace => ({...workspace, address: event.target.value}))
+          }}
         />
         <OutlinedInput
           required
@@ -259,8 +237,10 @@ const WorkspaceHandler = () => {
           type="description"
           id="description"
           autoComplete="description"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
+          value={workspace.description}
+          onChange={(event) => {
+            setWorkspace(workspace => ({...workspace, description: event.target.value}))
+          }}
         />
         <OutlinedInput
           variant="outlined"
@@ -274,8 +254,10 @@ const WorkspaceHandler = () => {
           type="capacity"
           id="capacity"
           autoComplete="capacity"
-          value={capacity}
-          onChange={(event) => setCapacity(event.target.value)}
+          value={workspace.capacity}
+          onChange={(event) => {
+            setWorkspace(workspace => ({...workspace, capacity: event.target.value}))
+          }}
         />
         <OutlinedInput
           variant="outlined"
@@ -289,15 +271,17 @@ const WorkspaceHandler = () => {
           type="cost per hour"
           id="cost per hour"
           autoComplete="cost per hour"
-          value={cost_per_hour}
-          onChange={(event) => setCostPerHour(event.target.value)}
+          value={workspace.cost_per_hour}
+          onChange={(event) => {
+            setWorkspace(workspace => ({...workspace, cost_per_hour: event.target.value}))
+          }}
         />
         <a className="text-zinc-400">Do you have any from the next:</a>
         <div className="all-checkbox">
         <div className="single-checkbox">
         <a className="text-zinc-400">wifi</a>
         <Checkbox
-          checked={wifi}
+          checked={workspace.wifi}
           onChange={handleChangeIsWifi}
           inputProps={{ "aria-label": "controlled" }}
         />
@@ -305,7 +289,7 @@ const WorkspaceHandler = () => {
         <div className="single-checkbox">
         <a className="text-zinc-400">disabled access</a>
         <Checkbox
-          checked={disabled_access}
+          checked={workspace.disabled_access}
           onChange={handleChangeDisabledAccess}
           inputProps={{ "aria-label": "controlled" }}
         />
@@ -313,7 +297,7 @@ const WorkspaceHandler = () => {
         <div className="single-checkbox">
         <a className="text-zinc-400">smoke friendly</a>
         <Checkbox
-          checked={smoke_friendly}
+          checked={workspace.smoke_friendly}
           onChange={HandleChangeSmokeFriendly}
           inputProps={{ "aria-label": "controlled" }}
         />
@@ -335,8 +319,10 @@ const WorkspaceHandler = () => {
                           variant="outlined"
                           {...params} />
               )}
-              value={spaceType}
-              onChange={(event, value) => setSpaceType(value)}
+              value={workspace.spaceType}
+              onChange={(event, value) => 
+                {setWorkspace(workspace => ({...workspace, spaceType: value}))}
+              }
           />
         </div>
         <a className="text-zinc-400">set opening days</a>
@@ -345,7 +331,7 @@ const WorkspaceHandler = () => {
             return <div key={index} className="single-checkbox">
               <a className="text-zinc-400">{day.dayName}</a>
               <Checkbox
-                checked={opening_days[index]}
+                checked={workspace.opening_days[index]}
                 id={index.toString()}
                 onChange={HandleChangeOpeningDays}
                 inputProps={{ 'aria-label': 'controlled' }}
@@ -357,10 +343,10 @@ const WorkspaceHandler = () => {
           <a className="text-zinc-400">opening hour</a>
           <TimePicker
             onChange={setOpeningHour}
-            value={opening_hour}/>
+            value={workspace.opening_hour}/>
           <TimePicker
             onChange={setClosingHour}
-            value={closing_hour}/>
+            value={workspace.closing_hour}/>
         <input
           type="file"
           label="Photo"
@@ -369,7 +355,7 @@ const WorkspaceHandler = () => {
           onChange={handlePhotoUpload}
         />
         <div className="photo-preview">
-          <img src={photo} />
+          <img src={workspace.photo} />
         </div>
         <Button
           fullWidth

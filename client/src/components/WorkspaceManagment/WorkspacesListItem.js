@@ -15,7 +15,7 @@ const WorkspacesListItem = ({ workspace, isEditable, onDelete }) => {
   const [ , dispatch] = useContext(AppContext)
 
   const onItemClick = useCallback((e, workspace) => {
-    navigate(`/workspaces/${workspace.id}`, { state: { workspace } });
+    navigate(`/workspaces/${workspace.id}`, { state: { workspace, isEditable} });
   }, []);
 
   const onEditClick = useCallback((e, workspace) => {
