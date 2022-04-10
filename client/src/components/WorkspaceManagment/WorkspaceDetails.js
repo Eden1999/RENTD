@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
@@ -12,14 +12,49 @@ import { StarBorderRounded, Wifi, SmokeFree, SmokingRooms, Accessible } from "@m
 import Orders from "./Orders/Orders";
 
 import "./WorkspaceDetails.scss";
-import { Rating } from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField } from "@mui/material";
+import { AppContext } from "store/AppContext";
 
 const WorkspaceDetails = () => {
+  const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [{ user }] = useContext(AppContext);
+  const [workspace, setWorkspace] = useState(useLocation().state.workspace)
   const {
-    state: { workspace, isEditable },
+    state: { isEditable },
   } = useLocation();
   const navigate = useNavigate();
   const { token, setToken } = useToken();
+
+  const handleClose = () => {
+    setRating(0);
+    setComment("");
+    setOpen(false);
+  }
+
+  const handleWriteComment = () => {
+    handleClose();
+
+    const query = {
+      workspace_id : workspace.id,
+      comment,
+      rating
+    }
+
+    axios.post(`http://localhost:8000/ratings/create`, query, {
+      headers: {
+        token,
+      }
+    })
+    .then((res) => {
+      console.log(res.data)
+      setWorkspace({...workspace, ratings : [...workspace.ratings, res?.data]})
+    })
+    .catch(err =>{
+      alert(err.response.data)
+  })
+  }
   
   const onEditClick = useCallback((e, workspace) => {
     navigate(`/manage/editWorkspace`, { state: { workspace } });
@@ -59,7 +94,7 @@ const WorkspaceDetails = () => {
         </span>)}
           <p className="text-3xl text-white pr-3">{workspace.name}</p>
           {workspace.ratings.length > 0 && (
-            <Rating className="pr-1" name="read-only" value={workspace.ratings.reduce((total, currRating) => total + currRating.rating, 0) /
+            <Rating precision={0.5} className="pr-1" name="read-only" value={workspace.ratings.reduce((total, currRating) => total + parseInt(currRating.rating), 0) /
                 workspace.ratings.length} readOnly /> 
           )}
           <p className="text-sm text-white pr-3">({workspace.ratings.length} reviews)</p>  
@@ -71,7 +106,7 @@ const WorkspaceDetails = () => {
           </div>
           <div className="location">{workspace.location}</div>
         </div>
-        <div className="hero container mx-auto w-3/12 pb-10">
+        <div className="hero container mx-auto w-96 pb-10">
           <img src={workspace.photo} />
         </div>
         <span className="text-md text-white">
@@ -100,32 +135,61 @@ const WorkspaceDetails = () => {
             </div>
           </div>
         </span>
-        {workspace.ratings.length > 0 && (
           <>
-            <div className="reviews-title">
-              <h2 className="text-xl text-white pb-3">Reviews</h2>
-            </div>
-            <div className="reviews">
-              {workspace.ratings.map((rating) => (
-                <div key={rating.id} className="flex justify-between pb-3">
-                  <div className="user-photo">
-                    <Rating name="read-only" value={rating.rating} readOnly 
-                    emptyIcon={<StarBorderRounded style={{ opacity: 0.55, color : "white" }} fontSize="inherit"/>}/>
+            {workspace.ratings.length > 0 && (
+            <>
+              <div className="reviews-title">
+                <h2 className="text-xl text-white pb-3">Reviews</h2>
+              </div>
+              <div className="reviews">
+                {workspace.ratings.map((rating) => (
+                  <div key={rating.id} className="flex justify-between pb-3">
+                    <div className="user-photo">
+                      <Rating name="read-only" value={rating.rating} readOnly 
+                      emptyIcon={<StarBorderRounded style={{ opacity: 0.55, color : "white" }} fontSize="inherit"/>}/>
+                    </div>
+                    <span className="flex flex-col text-md text-white">
+                        <h2 className="text-right">{rating.user.username}</h2>
+                        <span>{rating.comment}</span>
+                    </span>
                   </div>
-                  <span className="flex flex-col text-md text-white">
-                      <h2 className="text-right">{rating.user.username}</h2>
-                      <span>{rating.comment}</span>
-                  </span>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
+            )}
+            {!user.is_host && <button onClick={() => {setOpen(true)}}
+                    className="text-white 2xl:text-lg text-sm bg-blue-600 hover:bg-blue-700 focus:ring-4
+                      focus:outline-none focus:ring-blue-800 font-medium rounded-lg
+                      px-5 py-2.5 text-center">
+                Write a review
+            </button>}
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Write a review</DialogTitle>
+              <DialogContent>
+              <Rating name="rating" 
+                value={rating} 
+                onChange={(_, value) => {
+                  setRating(value);
+                }}/>
+                <TextField
+                id="comment"
+                required
+                multiline
+                fullWidth
+                value={comment}
+                className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none 
+                  w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                placeholder="Type your comment"
+                onChange={(event) => setComment(event.target.value)}
+                />
+            </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleWriteComment}>Send review</Button>
+              </DialogActions>
+            </Dialog>
           </>
-        )}
-        <div>
-          <Orders
-            workspace={workspace}
-          />
-        </div>
+        <Orders workspace={workspace}/>
     </div>
     </div>
   );
