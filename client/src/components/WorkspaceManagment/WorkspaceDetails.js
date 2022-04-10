@@ -1,5 +1,13 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import useToken from "../../helpers/useToken";
+
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { StarBorderRounded, Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
 import Orders from "./Orders/Orders";
 
@@ -8,13 +16,47 @@ import { Rating } from "@mui/material";
 
 const WorkspaceDetails = () => {
   const {
-    state: { workspace },
+    state: { workspace, isEditable },
   } = useLocation();
+  const navigate = useNavigate();
+  const { token, setToken } = useToken();
+  
+  const onEditClick = useCallback((e, workspace) => {
+    navigate(`/manage/editWorkspace`, { state: { workspace } });
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+  }, []);
+
+  const onDeleteClick = useCallback((e, workspace) => {
+    axios.delete(`http://localhost:8000/workspaces/${workspace.id}`, 
+    {headers: {
+      token,
+    }},)
+    .then((res) => {
+      navigate('/my-spaces');
+    })
+    .catch(err =>{
+        alert(err.response.data)
+    })
+
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+  }, []);
 
   return (
     <div className="flex flex-column justify-center h-full px-20 py-10 2xl:py-20">
     <div>
         <div className="flex flex-row items-center">
+        {isEditable && (<span>
+            <IconButton id="editIcon" aria-label="edit workspace" color='primary' onClick={(e) => onEditClick(e, workspace)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton id="deleteIcon" aria-label="edit workspace" color='primary' onClick={(e) => onDeleteClick(e, workspace)}>
+              <DeleteIcon />
+            </IconButton>
+        </span>)}
           <p className="text-3xl text-white pr-3">{workspace.name}</p>
           {workspace.ratings.length > 0 && (
             <Rating className="pr-1" name="read-only" value={workspace.ratings.reduce((total, currRating) => total + currRating.rating, 0) /
