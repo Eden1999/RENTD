@@ -63,24 +63,7 @@ const getWorkspacesByUserId = (req, res) => {};
 
 const createNewWorkspace = (req, res) => {
   const { token } = req.headers;
-  const {
-    name,
-    city,
-    address,
-    location_x,
-    location_y,
-    cost_per_hour,
-    capacity,
-    wifi,
-    disabled_access,
-    smoke_friendly,
-    description,
-    space_type_id,
-    photo,
-    opening_days,
-    opening_hour,
-    closing_hour,
-  } = req.body;
+  const { workspace } = req.body;
 
   // let openingDate = new Date(opening_hour)
   // let openingHour = date.getHours()
@@ -92,33 +75,14 @@ const createNewWorkspace = (req, res) => {
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
-  let newWorkspace = {
-    name,
-    city,
-    address,
-    location_x,
-    location_y,
-    cost_per_hour,
-    capacity,
-    wifi,
-    disabled_access,
-    smoke_friendly,
-    description,
-    space_type_id,
-    photo,
-    opening_days,
-    opening_hour,
-    closing_hour,
-  };
-
   // check if user is already exist
   sequelize.models.users
     .findOne({ where: { id: decodeId } })
     .then((user) => {
       if (user) {
-        newWorkspace.host_id = user.id;
+        workspace.host_id = user.id;
         sequelize.models.workspaces
-          .create(newWorkspace)
+          .create(workspace)
           .then(() => {
             return res.status(200).send();
           })
@@ -142,45 +106,9 @@ const editWorkspace = (req, res) => {
   const { workspaceId } = req.params;
 
   const { token } = req.headers;
-  const {
-    name,
-    city,
-    address,
-    location_x,
-    location_y,
-    cost_per_hour,
-    capacity,
-    wifi,
-    disabled_access,
-    smoke_friendly,
-    description,
-    space_type_id,
-    photo,
-    opening_days,
-    opening_hour,
-    closing_hour,
-  } = req.body;
+  const { workspace } = req.body;
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
-
-  let updateWorkspace = {
-    name,
-    city,
-    address,
-    location_x,
-    location_y,
-    cost_per_hour,
-    capacity,
-    wifi,
-    disabled_access,
-    smoke_friendly,
-    description,
-    space_type_id,
-    photo,
-    opening_days,
-    opening_hour,
-    closing_hour,
-  };
 
   // check if user is already exist
   sequelize.models.users
@@ -188,7 +116,7 @@ const editWorkspace = (req, res) => {
     .then((user) => {
       if (user) {
         sequelize.models.workspaces
-          .update(updateWorkspace, { where: { id: workspaceId } })
+          .update(workspace, { where: { id: workspaceId } })
           .then(() => {
             return res.status(200).send();
           })
