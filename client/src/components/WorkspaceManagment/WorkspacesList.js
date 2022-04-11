@@ -4,7 +4,7 @@ import Axios from "axios";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
-const WorkspacesList = () => {
+const WorkspacesList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
   const [workspaces, setWorkspaces] = useState([]);
 
   const workspaceParams = useLocation();
@@ -49,6 +49,7 @@ const WorkspacesList = () => {
     });
 
     setFilteredWorkspaces(newFilteredWorkspaces);
+    setMapMarkers(newFilteredWorkspaces);
   }, [workspaces, checkedFilters]);
 
   useEffect(async () => {
@@ -83,7 +84,12 @@ const WorkspacesList = () => {
       </FormGroup>
       <div className={"text-white flex flex-col flex-1 px-12"}>
         {filteredWorkspaces.map((workspace) => (
-          <WorkspacesListItem key={workspace.id} workspace={workspace} />
+          <WorkspacesListItem
+            key={workspace.id}
+            workspace={workspace}
+            hoveredOnMap={workspace.id == hoveredMarkerId}
+            setHoveredWorkspaceId={setHoveredWorkspaceId}
+          />
         ))}
       </div>
     </div>
