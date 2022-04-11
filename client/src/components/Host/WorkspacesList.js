@@ -3,7 +3,7 @@ import WorkspacesListItem from "../WorkspaceManagment/WorkspacesListItem";
 import Axios from "axios";
 import { AppContext } from "../../store/AppContext";
 
-const WorkspacesList = ({ isEditable }) => {
+const WorkspacesList = ({ isEditable, setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
   const [workspaces, setWorkspaces] = useState([]);
   const [{ user }] = useContext(AppContext);
 
@@ -20,6 +20,7 @@ const WorkspacesList = ({ isEditable }) => {
       const query = {};
       const res = await Axios.get(`http://localhost:8000/workspaces/hosts/${user.id}`);
       setWorkspaces(res.data);
+      setMapMarkers(res.data);
     } catch (err) {
       console.log(`Failed to fetch workspaces ${err.message}`);
     }
@@ -34,6 +35,8 @@ const WorkspacesList = ({ isEditable }) => {
             key={workspace.id}
             onDelete={onDelete}
             isEditable={isEditable}
+            hoveredOnMap={workspace.id == hoveredMarkerId}
+            setHoveredWorkspaceId={setHoveredWorkspaceId}
           />
         ))}
     </div>

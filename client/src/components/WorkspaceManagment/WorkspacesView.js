@@ -1,12 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useCallback } from "react";
 
 import Map from "../Map/Map";
 
 import WorkspacesSearchData from "./WorkspacesSearchData";
 
 const WorkspacesView = () => {
-  const navigate = useNavigate();
   const [mapMarkers, setMapMarkers] = useState([]);
   const [hoveredWorkspaceId, setHoveredWorkspaceId] = useState(null);
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
