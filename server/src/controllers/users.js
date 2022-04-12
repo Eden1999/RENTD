@@ -1,6 +1,9 @@
 const { sequelize } = require("../config/sequelize");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const sendMail = require('../utils/sendMail.js');
+const randToken = require('rand-token');
+const {hash} = require("bcrypt");
 
 const getUsersList = (req, res) => {
   sequelize.models.users
@@ -142,4 +145,58 @@ const editUser = async ({body}, res) => {
   }
 };
 
-module.exports = { getUsersList, getUserById, registerNewUser, signIn, editUser };
+const resetPassword = async (req, res) => {
+  console.log(req.body);
+  const {email} = req.body;
+
+  if (!email) {
+    return res.status(500).send("must enter params");
+  }
+
+  let type = '';
+  let message = '';
+
+  sequelize.models.users
+      .findOne({ where: { email: email } })
+      .then( async (user) => {
+        if (user) {
+          const token = randToken.generate(20);
+          const sent = sendMail(email, token);
+          console.log(sent);
+          if(sent !== '0') {
+            user.set({ token });
+            await user.save();
+            const token = jwt.sign(user.id, process.env.SECRET_KEY);
+            console.log(token);
+            return res.status(200).send({ token, user });
+            type = 'success';
+            message = 'The reset password link has been sent to your email';
+          } else {
+            type = 'error';
+            message = 'something went wrong. Please try again';
+          }
+        } else {
+            type  = 'error';
+            message = 'The email is not registered with us';
+        }
+      });
+};
+
+const updatePassword = async (req, res) => {
+  const token = req.body.token;
+  const password = req.body.password;
+  sequelize.models.users.findOne({ where: { token: token}}).then((user) => {
+    if(user) {
+      const saltRounds = 10;
+      bcrypt.genSalt(saltRounds, (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+          user.set({ password: hash });
+          await user.save();
+        });
+      });
+    }
+  });
+}
+
+module.exports = { getUsersList, getUserById, registerNewUser, signIn, editUser, resetPassword, updatePassword
+};

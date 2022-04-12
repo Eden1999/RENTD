@@ -66,9 +66,10 @@ CREATE TABLE IF NOT EXISTS public.users
     is_host boolean NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     photo character varying COLLATE pg_catalog."default" NOT NULL,
+    token character varying COLLATE pg_catalog."default" NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id),
     UNIQUE(username),
-    UNIQUE(email)
+    UNIQUE(email)0
 )
 
 TABLESPACE pg_default;
