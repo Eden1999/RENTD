@@ -26,24 +26,18 @@ function NumberInput(props) {
   return (
     <div className="form-control">
       <div className="input-group">
-        <button className="btn btn-square btn-lg" onClick={(e) => decrease(e)}>
-          -
-        </button>
-        <input
-          id={props.id}
-          type="number"
-          value={value}
-          required
-          min={0}
-          className="input input-bordered input-lg w-full bg-zinc-700 text-white text-center"
-          onChange={(event) => {
-            setValue(event.target.value);
-            props.setValue(event.target.value);
-          }}
-        />
-        <button className="btn btn-square btn-lg" onClick={(e) => increase(e)}>
-          +
-        </button>
+        <button className="btn btn-square 2xl:btn-lg" onClick={(e) => decrease(e)}>-</button>
+        <input id={props.id}
+               type="number"
+               value={value}
+               required
+               min={0}
+               className="input input-bordered 2xl:input-lg w-full bg-zinc-700 text-white text-center"
+               onChange={(event) => {
+                 setValue(event.target.value);
+                 props.setValue(event.target.value);
+               }}/>
+        <button className="btn btn-square 2xl:btn-lg" onClick={(e) => increase(e)}>+</button>
       </div>
       <style>{overrideInputButtons}</style>
     </div>
