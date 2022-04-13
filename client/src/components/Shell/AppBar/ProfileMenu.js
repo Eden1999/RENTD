@@ -29,7 +29,7 @@ export default function ProfileMenu() {
                         <span className="sr-only">Open user menu</span>
                         <img
                             className="h-8 w-8 rounded-full"
-                            src="https://scontent.ftlv18-1.fna.fbcdn.net/v/t1.6435-9/125353907_3305195439609150_6275363081649698443_n.jpg?_nc_cat=106&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=xP6LJv3gj9oAX9Vq4Cr&_nc_ht=scontent.ftlv18-1.fna&oh=00_AT82kEQOSKw3gIhdLMfyKW4P5j3B9-kuULboTZDu-NyJJQ&oe=624DA8BA"
+                            src="https://api.lorem.space/image/fashion?w=1000&h=800"
                             alt=""
                         />
                     </Menu.Button>

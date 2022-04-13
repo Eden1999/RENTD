@@ -1,18 +1,24 @@
 import WorkspaceForm from "./WorkspaceForm";
+import RecommendationCarousel from "./RecommendationCarousel";
+import React from "react";
+
 function HomepageView() {
     return (
-        <div className="h-full align-middle">
-            <div className="flex flex-row h-full px-20 py-10 2xl:py-20">
-                <div className="w-1/3">
-                    <span className="text-white 2xl:text-3xl">
-                        <p className="text-2xl 2xl:text-6xl">Welcome,</p>
-                        <p>Start your RENTD experience now!</p>
-                    </span>
-                    <div className="pl-5 2xl:pr-20 pt-5">
-                        <WorkspaceForm />
-                    </div>
+        <div className="flex flex-row flex-1 mx-20 my-10 2xl:my-20">
+            <div className="w-1/3 self-center">
+                <span className="text-2xl text-white 2xl:text-3xl">
+                    <p className="text-4xl 2xl:text-6xl">Welcome,</p>
+                    <p>Start your RENTD experience now!</p>
+                </span>
+                <div className="mt-6 2xl:mt-12">
+                    <WorkspaceForm />
                 </div>
-                <div className="w-2/3"> </div>
+            </div>
+            <div className="flex-1 flex-col flex ml-36">
+                <span className="text-white text-2xl">Recommended Workspaces - Just For You!</span>
+                <div className="mt-4 flex-grow">
+                    <RecommendationCarousel />
+                </div>
             </div>
         </div>
     );
