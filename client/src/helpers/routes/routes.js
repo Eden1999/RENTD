@@ -8,6 +8,7 @@ import HomepageView from '../../components/Homepage/HomepageView'
 import OrdersHistory from "components/History/OrdersHistory";
 import { userTypes } from "../consts";
 import MySpaces from "../../components/Host/MySpaces";
+import ResetPassword from "../../components/UserManagment/ResetPassword";
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     path: "/register",
     Component: <Register />,
     allowed: [userTypes.notSigned],
+  },
+  {
+    path: "/reset-password",
+    Component: <ResetPassword />,
+    allowed: [userTypes.notSigned, userTypes.guest, userTypes.host],
   },
   {
     path: "/homepage",
