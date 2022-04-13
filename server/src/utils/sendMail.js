@@ -1,11 +1,14 @@
 const nodemailer = require('nodemailer');
 
-module.exports = function (email, token) {
+module.exports = async (email, token) => {
     const mail = nodemailer.createTransport({
         service: 'gmail',
+        host: 'localhost',
+        port: 587,
+        requireTls: true,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
+            user: 'amit0123ram@gmail.com',
+            pass: 'azcdsx1234',
         },
     });
 
@@ -13,14 +16,17 @@ module.exports = function (email, token) {
         from: 'amit0123ram@gmail.com',
         to: email,
         subject: 'Reset Password Link - RentD.com',
-        html: '<p>You requested for reset password, kindly use this <a href="http://localhost:8000/reset-password?token=' + token + '">link</a> to reset your password</p>'
+        html: `<p>You requested for reset password, kindly use this <p> ${token} </p> to reset your password</p>`
 
     };
 
-    return mail.sendMail(mailOptions, function(error, info) {
+    return await mail.sendMail(mailOptions, function(error, info) {
+        console.log(324324)
         if (error) {
+            console.log(error)
             return 1;
         } else {
+            console.log('sent')
             return  0;
         }
     });
