@@ -13,7 +13,7 @@ const Map = ({ hoveredMarkerId, onMarkerHover, markers }) => {
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div className="h-full w-full">
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyAuGj5jlZEbHnClaEGrepx4vCtj7Yb2B6w" }}
         onChildMouseEnter={onChildMouseEnter}
