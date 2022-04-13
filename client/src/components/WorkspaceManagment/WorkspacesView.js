@@ -17,16 +17,16 @@ const WorkspacesView = () => {
   );
 
   return (
-    <div className={"h-full flex"}>
-      <div className={"flex w-1/2"}>
+    <div className='h-full flex flex-row flex-1'>
+      <div className='flex w-1/2'>
         <WorkspacesSearchData
           setMapMarkers={setMapMarkers}
           hoveredMarkerId={hoveredMarkerId}
           setHoveredWorkspaceId={setHoveredWorkspaceId}
         />
       </div>
-      <div className={"flex flex-1"} style={{ minHeight: "100%" }}>
-        <div className={"w-full h-full"}>
+      <div className='flex flex-1 min-h-full mx-44 my-8'>
+        <div className='w-full'>
           <Map
             onMarkerHover={onMarkerHover}
             hoveredMarkerId={hoveredWorkspaceId}
