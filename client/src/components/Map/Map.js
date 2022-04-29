@@ -3,7 +3,7 @@ import GoogleMapReact from "google-map-react";
 
 import Marker from "./Marker";
 
-const Map = ({ hoveredMarkerId, onMarkerHover, markers }) => {
+const Map = ({ hoveredMarkerId, onMarkerHover, markers, center_location }) => {
   const onChildMouseEnter = (key) => {
     onMarkerHover(key);
   };
@@ -18,8 +18,8 @@ const Map = ({ hoveredMarkerId, onMarkerHover, markers }) => {
         bootstrapURLKeys={{ key: "AIzaSyAuGj5jlZEbHnClaEGrepx4vCtj7Yb2B6w" }}
         onChildMouseEnter={onChildMouseEnter}
         onChildMouseLeave={onChildMouseLeave}
-        defaultCenter={{ lat: 1, lng: 1 }}
-        defaultZoom={5}
+        defaultCenter={center_location}
+        defaultZoom={13}
       >
         {markers.map(({ id, lat, lng, text }) => (
           <Marker key={id} lat={lat} lng={lng} text={text} hoveredAtList={hoveredMarkerId === id} />
