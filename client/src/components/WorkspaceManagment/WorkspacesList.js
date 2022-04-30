@@ -7,7 +7,10 @@ import { useLocation } from "react-router-dom";
 const WorkspacesList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
   const [workspaces, setWorkspaces] = useState([]);
 
-  const workspaceParams = useLocation();
+  const { state } = useLocation();
+  const { capacity, space_type_id } = state;
+  let { city } = state;
+  city = JSON.parse(city);
 
   const filters = {
     wifi: {
@@ -55,7 +58,7 @@ const WorkspacesList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId 
   useEffect(async () => {
     try {
       const res = await Axios.post("http://localhost:8000/workspaces/search", null, {
-        params: workspaceParams.state,
+        params: { city: city.name, capacity, space_type_id },
       });
       setWorkspaces(res.data);
     } catch (err) {
