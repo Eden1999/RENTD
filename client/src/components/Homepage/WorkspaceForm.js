@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import NumberInput from "../../helpers/sharedComponents/NumberInput";
 
 function WorkspaceForm() {
-  let autoComplete;
   const [spaceTypes, setSpaceTypes] = useState([]);
   const [city, setCity] = useState({});
   const [capacity, setCapacity] = useState();
@@ -32,7 +31,7 @@ function WorkspaceForm() {
         types: ["locality"],
       };
       setTimeout(() => {
-        autoComplete = new window.google.maps.places.Autocomplete(locationInput, options);
+        const autoComplete = new window.google.maps.places.Autocomplete(locationInput, options);
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setCity({ name: place.name, location: place.geometry.location });
