@@ -8,7 +8,27 @@ import Appointment from './Appointment.js';
 import './styles.css'
 
 const views = ['day', 'week'];
-const groups = ['theatreId'];
+const groups = ['asset_id'];
+
+const assetsData = [
+  {
+    text: 'Room',
+    id: 1,
+    cost_per_hour: 20,
+    capacity: 5,
+    
+  }, {
+    text: 'Table 1',
+    id: 2,
+    cost_per_hour: 20,
+    capacity: 2,
+  }, {
+    text: 'Table 2',
+    id: 3,
+    cost_per_hour: 20,
+    capacity: 3,
+  },
+]
 
 const convertHourToFloat = (dateString) => {
   let hour = parseInt(dateString.split(':')[0])
@@ -33,7 +53,7 @@ const convertCapacityArrayToObject = (capacity) => {
 const Orders = ({workspace}) => {
   const [orders, setOrders] = useState([])
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [capacity, setCapacity] = useState(convertCapacityArrayToObject(workspace.capacity))
+  let [capacity, setCapacity] = useState(1)
   const [{ user }] = useContext(AppContext);
 
   const getOrders = async (workspace_id) => {
@@ -53,12 +73,15 @@ const Orders = ({workspace}) => {
   }, [])
 
   const HandalingAddOrder = useCallback(async (e) => {
+    let relAsset = assetsData.find(asset => asset.id == e.appointmentData.asset_id)
+
     let newOrder = {
       startdate: e.appointmentData.startDate,
       enddate: e.appointmentData.endDate,
       capacity: e.appointmentData.capacity,
       user_id: user.id,
-      workspace_id: workspace.id
+      workspace_id: workspace.id,
+      asset_id: e.appointmentData.asset_id,
     }
     
     console.log(newOrder)
@@ -120,6 +143,7 @@ const Orders = ({workspace}) => {
   const onOrderFormOpening = (e) => {
     const { form } = e;
     let { startDate, endDate, userName } = e.appointmentData;
+    let relAsset = assetsData.find(asset => asset.id == e.appointmentData.asset_id)
 
     form.option('items', [
       {
@@ -160,10 +184,10 @@ const Orders = ({workspace}) => {
         editorType: 'dxSelectBox',
         dataField: 'capacity',
         editorOptions: {
-          items: convertCapacityArrayToObject(workspace.capacity),
+          items: convertCapacityArrayToObject(relAsset.capacity),
           displayExpr: 'number',
           valueExpr: 'number',
-          value: 1,
+          value: capacity || 1,
           onValueChanged(args) {
             capacity = args.value
           },
@@ -198,10 +222,11 @@ const Orders = ({workspace}) => {
           >
             <Editing allowAdding={true} />
             <Resource
-              dataSource={orders}
-              fieldExpr="id"
-              useColorAsDefault={true}
-            />
+            fieldExpr="asset_id"
+            allowMultiple={false}
+            dataSource={assetsData}
+            label="Assets"
+          />
           </Scheduler>
         </div>
       </div>

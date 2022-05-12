@@ -1,10 +1,11 @@
 CREATE TABLE IF NOT EXISTS public.orders
 (
     id SERIAL,
-    user_id bigint NOT NULL,
+    user_id INTEGER NOT NULL,
     available boolean,
-    capacity bigint,
-    workspace_id bigint NOT NULL,
+    capacity INTEGER,
+    workspace_id INTEGER NOT NULL,
+    asset_id INTEGER NOT NULL,
     startDate timestamp with time zone NOT NULL,
     endDate timestamp with time zone NOT NULL,
     CONSTRAINT orders_pkey PRIMARY KEY (id)
@@ -111,7 +112,20 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.workspaces
     OWNER to postgres;
 
+CREATE TABLE IF NOT EXISTS public.assets
+(
+    id SERIAL,
+    text character varying COLLATE pg_catalog."default" NOT NULL,
+    workspaces_id bigint NOT NULL,
+    cost_per_hour INTEGER NOT NULL DEFAULT 0,
+    capacity INTEGER NOT NULL,
+    description character varying COLLATE pg_catalog."default" NOT NULL
+)
 
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.workspaces
+    OWNER to postgres;
 
 
 
