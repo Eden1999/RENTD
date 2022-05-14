@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
-import "./NewWorkspace.scss";
+import "./CreateWorkspace.scss";
 import _ from "lodash";
 
 import TimePicker from "react-time-picker";
@@ -31,7 +31,7 @@ const daysCheckBox = [
   { dayName: "saturday" },
 ];
 
-const WorkspaceHandler = () => {
+const CreateWorkspace = () => {
   let location = useLocation();
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
@@ -434,8 +434,8 @@ const WorkspaceHandler = () => {
   );
 };
 
-WorkspaceHandler.propTypes = {
+CreateWorkspace.propTypes = {
   workspace: PropTypes.object,
 };
 
-export default WorkspaceHandler;
+export default CreateWorkspace;

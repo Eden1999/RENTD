@@ -1,5 +1,5 @@
 import React from "react";
-import WorkspacesListItem from "../WorkspaceManagment/WorkspacesListItem";
+import WorkspacesListItem from "../../components/WorkspacesListItem";
 import WorkspaceHero from "./WorkspaceHero";
 
 

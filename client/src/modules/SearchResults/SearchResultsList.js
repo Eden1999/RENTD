@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import WorkspacesListItem from "./WorkspacesListItem";
+import WorkspacesListItem from "../../components/WorkspacesListItem";
 import Axios from "axios";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
-const WorkspacesList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
+const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
   const [workspaces, setWorkspaces] = useState([]);
 
   const { state } = useLocation();
@@ -99,4 +99,4 @@ const WorkspacesList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId 
   );
 };
 
-export default WorkspacesList;
+export default SearchResultsList;

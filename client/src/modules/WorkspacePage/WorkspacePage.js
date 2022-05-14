@@ -9,13 +9,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { StarBorderRounded, Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
-import Orders from "./Orders/Orders";
+import Orders from "../Orders/Orders";
 
-import "./WorkspaceDetails.scss";
+import "./WorkspacePage.scss";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField } from "@mui/material";
 import { AppContext } from "store/AppContext";
 
-const WorkspaceDetails = () => {
+const WorkspacePage = () => {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -195,4 +195,4 @@ const WorkspaceDetails = () => {
   );
 };
 
-export default WorkspaceDetails;
+export default WorkspacePage;

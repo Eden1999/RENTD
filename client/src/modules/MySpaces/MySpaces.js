@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 
 import WorkspacesList from "./WorkspacesList";
 import Map from "../Map/Map";
-import WorkspaceForm from "../Homepage/WorkspaceForm";
-
 const MySpaces = () => {
   const [mapMarkers, setMapMarkers] = useState([]);
   const [hoveredWorkspaceId, setHoveredWorkspaceId] = useState(null);

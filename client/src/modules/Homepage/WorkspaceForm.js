@@ -2,7 +2,7 @@ import { LocationOn } from "@mui/icons-material";
 import { useEffect, useState, useCallback } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import NumberInput from "../../helpers/sharedComponents/NumberInput";
+import NumberInput from "../../components/NumberInput";
 
 function WorkspaceForm() {
   const [spaceTypes, setSpaceTypes] = useState([]);

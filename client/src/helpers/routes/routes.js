@@ -1,14 +1,14 @@
-import Login from "../../components/UserManagment/Login";
-import Profile from "../../components/UserManagment/Profile";
-import Register from "../../components/UserManagment/Register";
-import WorkspaceHandler from "../../components/WorkspaceManagment/WorkspaceHandler";
-import WorkspacesView from "../../components/WorkspaceManagment/WorkspacesView";
-import WorkspaceDetails from "../../components/WorkspaceManagment/WorkspaceDetails";
-import HomepageView from '../../components/Homepage/HomepageView'
-import OrdersHistory from "components/History/OrdersHistory";
+import Login from "../../modules/UserManagment/Login";
+import Profile from "../../modules/UserManagment/Profile";
+import Register from "../../modules/UserManagment/Register";
+import CreateWorkspace from "../../modules/CreateWorkspace/CreateWorkspace";
+import SearchResultsView from "../../modules/SearchResults/SearchResultsView";
+import WorkspacePage from "../../modules/WorkspacePage/WorkspacePage";
+import HomepageView from '../../modules/Homepage/HomepageView'
+import OrdersHistory from "modules/History/OrdersHistory";
 import { userTypes } from "../consts";
-import MySpaces from "../../components/Host/MySpaces";
-import ResetPassword from "../../components/UserManagment/ResetPassword";
+import MySpaces from "../../modules/MySpaces/MySpaces";
+import ResetPassword from "../../modules/UserManagment/ResetPassword";
 
 const routes = [
   {
@@ -43,22 +43,22 @@ const routes = [
   },
   {
     path: "/manage/newWorkspace",
-    Component: <WorkspaceHandler />,
+    Component: <CreateWorkspace />,
     allowed: [userTypes.host],
   },
   {
     path: "/manage/editWorkspace",
-    Component: <WorkspaceHandler />,
+    Component: <CreateWorkspace />,
     allowed: [userTypes.host],
   },
   {
     path: "/search",
-    Component: <WorkspacesView />,
+    Component: <SearchResultsView />,
     allowed: [userTypes.notSigned, userTypes.guest],
   },
   {
     path: "/workspaces/:id",
-    Component: <WorkspaceDetails />,
+    Component: <WorkspacePage />,
     allowed: [userTypes.guest, userTypes.host],
   },
   {

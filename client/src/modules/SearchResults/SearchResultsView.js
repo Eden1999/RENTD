@@ -1,11 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-
 import Map from "../Map/Map";
+import SearchResultsList from "./SearchResultsList";
 
-import WorkspacesSearchData from "./WorkspacesSearchData";
-
-const WorkspacesView = () => {
+const SearchResultsView = () => {
   const [mapMarkers, setMapMarkers] = useState([]);
   const [hoveredWorkspaceId, setHoveredWorkspaceId] = useState(null);
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
@@ -24,11 +22,20 @@ const WorkspacesView = () => {
   return (
     <div className="h-full flex flex-row flex-1">
       <div className="flex w-1/2">
-        <WorkspacesSearchData
-          setMapMarkers={setMapMarkers}
-          hoveredMarkerId={hoveredMarkerId}
-          setHoveredWorkspaceId={setHoveredWorkspaceId}
-        />
+          <div className={"flex-1 flex flex-col"}>
+              <div className={"h-20 mt-8"}>
+                  <div className={'ml-[17.5rem] text-white text-left text-3xl'}>
+                      We found multiple options for you
+                  </div>
+              </div>
+              <div className={"flex-1"}>
+                  <SearchResultsList
+                      setMapMarkers={setMapMarkers}
+                      hoveredMarkerId={hoveredMarkerId}
+                      setHoveredWorkspaceId={setHoveredWorkspaceId}
+                  />
+              </div>
+          </div>
       </div>
       <div className="flex flex-1 min-h-full mx-44 my-8">
         <div className="w-full">
@@ -49,4 +56,4 @@ const WorkspacesView = () => {
   );
 };
 
-export default WorkspacesView;
+export default SearchResultsView;

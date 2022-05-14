@@ -4,9 +4,9 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
-import { AppContext } from "../../store/AppContext";
+import { AppContext } from "../store/AppContext";
 import axios from "axios";
-import useToken from "../../helpers/useToken";
+import useToken from "../helpers/useToken";
 
 const WorkspacesListItem = ({
   workspace,
