@@ -1,9 +1,7 @@
 import React, { useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Link } from "react-router-dom";
 import { AppContext } from "../store/AppContext";
 import axios from "axios";
 import useToken from "../helpers/useToken";
@@ -75,32 +73,27 @@ const WorkspacesListItem = ({
       <img src={workspace.photo} className={"h-28 w-48 bg-zinc-400 rounded-md"} />
       <div className={"flex flex-col text-left flex-1 ml-8"}>
         <span className={"text-xl text-zinc-100"}>{workspace.name}</span>
-        {isEditable && (
-          <span>
-            <IconButton
-              id="editIcon"
-              aria-label="edit workspace"
-              color="primary"
-              onClick={(e) => onEditClick(e, workspace)}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              id="deleteIcon"
-              aria-label="edit workspace"
-              color="primary"
-              onClick={(e) => onDeleteClick(e, workspace)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </span>
-        )}
         <span className={"text-sm text-zinc-300 mt-1.5"}>
           {workspace.address}, {workspace.city}
         </span>
         <span className={"mt-auto text-xs text-zinc-300"}>
           Opens: {workspace.opening_hour} - {workspace.closing_hour}
         </span>
+      </div>
+      <div className="flex">
+        {isEditable && (
+            <span className="flex self-center">
+              <button className="btn btn-sm btn-circle"
+                      onClick={(e) => onEditClick(e, workspace)}>
+                <EditIcon />
+              </button>
+            <button className="btn btn-sm btn-circle mx-4"
+                onClick={(e) => onDeleteClick(e, workspace)}
+            >
+              <DeleteIcon />
+            </button>
+          </span>
+        )}
       </div>
     </div>
   );

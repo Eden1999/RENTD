@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import Axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "store/AppContext";
 import './OrdersHistory.scss'
-import WorkspacesListItem from "../../components/WorkspacesListItem";
-
 const OrdersHistory = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -26,12 +24,12 @@ const OrdersHistory = () => {
   }
 
   return (
-    <div>
-      <div className="orders-title uppercase tracking-wide text-sm text-gray-500 font-semibold">Here are the orders you've been made!</div>
+    <div className={'m-16'}>
+      <div className="flex text-3xl text-zinc-200">Here are the orders you've been made!</div>
       {orders.map((order) => (
         <div key={order.id}
-             className={`flex flex-row flex-1 bg-zinc-500 hover:bg-zinc-500/90 transition-all duration-200 rounded-lg p-3 mt-5 max-w-md mx-auto md:max-w-2xl`}>
-          <div className={'flex w-11/12 self-center'}>
+             className={`flex flex-row flex-1 bg-zinc-500 hover:bg-zinc-500/90 rounded-lg p-3 mt-5 w-1/3`}>
+          <div className={'flex w-11/12'}>
             <img className={"h-28 w-48 bg-zinc-400 rounded-md"} src={order.workspace.photo} alt="Man looking at item at a store"/>
             <span className={"flex flex-col text-left flex-1 ml-8 hover:cursor-default"}>
               <span className={"text-xl text-zinc-100"}>{order.workspace.name}</span>
@@ -41,7 +39,7 @@ const OrdersHistory = () => {
             </span>
           </div>
           <div className={'flex flex-col flex-1 self-center'}>
-            <button className="btn" onClick={() => {onItemClick(order.workspace)}}>order again</button>
+            <button className="btn btn-ghost text-zinc-300" onClick={() => {onItemClick(order.workspace)}}>order again</button>
           </div>
         </div>
       ))}

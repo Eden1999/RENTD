@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
-import { Container, IconButton } from "@mui/material";
-import { AddCircleOutline } from "@mui/icons-material";
+import React, { useState, useCallback } from "react";
+import { Container } from "@mui/material";
+import {Add} from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 import WorkspacesList from "./WorkspacesList";
@@ -24,9 +24,9 @@ const MySpaces = () => {
           <div className="flex justify-between mt-8 text-3xl text-zinc-200">
             <span>My workspaces</span>
             <Link to={"/manage/newWorkspace"}>
-              <IconButton aria-label="new workspace" color="primary">
-                <AddCircleOutline />
-              </IconButton>
+                <button className="btn btn-circle">
+                    <Add/>
+                </button>
             </Link>
           </div>
           <div className="flex mt-10">
