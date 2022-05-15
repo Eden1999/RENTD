@@ -10,10 +10,15 @@ import {
   Button,
   Autocomplete,
   OutlinedInput,
+  IconButton,
 } from "@mui/material";
-import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
+import { AddCircleOutline } from "@mui/icons-material";
+import useToken from "../../helpers/useToken";
+import { Link } from "react-router-dom";
+
 import "./NewWorkspace.scss";
+import AddAsset from "./AddAsset"
 import _ from "lodash";
 
 import TimePicker from "react-time-picker";
@@ -55,6 +60,7 @@ const WorkspaceHandler = () => {
     opening_hour: "10:00",
     closing_hour: "23:00",
     spaceTypes: [{ id: 1, name: "" }],
+    assets: [{text:"hey", capacity:20}],
   });
   const [isInCreateMode, setIsInCreateMode] = useState(true);
   const [location_x, setLocationX] = useState(1.0);
@@ -64,7 +70,6 @@ const WorkspaceHandler = () => {
   const [spaceTypes, setSpaceTypes] = useState([{ id: 1, name: "" }]);
 
   useEffect(() => {
-    console.log("hey");
     const workspace = _.get(location, "state.workspace");
 
     if (!_.isEmpty(workspace)) {
@@ -84,6 +89,12 @@ const WorkspaceHandler = () => {
       console.log(`Failed to fetch spaceTypes ${err.message}`);
     }
   }, []);
+
+  const addAsset = (asset) => {
+    let newArray = [...workspace.assets];
+    newArray.push(asset)
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  }
 
   const checkUserValidation = () => {
     let errors = "";
@@ -171,6 +182,10 @@ const WorkspaceHandler = () => {
     newArray[id] = checked;
     setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
+
+  const onAddAssetClick = () => {
+    console.log("hey")
+  }
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -416,6 +431,18 @@ const WorkspaceHandler = () => {
         />
         <div className="photo-preview">
           <img src={workspace.photo} />
+        </div>
+        <div>
+          <a className="text-zinc-400">Add Assets</a>
+          {/* <Link to={"/manage/asset"}> */}
+            <IconButton aria-label="new workspace" color="primary" >
+              <AddCircleOutline onClick={() => onAddAssetClick}/>
+            </IconButton>
+          {/* </Link> */}
+            {workspace.assets && workspace.assets.map((curAsset, index) => {
+              return (<AddAsset asset={curAsset}/>)
+            }
+            )}
         </div>
         <Button
           fullWidth

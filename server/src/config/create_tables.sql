@@ -103,6 +103,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     opening_days boolean[] NOT NULL,
     opening_hour character varying,
     closing_hour character varying,
+    assets_id INTEGER[],
     photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )
@@ -116,7 +117,8 @@ CREATE TABLE IF NOT EXISTS public.assets
 (
     id SERIAL,
     text character varying COLLATE pg_catalog."default" NOT NULL,
-    workspaces_id bigint NOT NULL,
+    asset_id bigint NOT NULL,
+    workspace_id bigint NOT NULL,
     cost_per_hour INTEGER NOT NULL DEFAULT 0,
     capacity INTEGER NOT NULL,
     description character varying COLLATE pg_catalog."default" NOT NULL
@@ -201,4 +203,20 @@ INSERT INTO public.space_types(
 	('2','Coffee Shop'),
 	('3','Office'),
 	('4','Bar')
+	;
+
+    CREATE TABLE IF NOT EXISTS public.asset_types
+(
+    id SERIAL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT space_types_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+INSERT INTO public.asset_types(
+	id, name)
+	VALUES
+	('1','Room'),
+	('2','Table')
 	;

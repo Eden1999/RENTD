@@ -42,7 +42,10 @@ const getWorkspacesByHostId = async (req, res) => {
             const spaceType = await sequelize.models.space_types.findOne({
               where: { id: workspace.space_type_id },
             });
-            return { ...workspace, ratings, host, spaceType };
+            const assets = await sequelize.models.assets.findAll({
+              where: { workspace_id: workspace.id },
+            }); 
+            return { ...workspace, ratings, host, spaceType, assets };
           })
         );
         return res.status(200).send(fullWorkspaces);
@@ -75,6 +78,10 @@ const createNewWorkspace = (req, res) => {
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
+  workspace.assets_id = workspace.assets.map(asset => asset.type_id)
+  let assets = workspace.assets
+  delete workspace.assets
+
   // check if user is already exist
   sequelize.models.users
     .findOne({ where: { id: decodeId } })
@@ -90,6 +97,15 @@ const createNewWorkspace = (req, res) => {
             console.log(err);
             return res.status(err.status || 500).send(err.message || err.errors[0].message);
           });
+        // sequelize.models.assets
+        //   .create(workspace)
+        //   .then(() => {
+        //     return res.status(200).send();
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //     return res.status(err.status || 500).send(err.message || err.errors[0].message);
+        //   });
       } else {
         let err = "user not found";
         console.log(err);

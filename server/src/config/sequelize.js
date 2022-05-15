@@ -20,6 +20,8 @@ const modelDefiners = [
 	require('../models/orders'),
 	require('../models/rating'),
 	require('../models/spacetype'),
+  require('../models/assettype'),
+  require('../models/asset'),
   require('../models/user'),
   require('../models/workspace')
 ];

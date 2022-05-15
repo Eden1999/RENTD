@@ -9,6 +9,7 @@ import OrdersHistory from "components/History/OrdersHistory";
 import { userTypes } from "../consts";
 import MySpaces from "../../components/Host/MySpaces";
 import ResetPassword from "../../components/UserManagment/ResetPassword";
+import AddAsset from "components/WorkspaceManagment/AddAsset";
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
   {
     path: "/manage/editWorkspace",
     Component: <WorkspaceHandler />,
+    allowed: [userTypes.host],
+  },
+  {
+    path: "/manage/asset",
+    Component: <AddAsset />,
     allowed: [userTypes.host],
   },
   {
