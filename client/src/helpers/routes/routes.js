@@ -9,6 +9,7 @@ import OrdersHistory from "modules/History/OrdersHistory";
 import { userTypes } from "../consts";
 import MySpaces from "../../modules/MySpaces/MySpaces";
 import ResetPassword from "../../modules/UserManagment/ResetPassword";
+import FavoriteWorkspaces from "modules/Favorites/FavoriteWorkspaces";
 
 const routes = [
   {
@@ -64,6 +65,11 @@ const routes = [
   {
     path: "/history",
     Component: <OrdersHistory />,
+    allowed: [userTypes.guest],
+  },
+  {
+    path: "/favorites",
+    Component: <FavoriteWorkspaces />,
     allowed: [userTypes.guest],
   },
 ];

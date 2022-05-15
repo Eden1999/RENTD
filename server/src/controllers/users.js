@@ -230,6 +230,66 @@ const uploadProfilePhoto = async (req, res) => {
     });
 }
 
+const addWorkspaceToFavorites = async (req, res) => {
+    const {workspaceId} = req.body;
+    const {token} = req.headers;
+
+    const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+
+    // check if user exists
+    sequelize.models.users
+    .findOne({where: {id: decodeId}})
+    .then(async (user) => {
+        if (user) {
+            try {
+                await user.update({favorite_workspaces: sequelize.fn('array_append',
+                    sequelize.col('favorite_workspaces'), workspaceId)});
+                return res.status(200).send('Added to favorites successfully!');
+            } catch (err) {
+                return res.status(500).send('Something went wrong! Workspace was not added to list');
+            }
+        } else {
+            let err = "user not found";
+            console.log(err);
+            return res.status(500).send(err);
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err);
+    });
+}
+
+const RemoveWorkspaceFromFavorites = async (req, res) => {
+    const {workspaceId} = req.body;
+    const {token} = req.headers;
+
+    const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+
+    // check if user exists
+    sequelize.models.users
+    .findOne({where: {id: decodeId}})
+    .then(async (user) => {
+        if (user) {
+            try {
+                await user.update({favorite_workspaces: sequelize.fn('array_remove',
+                    sequelize.col('favorite_workspaces'), workspaceId)});
+                return res.status(200).send('Workspace was removed from favorites successfully!');
+            } catch (err) {
+                return res.status(500).send('Something went wrong! Workspace was not removed from list');
+            }
+        } else {
+            let err = "user not found";
+            console.log(err);
+            return res.status(500).send(err);
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err);
+    });
+}
+
 module.exports = {
     getUsersList,
     getUserById,
@@ -241,4 +301,6 @@ module.exports = {
     validateToken,
     uploadProfilePhoto,
     updateUsername,
+    addWorkspaceToFavorites,
+    RemoveWorkspaceFromFavorites
 };

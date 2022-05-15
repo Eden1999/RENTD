@@ -14,12 +14,15 @@ import Orders from "../Orders/Orders";
 import "./WorkspacePage.scss";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField } from "@mui/material";
 import { AppContext } from "store/AppContext";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { toast } from "react-toastify";
 
 const WorkspacePage = () => {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [{ user }] = useContext(AppContext);
+  const [{ user }, dispatch] = useContext(AppContext);
   const [workspace, setWorkspace] = useState(useLocation().state.workspace)
   const {
     state: { isEditable },
@@ -72,12 +75,59 @@ const WorkspacePage = () => {
       navigate('/my-spaces');
     })
     .catch(err =>{
-        alert(err.response.data)
+      alert(err.response.data)
     })
-
+    
     if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
+  }, []);
+  
+  const onFavoriteClick = useCallback((workspace) => {
+    axios.post('http://localhost:8000/users/addWorkspaceToFavorites', {workspaceId : workspace.id}, {
+      headers: {
+        token,
+      }
+    })
+    .then((res) => {
+      toast(res.data)
+      let updatedUser = {...user, favorite_workspaces : (user.favorite_workspaces ? 
+        [...user.favorite_workspaces, workspace.id] : 
+        [workspace.id])};
+      
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      dispatch({
+        type: "SET_GENERAL_STATE",
+        payload: {
+            user: updatedUser
+        },
+      })
+    })
+    .catch(err =>{
+        alert(err.response.data)
+    })
+  }, []);
+
+  const onRemoveFavoriteClick = useCallback((workspace) => {
+    axios.post('http://localhost:8000/users/removeFavoriteWorkspace', {workspaceId : workspace.id}, {
+      headers: {
+        token,
+      }
+    })
+    .then((res) => {
+      toast(res.data)
+      let updatedUser = {...user, favorite_workspaces : user.favorite_workspaces.filter((id) => id != workspace.id)}
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      dispatch({
+        type: "SET_GENERAL_STATE",
+        payload: {
+            user: updatedUser
+        },
+      })
+    })
+    .catch(err =>{
+        alert(err.response.data)
+    })
   }, []);
 
   return (
@@ -98,6 +148,14 @@ const WorkspacePage = () => {
                 workspace.ratings.length} readOnly /> 
           )}
           <p className="text-sm text-white pr-3">({workspace.ratings.length} reviews)</p>  
+          {user?.favorite_workspaces?.includes(workspace.id) ? 
+          <IconButton id="editIcon" aria-label="remove from favorites" color='secondary' onClick={() => onRemoveFavoriteClick(workspace)}>
+            <FavoriteIcon />
+          </IconButton> :
+            <IconButton id="editIcon" aria-label="add to favorites" color='secondary' onClick={() => onFavoriteClick(workspace)}>
+              <FavoriteBorderIcon />
+            </IconButton> 
+          }
         </div>
         {workspace.spaceType && <p className="text-md text-white">{workspace.spaceType.name}</p>}
         <p className="text-amber-800 pb-7">Hurry up! {workspace.capacity} spots left</p>
