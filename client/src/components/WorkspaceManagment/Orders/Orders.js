@@ -10,26 +10,6 @@ import './styles.css'
 const views = ['day', 'week'];
 const groups = ['asset_id'];
 
-// const assetsData = [
-//   {
-//     text: 'Room',
-//     id: 1,
-//     cost_per_hour: 20,
-//     capacity: 5,
-    
-//   }, {
-//     text: 'Table 1',
-//     id: 2,
-//     cost_per_hour: 20,
-//     capacity: 2,
-//   }, {
-//     text: 'Table 2',
-//     id: 3,
-//     cost_per_hour: 20,
-//     capacity: 3,
-//   },
-// ]
-
 const convertHourToFloat = (dateString) => {
   let hour = parseInt(dateString.split(':')[0])
   let minutes = parseInt(dateString.split(':')[1])
@@ -198,6 +178,17 @@ const Orders = ({workspace}) => {
           },
         },
       }, 
+      {
+        label: {
+          text: 'cost',
+        },
+        name: 'cost',
+        editorType: 'dxTextBox',
+        editorOptions: {
+          value: relAsset.cost_per_hour + '$',
+          readOnly: true
+      },
+    },
       {
         label: {
           text: 'capacity',

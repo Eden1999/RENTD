@@ -324,40 +324,6 @@ const WorkspaceHandler = () => {
             setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
           }}
         />
-        <OutlinedInput
-          variant="outlined"
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          required
-          fullWidth
-          name="capacity"
-          placeholder="capacity"
-          type="capacity"
-          id="capacity"
-          autoComplete="capacity"
-          value={workspace.capacity}
-          onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, capacity: event.target.value }));
-          }}
-        />
-        <OutlinedInput
-          variant="outlined"
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          required
-          fullWidth
-          name="cost per hour"
-          placeholder="how much do you take per hour?"
-          type="cost per hour"
-          id="cost per hour"
-          autoComplete="cost per hour"
-          value={workspace.cost_per_hour}
-          onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, cost_per_hour: event.target.value }));
-          }}
-        />
         <a className="text-zinc-400">Do you have any from the next:</a>
         <div className="all-checkbox">
           <div className="single-checkbox">
