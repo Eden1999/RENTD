@@ -1,7 +1,7 @@
 import React, {useReducer} from "react";
 import './App.css'
 import { AppContext, reducer } from "./store/AppContext";
-import ShellView from "./modules/Shell/ShellView";
+import ShellView from "./modules/shell/ShellView";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 

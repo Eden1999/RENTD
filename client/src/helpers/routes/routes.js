@@ -10,7 +10,7 @@ import { userTypes } from "../consts";
 import MySpaces from "../../modules/MySpaces/MySpaces";
 import ResetPassword from "../../modules/UserManagment/ResetPassword";
 import FavoriteWorkspaces from "modules/Favorites/FavoriteWorkspaces";
-import AddAsset from "components/WorkspaceManagment/AddAsset";
+import AddAsset from "modules/CreateWorkspace/AddAsset";
 
 const routes = [
   {

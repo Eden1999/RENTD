@@ -10,8 +10,8 @@ import {
     IconButton,
   } from "@mui/material";
   import DeleteIcon from '@mui/icons-material/Delete';
-  import "./NewWorkspace.scss";
-import Axios from "axios";
+  import "./CreateWorkspace.scss";
+  import Axios from "axios";
 
 const AddAsset = ({asset, handleChange, index, handleDelete}) => {
     const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);

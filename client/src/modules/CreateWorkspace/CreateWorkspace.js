@@ -18,7 +18,6 @@ import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
 
-import "./NewWorkspace.scss";
 import AddAsset from "./AddAsset"
 import _ from "lodash";
 
