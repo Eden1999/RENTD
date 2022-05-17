@@ -196,15 +196,29 @@ const searchWorkspaces = async (req, res) => {
     const { city, capacity, space_type_id } = req.query;
     console.log(city);
     console.log(capacity);
-    let workspaces = await sequelize.models.workspaces.findAll({
+
+    let assets = await sequelize.models.assets.findAll({
       where: {
-        city: city,
-        space_type_id: space_type_id,
         capacity: {
           [Op.gte]: capacity,
         },
       },
+    })
+
+    let workspacesIds = []
+    
+    if (assets.length > 0) {
+      workspacesIds = assets.map(asset => {return parseInt(asset.workspace_id)})
+    }
+
+    let workspaces = await sequelize.models.workspaces.findAll({
+      where: {
+        city: city,
+        space_type_id: space_type_id,
+        id: {[Op.in]: workspacesIds}
+      },
     });
+
     workspaces = await Promise.all(
       workspaces.map(async ({ dataValues: workspace }) => {
         const ratings = await sequelize.models.ratings.findAll({
@@ -219,7 +233,10 @@ const searchWorkspaces = async (req, res) => {
         const spaceType = await sequelize.models.space_types.findOne({
           where: { id: workspace.space_type_id },
         });
-        return { ...workspace, ratings, host, spaceType };
+        const assets = await sequelize.models.assets.findAll({
+          where: { workspace_id: workspace.id },
+        }); 
+        return { ...workspace, ratings, host, spaceType, assets };
       })
     );
     res.send(workspaces);
