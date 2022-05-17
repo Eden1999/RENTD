@@ -158,7 +158,7 @@ const WorkspacePage = () => {
           }
         </div>
         {workspace.spaceType && <p className="text-md text-white">{workspace.spaceType.name}</p>}
-        <p className="text-amber-800 pb-7">Hurry up! {workspace.capacity} spots left</p>
+        {/* <p className="text-amber-800 pb-7">Hurry up! {workspace.capacity} spots left</p> */}
         <div className="details">
           <div className="flex flex-column">
           </div>

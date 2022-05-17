@@ -8,7 +8,7 @@ import Appointment from './Appointment.js';
 import './styles.css'
 
 const views = ['day', 'week'];
-const groups = ['theatreId'];
+const groups = ['asset_id'];
 
 const convertHourToFloat = (dateString) => {
   let hour = parseInt(dateString.split(':')[0])
@@ -33,8 +33,9 @@ const convertCapacityArrayToObject = (capacity) => {
 const Orders = ({workspace}) => {
   const [orders, setOrders] = useState([])
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [capacity, setCapacity] = useState(convertCapacityArrayToObject(workspace.capacity))
+  let [capacity, setCapacity] = useState(1)
   const [{ user }] = useContext(AppContext);
+  const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);
 
   const getOrders = async (workspace_id) => {
     await axios.get(`http://localhost:8000/orders/${workspace_id}`)
@@ -48,17 +49,40 @@ const Orders = ({workspace}) => {
     })
   }
 
+  useEffect(async () => {
+    try {
+      const query = {};
+      const res = await axios.get("http://localhost:8000/assetTypes", query);
+      setAssetTypes(res.data);
+    } catch (err) {
+      console.log(`Failed to fetch spaceTypes ${err.message}`);
+    }
+  }, []);
+
   useEffect(() => {
     getOrders(workspace.id)
   }, [])
 
+  useEffect(() => {
+    workspace.assets = workspace.assets.map(asset => {
+      let assetType = assetTypes.find(type => type.id.toString() === asset.asset_id)
+      if(assetType) {
+        asset.text = assetType.name
+      }
+      return asset
+    })
+  }, [assetTypes])
+
   const HandalingAddOrder = useCallback(async (e) => {
+    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id)
+
     let newOrder = {
       startdate: e.appointmentData.startDate,
       enddate: e.appointmentData.endDate,
       capacity: e.appointmentData.capacity,
       user_id: user.id,
-      workspace_id: workspace.id
+      workspace_id: workspace.id,
+      asset_id: e.appointmentData.asset_id,
     }
     
     console.log(newOrder)
@@ -120,6 +144,7 @@ const Orders = ({workspace}) => {
   const onOrderFormOpening = (e) => {
     const { form } = e;
     let { startDate, endDate, userName } = e.appointmentData;
+    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id)
 
     form.option('items', [
       {
@@ -155,15 +180,26 @@ const Orders = ({workspace}) => {
       }, 
       {
         label: {
+          text: 'cost',
+        },
+        name: 'cost',
+        editorType: 'dxTextBox',
+        editorOptions: {
+          value: relAsset.cost_per_hour + '$',
+          readOnly: true
+      },
+    },
+      {
+        label: {
           text: 'capacity',
         },
         editorType: 'dxSelectBox',
         dataField: 'capacity',
         editorOptions: {
-          items: convertCapacityArrayToObject(workspace.capacity),
+          items: convertCapacityArrayToObject(relAsset.capacity),
           displayExpr: 'number',
           valueExpr: 'number',
-          value: 1,
+          value: capacity || 1,
           onValueChanged(args) {
             capacity = args.value
           },
@@ -198,10 +234,11 @@ const Orders = ({workspace}) => {
           >
             <Editing allowAdding={true} />
             <Resource
-              dataSource={orders}
-              fieldExpr="id"
-              useColorAsDefault={true}
-            />
+            fieldExpr="asset_id"
+            allowMultiple={false}
+            dataSource={workspace.assets}
+            label="Assets"
+          />
           </Scheduler>
         </div>
       </div>

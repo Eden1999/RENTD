@@ -116,7 +116,7 @@ const updateOrder = (req, res) => {
 }
 
 const createNewOrder = (req, res) => {
-    const { startdate, enddate, capacity, user_id, workspace_id } = req.body;
+    const { startdate, enddate, capacity, user_id, workspace_id, asset_id } = req.body;
 
     let newOrder = {
         startdate,
@@ -124,7 +124,8 @@ const createNewOrder = (req, res) => {
         capacity,
         user_id,
         workspace_id,
-        available: false
+        available: false,
+        asset_id
     }
 
     sequelize.models.orders

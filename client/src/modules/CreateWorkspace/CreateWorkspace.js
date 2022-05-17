@@ -10,10 +10,15 @@ import {
   Button,
   Autocomplete,
   OutlinedInput,
+  IconButton,
 } from "@mui/material";
-import useToken from "../../helpers/useToken";
 import Checkbox from "@mui/material/Checkbox";
+import { AddCircleOutline, DeleteIcon } from "@mui/icons-material";
+import useToken from "../../helpers/useToken";
+import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
+
+import AddAsset from "./AddAsset"
 import _ from "lodash";
 
 import TimePicker from "react-time-picker";
@@ -41,8 +46,6 @@ const CreateWorkspace = () => {
     host_id: user.host_id,
     city: "",
     address: "",
-    cost_per_hour: 10,
-    capacity: 20,
     wifi: true,
     disabled_access: true,
     smoke_friendly: true,
@@ -55,6 +58,7 @@ const CreateWorkspace = () => {
     opening_hour: "10:00",
     closing_hour: "23:00",
     spaceTypes: [{ id: 1, name: "" }],
+    assets: [],
   });
   const [isInCreateMode, setIsInCreateMode] = useState(true);
   const [location_x, setLocationX] = useState(1.0);
@@ -62,9 +66,9 @@ const CreateWorkspace = () => {
   const [cityBounds, setCityBounds] = useState({});
   const { token } = useToken();
   const [spaceTypes, setSpaceTypes] = useState([{ id: 1, name: "" }]);
+  const [showAddAsset, setShowAddAsset] = useState(false)
 
   useEffect(() => {
-    console.log("hey");
     const workspace = _.get(location, "state.workspace");
 
     if (!_.isEmpty(workspace)) {
@@ -98,6 +102,18 @@ const CreateWorkspace = () => {
 
     return isFormValid;
   };
+
+  const handleChangeAsset = (asset, index) => {
+    let newArray = [...workspace.assets];
+    newArray[index] = asset
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  }
+
+  const handleDeleteAsset = (index) => {
+    let newArray = [...workspace.assets];
+    newArray.splice(index, 1)
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  }
 
   const handleSave = useCallback(async () => {
     if (checkUserValidation()) {
@@ -171,6 +187,19 @@ const CreateWorkspace = () => {
     newArray[id] = checked;
     setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
+
+  const onAddAssetClick = useCallback(async (e) => {
+    console.log("hey")
+    let newArray = [...workspace.assets];
+    let asset = {
+      capacity: 2,
+      cost_per_hour: 20,
+      asset_id: "1",
+      text: "Room"
+    }
+    newArray.push(asset)
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  })
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -309,40 +338,6 @@ const CreateWorkspace = () => {
             setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
           }}
         />
-        <OutlinedInput
-          variant="outlined"
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          required
-          fullWidth
-          name="capacity"
-          placeholder="capacity"
-          type="capacity"
-          id="capacity"
-          autoComplete="capacity"
-          value={workspace.capacity}
-          onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, capacity: event.target.value }));
-          }}
-        />
-        <OutlinedInput
-          variant="outlined"
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          required
-          fullWidth
-          name="cost per hour"
-          placeholder="how much do you take per hour?"
-          type="cost per hour"
-          id="cost per hour"
-          autoComplete="cost per hour"
-          value={workspace.cost_per_hour}
-          onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, cost_per_hour: event.target.value }));
-          }}
-        />
         <a className="text-zinc-400">Do you have any from the next:</a>
         <div className="all-checkbox">
           <div className="single-checkbox">
@@ -416,6 +411,16 @@ const CreateWorkspace = () => {
         />
         <div className="photo-preview">
           <img src={workspace.photo} />
+        </div>
+        <div>
+          <a className="text-zinc-400">Add Assets</a>
+            <IconButton aria-label="new workspace" color="primary" >
+              <AddCircleOutline onClick={onAddAssetClick}/>
+            </IconButton>
+            {workspace.assets && workspace.assets.map((curAsset, index) => {
+              return (<AddAsset asset={curAsset} handleChange={handleChangeAsset} index={index} handleDelete={handleDeleteAsset}/>)
+            }
+            )}
         </div>
         <Button
           fullWidth

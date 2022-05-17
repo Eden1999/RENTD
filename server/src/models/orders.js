@@ -24,6 +24,9 @@ module.exports = (sequelize) => {
         },
         user_id : {
             type : DataTypes.BIGINT
+        },
+        asset_id : {
+            type : DataTypes.BIGINT
         }
     }, {
         freezeTableName: true // Model tableName will be the same as the model name

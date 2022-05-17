@@ -27,12 +27,6 @@ module.exports = (sequelize) => {
       location_y: {
         type: DataTypes.DOUBLE,
       },
-      cost_per_hour: {
-        type: DataTypes.INTEGER,
-      },
-      capacity: {
-        type: DataTypes.INTEGER,
-      },
       description: {
         type: DataTypes.STRING,
       },
