@@ -2,7 +2,7 @@ import React, { useState, useCallback, useContext, useEffect } from 'react';
 import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
 import axios from 'axios'
 
-import { AppContext } from "../../../store/AppContext"
+import { AppContext } from "../../store/AppContext"
 import Appointment from './Appointment.js';
 
 import './styles.css'

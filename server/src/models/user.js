@@ -27,6 +27,9 @@ module.exports = (sequelize) => {
       photo: {
         type: DataTypes.STRING,
       },
+      favorite_workspaces: {
+        type: DataTypes.ARRAY,
+      }
     },
     {
       freezeTableName: true, // Model tableName will be the same as the model name

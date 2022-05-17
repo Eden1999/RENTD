@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import './styles.css'
-import { AppContext } from "../../../store/AppContext"
+import { AppContext } from "../../store/AppContext"
 
 const Appointment = (model) => {
   const { targetedAppointmentData } = model.data;

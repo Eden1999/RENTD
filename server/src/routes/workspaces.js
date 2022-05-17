@@ -5,6 +5,8 @@ const WorkspacesController = require('../controllers/workspaces');
 
 router.get('/', WorkspacesController.getWorkspacesList);
 
+router.get('/userFavoriteWorkspaces', WorkspacesController.getUserFavoriteWorkspaces);
+
 router.get('/:userId', WorkspacesController.getWorkspacesByUserId);
 
 router.get('/hosts/:hostId', WorkspacesController.getWorkspacesByHostId);

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import WorkspacesListItem from "../WorkspaceManagment/WorkspacesListItem";
+import WorkspacesListItem from "../../components/WorkspacesListItem";
 import Axios from "axios";
 import { AppContext } from "../../store/AppContext";
 

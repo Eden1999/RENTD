@@ -16,6 +16,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { AddCircleOutline, DeleteIcon } from "@mui/icons-material";
 import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
+import "./CreateWorkspace.scss";
 
 import "./NewWorkspace.scss";
 import AddAsset from "./AddAsset"
@@ -36,7 +37,7 @@ const daysCheckBox = [
   { dayName: "saturday" },
 ];
 
-const WorkspaceHandler = () => {
+const CreateWorkspace = () => {
   let location = useLocation();
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
@@ -439,8 +440,8 @@ const WorkspaceHandler = () => {
   );
 };
 
-WorkspaceHandler.propTypes = {
+CreateWorkspace.propTypes = {
   workspace: PropTypes.object,
 };
 
-export default WorkspaceHandler;
+export default CreateWorkspace;
