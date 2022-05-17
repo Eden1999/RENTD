@@ -42,12 +42,16 @@ const MySpaces = () => {
             <Map
               onMarkerHover={onMarkerHover}
               hoveredMarkerId={hoveredWorkspaceId}
-              markers={mapMarkers.map(({ id, location_x, location_y, cost_per_hour }) => ({
+              markers={mapMarkers.map(({ id, location_x, location_y, assets }) => {
+                let workspaceCosts = assets.map(x => {return x.cost_per_hour})
+                let max = Math.max.apply(Math, workspaceCosts)
+                let min = Math.min.apply(Math, workspaceCosts)
+                return ({
                 id,
                 lat: location_x,
                 lng: location_y,
-                text: cost_per_hour,
-              }))}
+                text: `${min}-${max}`,
+              })})}
             />
         </div>
       </div>
