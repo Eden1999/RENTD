@@ -68,17 +68,8 @@ const createNewWorkspace = (req, res) => {
   const { token } = req.headers;
   const { workspace } = req.body;
 
-  // let openingDate = new Date(opening_hour)
-  // let openingHour = date.getHours()
-  // let openingMinutes = date.getMinutes()
-
-  // let closingDate = new Date(closing_hour)
-  // let closingHour = date.getHours()
-  // let closingMinutes = date.getMinutes()
-
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
-  workspace.assets_id = workspace.assets.map(asset => asset.type_id)
   let assets = workspace.assets
   delete workspace.assets
 
@@ -90,22 +81,27 @@ const createNewWorkspace = (req, res) => {
         workspace.host_id = user.id;
         sequelize.models.workspaces
           .create(workspace)
-          .then(() => {
-            return res.status(200).send();
+          .then((addedWorkspace) => {
+            if (assets.length > 0) {
+              assets.map(asset => {
+                asset.workspace_id = addedWorkspace.id
+                sequelize.models.assets
+                .create(asset)
+                .then(() => {
+                  console.log("added asset")
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return res.status(err.status || 500).send(err.message || err.errors[0].message);
+                })
+              })
+              return res.status(200).send();
+            }
           })
           .catch((err) => {
             console.log(err);
             return res.status(err.status || 500).send(err.message || err.errors[0].message);
-          });
-        // sequelize.models.assets
-        //   .create(workspace)
-        //   .then(() => {
-        //     return res.status(200).send();
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //     return res.status(err.status || 500).send(err.message || err.errors[0].message);
-        //   });
+          })
       } else {
         let err = "user not found";
         console.log(err);
@@ -126,6 +122,11 @@ const editWorkspace = (req, res) => {
 
   const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
+  let assets = workspace.assets
+  delete workspace.assets
+  
+  let assetsArray = assets.filter(asset => asset.id).map(x=> {return x.id})
+
   // check if user is already exist
   sequelize.models.users
     .findOne({ where: { id: decodeId } })
@@ -134,7 +135,45 @@ const editWorkspace = (req, res) => {
         sequelize.models.workspaces
           .update(workspace, { where: { id: workspaceId } })
           .then(() => {
+            // delete
+            sequelize.models.assets
+            .destroy({ where: { workspace_id: workspaceId, id: {[Op.notIn]: assetsArray}} })
+            .then(() => {
+              console.log("asset deleted")
+            })
+            .catch((err) => {
+              console.log(err);
+              return res.status(err.status || 500).send(err.message || err.errors[0].message);
+            });
+
+
+            assets.map(asset => {
+              if (asset.id) {
+                sequelize.models.assets
+                .update(asset, { where: { id: asset.id } })
+                .then(() => {
+                  console.log("asset updated")
+
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return res.status(err.status || 500).send(err.message || err.errors[0].message);
+                })
+              } else {
+                asset.workspace_id = workspace.id
+                sequelize.models.assets
+                .create(asset)
+                .then(() => {
+                  console.log("asset added")
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return res.status(err.status || 500).send(err.message || err.errors[0].message);
+                })
+              }
+            })
             return res.status(200).send();
+
           })
           .catch((err) => {
             console.log(err);

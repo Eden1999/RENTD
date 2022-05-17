@@ -101,7 +101,6 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     opening_days boolean[] NOT NULL,
     opening_hour character varying,
     closing_hour character varying,
-    assets_id INTEGER[],
     photo character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
 )

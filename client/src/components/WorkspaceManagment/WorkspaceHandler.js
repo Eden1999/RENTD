@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
-import { AddCircleOutline } from "@mui/icons-material";
+import { AddCircleOutline, DeleteIcon } from "@mui/icons-material";
 import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
 
@@ -46,8 +46,6 @@ const WorkspaceHandler = () => {
     host_id: user.host_id,
     city: "",
     address: "",
-    cost_per_hour: 10,
-    capacity: 20,
     wifi: true,
     disabled_access: true,
     smoke_friendly: true,
@@ -60,7 +58,7 @@ const WorkspaceHandler = () => {
     opening_hour: "10:00",
     closing_hour: "23:00",
     spaceTypes: [{ id: 1, name: "" }],
-    assets: [{text:"hey", capacity:20}],
+    assets: [],
   });
   const [isInCreateMode, setIsInCreateMode] = useState(true);
   const [location_x, setLocationX] = useState(1.0);
@@ -68,6 +66,7 @@ const WorkspaceHandler = () => {
   const [cityBounds, setCityBounds] = useState({});
   const { token } = useToken();
   const [spaceTypes, setSpaceTypes] = useState([{ id: 1, name: "" }]);
+  const [showAddAsset, setShowAddAsset] = useState(false)
 
   useEffect(() => {
     const workspace = _.get(location, "state.workspace");
@@ -90,12 +89,6 @@ const WorkspaceHandler = () => {
     }
   }, []);
 
-  const addAsset = (asset) => {
-    let newArray = [...workspace.assets];
-    newArray.push(asset)
-    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  }
-
   const checkUserValidation = () => {
     let errors = "";
     let isFormValid = true;
@@ -109,6 +102,18 @@ const WorkspaceHandler = () => {
 
     return isFormValid;
   };
+
+  const handleChangeAsset = (asset, index) => {
+    let newArray = [...workspace.assets];
+    newArray[index] = asset
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  }
+
+  const handleDeleteAsset = (index) => {
+    let newArray = [...workspace.assets];
+    newArray.splice(index, 1)
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  }
 
   const handleSave = useCallback(async () => {
     if (checkUserValidation()) {
@@ -183,9 +188,18 @@ const WorkspaceHandler = () => {
     setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
-  const onAddAssetClick = () => {
+  const onAddAssetClick = useCallback(async (e) => {
     console.log("hey")
-  }
+    let newArray = [...workspace.assets];
+    let asset = {
+      capacity: 2,
+      cost_per_hour: 20,
+      asset_id: "1",
+      text: "Room"
+    }
+    newArray.push(asset)
+    setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
+  })
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -400,13 +414,11 @@ const WorkspaceHandler = () => {
         </div>
         <div>
           <a className="text-zinc-400">Add Assets</a>
-          {/* <Link to={"/manage/asset"}> */}
             <IconButton aria-label="new workspace" color="primary" >
-              <AddCircleOutline onClick={() => onAddAssetClick}/>
+              <AddCircleOutline onClick={onAddAssetClick}/>
             </IconButton>
-          {/* </Link> */}
             {workspace.assets && workspace.assets.map((curAsset, index) => {
-              return (<AddAsset asset={curAsset}/>)
+              return (<AddAsset asset={curAsset} handleChange={handleChangeAsset} index={index} handleDelete={handleDeleteAsset}/>)
             }
             )}
         </div>
