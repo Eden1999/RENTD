@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function NumberInput(props) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
 
   const increase = (event) => {
     event.preventDefault();

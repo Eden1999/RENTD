@@ -215,12 +215,14 @@ const WorkspacePage = () => {
               </div>
             </>
             )}
-            {!user.is_host && <button onClick={() => {setOpen(true)}}
+            {!user.is_host &&
+            <button onClick={() => {setOpen(true)}}
                     className="text-white 2xl:text-lg text-sm bg-blue-600 hover:bg-blue-700 focus:ring-4
                       focus:outline-none focus:ring-blue-800 font-medium rounded-lg
                       px-5 py-2.5 text-center">
                 Write a review
-            </button>}
+            </button>
+            }
             <Dialog open={open} onClose={handleClose}>
               <DialogTitle>Write a review</DialogTitle>
               <DialogContent>

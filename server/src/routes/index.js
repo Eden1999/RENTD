@@ -8,6 +8,7 @@ const ordersRouter = require('./orders')
 const spacetypesRouter = require('./spacetypes')
 const assettypesRouter = require('./assettypes')
 const availabilitiesRouter = require('./availabilities')
+const assetRouter = require('./assets')
 
 router.use('/users', usersRouter)
 router.use('/workspaces', workspacesRouter)
@@ -16,6 +17,7 @@ router.use('/orders', ordersRouter)
 router.use('/spacetypes', spacetypesRouter)
 router.use('/assettypes', assettypesRouter)
 router.use('/availabilities', availabilitiesRouter)
+router.use('/assets', assetRouter)
 
 router.get('/health', (req, res) => {
     res.status(200).send('Ok');

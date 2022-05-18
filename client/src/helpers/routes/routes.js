@@ -9,6 +9,7 @@ import OrdersHistory from "modules/History/OrdersHistory";
 import { userTypes } from "../consts";
 import MySpaces from "../../modules/MySpaces/MySpaces";
 import ResetPassword from "../../modules/UserManagment/ResetPassword";
+import PaymentView from "../../modules/Payment/PaymentView";
 import FavoriteWorkspaces from "modules/Favorites/FavoriteWorkspaces";
 import AddAsset from "modules/CreateWorkspace/AddAsset";
 
@@ -76,6 +77,11 @@ const routes = [
   {
     path: "/favorites",
     Component: <FavoriteWorkspaces />,
+    allowed: [userTypes.guest],
+  },
+  {
+    path: "/payment",
+    Component: <PaymentView />,
     allowed: [userTypes.guest],
   },
 ];
