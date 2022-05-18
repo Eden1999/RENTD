@@ -249,8 +249,6 @@ const editWorkspace = (req, res) => {
 const searchWorkspaces = async (req, res) => {
   try {
     const { city, capacity, space_type_id } = req.query;
-    console.log(city);
-    console.log(capacity);
 
     let assets = await sequelize.models.assets.findAll({
       where: {

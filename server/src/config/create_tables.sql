@@ -68,17 +68,16 @@ CREATE TABLE IF NOT EXISTS public.users
     password character varying COLLATE pg_catalog."default" NOT NULL,
     photo character varying COLLATE pg_catalog."default" NOT NULL,
     token character varying COLLATE pg_catalog."default" NULL,
+    favorite_workspaces INTEGER[],
     CONSTRAINT users_pkey PRIMARY KEY (id),
     UNIQUE(username),
-    UNIQUE(email)0
+    UNIQUE(email)
 )
 
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.users
     OWNER to postgres;
-
-
 
 -- Table: public.workspaces
 
@@ -206,7 +205,7 @@ INSERT INTO public.space_types(
 (
     id SERIAL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT space_types_pkey PRIMARY KEY (id)
+    CONSTRAINT asset_types_pkey PRIMARY KEY (id)
 )
 
 TABLESPACE pg_default;
