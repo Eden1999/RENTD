@@ -43,70 +43,53 @@ const AddAsset = ({asset, handleChange, index, handleDelete}) => {
               <DeleteIcon onClick={() => {handleDelete(index)}}/>
             </IconButton>
             </div>
-            <div>
-            capacity:
-            <OutlinedInput
-                variant="outlined"
-                sx={{ color: "white" }}
-                className="block shadow-sm-light bg-zinc-700 border
-                            border-zinc-600 rounded-lg mb-6"
-                required
-                fullWidth
-                name="capacity"
-                placeholder="capacity"
-                type="capacity"
-                id="capacity"
-                autoComplete="capacity"
-                value={capacity}
-                onChange={(event) => {
-                    setCapacity(event.target.value)
-                    asset.capacity = event.target.value
-                    handleChange(asset, index)
-                }}
-            />
+            <div className="mb-6">
+                <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                    capacity:
+                </label>
+                <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                       placeholder={'capacity'}
+                       value={capacity}
+                       onChange={(event) => {
+                           setCapacity(event.target.value)
+                           asset.capacity = event.target.value
+                           handleChange(asset, index)
+                       }}
+                />
             </div>
-            <div>
-            cost:
-            <OutlinedInput
-                variant="outlined"
-                sx={{ color: "white" }}
-                className="block shadow-sm-light bg-zinc-700 border
-                            border-zinc-600 rounded-lg mb-6"
-                required
-                fullWidth
-                name="cost per hour"
-                placeholder="how much do you take per hour?"
-                type="cost per hour"
-                id="cost per hour"
-                autoComplete="cost per hour"
-                value={cost_per_hour}
-                onChange={(event) => {
-                    setCost(event.target.value);
-                    asset.cost_per_hour = event.target.value
-                    handleChange(asset, index)
-                }}
-            />
+            <div className="mb-6">
+                <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                    cost per hour:
+                </label>
+                <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                       placeholder={'cost'}
+                       value={cost_per_hour}
+                       onChange={(event) => {
+                           setCost(event.target.value);
+                           asset.cost_per_hour = event.target.value
+                           handleChange(asset, index)
+                       }}
+                />
             </div>
-            <div>
-            <label htmlFor="environment" className="block mb-2 text-sm font-medium text-zinc-400">
-            Environment:
-            </label>
-            <Autocomplete
-            id="asset"
-            options={assetTypes}
-            getOptionLabel={(option) => option.name}
-            className="w-64 block shadow-sm-light bg-zinc-700 border
-                                border-zinc-600 rounded-lg"
-            renderInput={(params) => <TextField variant="outlined" {...params} />}
-            value={assetType}
-            onChange={(event, value) => {
-                setAssetType(value);
-                // asset.assetType = value
-                asset.asset_id = value.id
-                asset.text = value.name
-                handleChange(asset, index)
-            }}
-            />
+            <div className="mb-6">
+                <label htmlFor="environment" className="block mb-2 text-sm font-medium text-zinc-400">
+                    Environment:
+                </label>
+                <select
+                    className="select select-bordered 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                    onChange={(event, value) => {
+                        setAssetType(value);
+                        asset.asset_id = value.id
+                        asset.text = value.name
+                        handleChange(asset, index)
+                    }}
+                >
+                    {assetTypes.map((item, index) => (
+                        <option value={index} key={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+                </select>
             </div>
         </div>
     )

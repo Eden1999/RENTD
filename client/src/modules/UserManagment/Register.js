@@ -78,52 +78,45 @@ const Register = () => {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5">
+        <span className={"font-semibold text-3xl text-zinc-300"}>
           Register
-        </Typography>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="email"
-          name="email"
-          autoComplete="enail"
-          autoFocus
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="username"
-          label="Username"
-          name="username"
-          autoComplete="username"
-          autoFocus
-          onChange={(event) => setUsername(event.target.value)}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <a>are you an host?</a>
+        </span>
+          <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-zinc-400">
+                  Email Address:
+              </label>
+              <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                     placeholder={'email@address.com'}
+                     onChange={(event) => setEmail(event.target.value)}
+              />
+          </div>
+          <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-zinc-400">
+                  User name:
+              </label>
+              <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                     placeholder={'user'}
+                     onChange={(event) => setUsername(event.target.value)}
+              />
+          </div>
+          <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-zinc-400">
+                  Password:
+              </label>
+              <input type="password"
+                     className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                     placeholder={'******'}
+                     onChange={(event) => setPassword(event.target.value)}
+              />
+          </div>
+          <span className={"font-semibold text-zinc-300"}>are you an host?</span>
         <Checkbox
           checked={isHost}
           onChange={handleIsHostChange}
           inputProps={{ "aria-label": "controlled" }}
         />
         <input
+            className={"text-zinc-300"}
           type="file"
           label="Photo"
           name="photo"
@@ -133,15 +126,9 @@ const Register = () => {
         <div className="photo-preview">
           <img src={photo} />
         </div>
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={handleRegister}
-        >
-          Register
-        </Button>
+          <div className="flex mb-6 justify-end">
+              <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
+          </div>
       </Box>
     </Container>
   );

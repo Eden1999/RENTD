@@ -369,18 +369,18 @@ const CreateWorkspace = () => {
           <label htmlFor="environment" className="block mb-2 text-sm font-medium text-zinc-400">
             Environment:
           </label>
-          <Autocomplete
-            id="environment"
-            options={spaceTypes}
-            getOptionLabel={(option) => option.name}
-            className="w-64 block shadow-sm-light bg-zinc-700 border
-                               border-zinc-600 rounded-lg"
-            renderInput={(params) => <TextField variant="outlined" {...params} />}
-            value={workspace.spaceType}
-            onChange={(event, value) => {
-              setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
-            }}
-          />
+          <select
+              className="select select-bordered 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+              onChange={(event, value) => {
+                setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
+              }}
+          >
+            {spaceTypes.map((item, index) => (
+                <option value={index} key={item.id}>
+                  {item.name}
+                </option>
+            ))}
+          </select>
         </div>
         <a className="text-zinc-400">set opening days</a>
         <div className="all-checkbox">
@@ -400,9 +400,10 @@ const CreateWorkspace = () => {
         </div>
         <a className="text-zinc-400">set hours</a>
         <a className="text-zinc-400">opening hour</a>
-        <TimePicker onChange={setOpeningHour} value={workspace.opening_hour} />
-        <TimePicker onChange={setClosingHour} value={workspace.closing_hour} />
+        <TimePicker className="text-zinc-400" onChange={setOpeningHour} value={workspace.opening_hour} />
+        <TimePicker className="text-zinc-400" onChange={setClosingHour} value={workspace.closing_hour} />
         <input
+            className="text-zinc-400"
           type="file"
           label="Photo"
           name="photo"
