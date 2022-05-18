@@ -6,6 +6,7 @@ import { AppContext } from "../../store/AppContext"
 import Appointment from './Appointment.js';
 
 import './styles.css'
+import {useNavigate} from "react-router-dom";
 
 const views = ['day', 'week'];
 const groups = ['asset_id'];
@@ -36,6 +37,7 @@ const Orders = ({workspace}) => {
   let [capacity, setCapacity] = useState(1)
   const [{ user }] = useContext(AppContext);
   const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);
+  const navigate = useNavigate();
 
   const getOrders = async (workspace_id) => {
     await axios.get(`http://localhost:8000/orders/${workspace_id}`)
@@ -48,16 +50,6 @@ const Orders = ({workspace}) => {
       setOrders([])
     })
   }
-
-  useEffect(async () => {
-    try {
-      const query = {};
-      const res = await axios.get("http://localhost:8000/assetTypes", query);
-      setAssetTypes(res.data);
-    } catch (err) {
-      console.log(`Failed to fetch spaceTypes ${err.message}`);
-    }
-  }, []);
 
   useEffect(() => {
     getOrders(workspace.id)
@@ -73,36 +65,26 @@ const Orders = ({workspace}) => {
     })
   }, [assetTypes])
 
-  const HandalingAddOrder = useCallback(async (e) => {
-    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id)
+  const continueToPayment = useCallback(async (e) => {
 
-    let newOrder = {
+    let cost = await axios.get(`http://localhost:8000/assets/${e.appointmentData.asset_id}`)
+        .then((res) => {
+          return(res.data.cost_per_hour);
+        })
+        .catch(err =>{
+          alert(err.response.data);
+        });
+
+    let rentingDetails = {
       startdate: e.appointmentData.startDate,
       enddate: e.appointmentData.endDate,
       capacity: e.appointmentData.capacity,
       user_id: user.id,
-      workspace_id: workspace.id,
-      asset_id: e.appointmentData.asset_id,
+      cost_per_hour: cost,
     }
-    
-    console.log(newOrder)
 
-    const query = newOrder
-
-    axios.post('http://localhost:8000/orders/create', query)
-    .then((res) => {
-      console.log(res)
-      let newArray = orders
-      newArray[newArray.length - 1].id = res.data.id
-      setOrders(newArray)
-      // res.data.id
-        // TODO: SOME COGO TOAST?
-    })
-    .catch(err =>{
-      //TODO: DO NOT SAVE
-        alert(err.response.data)
-    })
-  })
+    navigate(`/payment`, {state: {workspace, rentingDetails}});
+  });
 
   const HandalingUpdateOrder = useCallback(async (e) => {
     let newOrder = {
@@ -144,7 +126,7 @@ const Orders = ({workspace}) => {
   const onOrderFormOpening = (e) => {
     const { form } = e;
     let { startDate, endDate, userName } = e.appointmentData;
-    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id)
+    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id);
 
     form.option('items', [
       {
@@ -199,7 +181,7 @@ const Orders = ({workspace}) => {
           items: convertCapacityArrayToObject(relAsset.capacity),
           displayExpr: 'number',
           valueExpr: 'number',
-          value: capacity || 1,
+          value: 1,
           onValueChanged(args) {
             capacity = args.value
           },
@@ -228,7 +210,7 @@ const Orders = ({workspace}) => {
             cellDuration={30}
             appointmentComponent={Appointment}
             onAppointmentFormOpening={onOrderFormOpening}
-            onAppointmentAdded={HandalingAddOrder}
+            onAppointmentAdded={continueToPayment}
             onAppointmentUpdated={HandalingUpdateOrder}
             onAppointmentDeleted={HandalingDeleteOrder}
           >
