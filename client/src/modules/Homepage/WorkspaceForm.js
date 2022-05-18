@@ -7,7 +7,7 @@ import NumberInput from "../../components/NumberInput";
 function WorkspaceForm() {
   const [spaceTypes, setSpaceTypes] = useState([]);
   const [city, setCity] = useState({});
-  const [capacity, setCapacity] = useState();
+  const [capacity, setCapacity] = useState(1);
   const [spaceType, setSpaceType] = useState({});
 
   // Get space types from the server to the environment selector
@@ -79,7 +79,7 @@ function WorkspaceForm() {
           <label htmlFor="capacity" className="block mb-2 text-sm font-medium text-zinc-400">
             Number of people:
           </label>
-          <NumberInput id="capacity" setValue={setCapacity} />
+          <NumberInput id="capacity" value={capacity} setValue={setCapacity} />
         </div>
         <div>
           <Link
