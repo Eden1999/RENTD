@@ -54,57 +54,40 @@ const Login = () => {
                     alignItems: 'center',
                 }}
             >
-                <Typography component="h1" variant="h5">
-                    Login
-                </Typography>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="email"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    onChange={(event) => setEmail(event.target.value)}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={(event) => setPassword(event.target.value)}
-                />
+                <span className={"font-semibold text-3xl text-zinc-300"}>
+                  Login
+                </span>
+                <div className="mb-6">
+                    <label className="block mb-2 text-sm font-medium text-zinc-400">
+                        Email Address:
+                    </label>
+                    <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                           placeholder={'email@address.com'}
+                           onChange={(event) => setEmail(event.target.value)}
+                    />
+                </div>
+                <div className="mb-6">
+                    <label className="block mb-2 text-sm font-medium text-zinc-400">
+                        Password:
+                    </label>
+                    <input type="password"
+                           className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                           placeholder={'******'}
+                           onChange={(event) => setPassword(event.target.value)}
+                    />
+                </div>
                 <label
                     className={'mt-6 text-sm text-blue-500 cursor-pointer underline decoration-blue-500'}
                     onClick={() => navigate('/reset-password')}
                 >
                     reset password
                 </label>
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    sx={{mt: 3, mb: 2}}
-                    onClick={handleLogin}
-                >
-                    Login
-                </Button>
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    sx={{mt: 3, mb: 2}}
-                    onClick={handleRegister}
-                >
-                    Register
-                </Button>
+                <div className="flex mb-6 justify-end">
+                    <button type="button" className={"btn btn-lg btn-primary"} onClick={handleLogin}>Login</button>
+                </div>
+                <div className="flex mb-6 justify-end">
+                    <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
+                </div>
             </Box>
         </Container>
     )
