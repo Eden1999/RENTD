@@ -6,6 +6,7 @@ import {ToastContainer, toast } from "react-toastify";
 function PaymentView() {
     const [workspace, setWorkspace] = useState(useLocation().state.workspace);
     const [rentingDetails, setRentingDetails] = useState(useLocation().state.rentingDetails);
+    const [costPerHour, setCostPerHour] = useState(useLocation().state.costPerHour);
     const [fullName, setFullName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
@@ -42,7 +43,7 @@ function PaymentView() {
     const getTotalPrice = () => {
         const numOfRentingHours = Math.abs(rentingDetails.startdate - rentingDetails.enddate)/(1000*3600);
         console.log(numOfRentingHours);
-        return(rentingDetails.cost_per_hour * numOfRentingHours);
+        return(costPerHour * numOfRentingHours);
     }
 
     return (
