@@ -307,7 +307,7 @@ const CreateWorkspace = () => {
           name="city"
           placeholder="city"
           type="city"
-          defaultValue={workspace.city}
+          value={workspace.city}
         />
         <OutlinedInput
           required
@@ -319,7 +319,7 @@ const CreateWorkspace = () => {
                     border-zinc-600 rounded-lg mb-6"
           type="address"
           id="address"
-          defaultValue={workspace.address}
+          value={workspace.address}
           disabled={!workspace.city}
         />
         <OutlinedInput
