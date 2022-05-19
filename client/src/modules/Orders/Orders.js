@@ -67,7 +67,7 @@ const Orders = ({workspace}) => {
 
   const continueToPayment = useCallback(async (e) => {
 
-    let cost = await axios.get(`http://localhost:8000/assets/${e.appointmentData.asset_id}`)
+    let costPerHour = await axios.get(`http://localhost:8000/assets/${e.appointmentData.asset_id}`)
         .then((res) => {
           return(res.data.cost_per_hour);
         })
@@ -80,10 +80,11 @@ const Orders = ({workspace}) => {
       enddate: e.appointmentData.endDate,
       capacity: e.appointmentData.capacity,
       user_id: user.id,
-      cost_per_hour: cost,
+      workspace_id:workspace.id,
+      asset_id:e.appointmentData.asset_id,
     }
 
-    navigate(`/payment`, {state: {workspace, rentingDetails}});
+    navigate(`/payment`, {state: {workspace, rentingDetails, costPerHour}});
   });
 
   const HandalingUpdateOrder = useCallback(async (e) => {
