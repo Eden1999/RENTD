@@ -41,8 +41,7 @@ function PaymentView() {
     }
 
     const getTotalPrice = () => {
-        const numOfRentingHours = Math.abs(rentingDetails.startdate - rentingDetails.enddate)/(1000*3600);
-        console.log(numOfRentingHours);
+        const numOfRentingHours = Math.abs(new Date(rentingDetails.startdate) - new Date(rentingDetails.enddate))/(1000*3600);
         return(costPerHour * numOfRentingHours);
     }
 
@@ -59,6 +58,7 @@ function PaymentView() {
                             <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                    placeholder={'First Last'}
                                    value={fullName}
+                                   onChange={(e) => {setFullName(e.target.value)}}
                             />
                         </div>
                         <div className="w-1/2 ml-6 mb-6">
@@ -67,7 +67,7 @@ function PaymentView() {
                             </label>
                             <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                    placeholder={'e.g. 052-1234567'}
-                                   value={phoneNumber}
+                                   onChange={(e) => {setPhoneNumber(e.target.value)}}
                             />
                         </div>
                     </div>
@@ -78,6 +78,7 @@ function PaymentView() {
                         <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                placeholder={'email@address.com'}
                                value={email}
+                               onChange={(e) => {setEmail(e.target.value)}}
                         />
                     </div>
                     <span className="text-white text-2xl">Billing Details</span>
@@ -89,6 +90,7 @@ function PaymentView() {
                             <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                    placeholder={'XXXX XXXX XXXX XXXX'}
                                    value={cardNumber}
+                                   onChange={(e) => {setCardNumber(e.target.value)}}
                             />
                         </div>
                         <div className="w-1/2 ml-6">
@@ -99,12 +101,14 @@ function PaymentView() {
                                <div className="w-1/2">
                                    <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                           value={expirationMonth}
+                                          onChange={(e) => {setExpirationMonth(e.target.value)}}
                                           placeholder={'MM'}
                                    />
                                </div>
                                 <div className="w-1/2 ml-6">
                                     <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                            value={expirationYear}
+                                           onChange={(e) => {setExpirationYear(e.target.value)}}
                                            placeholder={'YYYY'}
                                     />
                                 </div>
@@ -118,6 +122,7 @@ function PaymentView() {
                         <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
                                placeholder={'XXX'}
                                value={securityCode}
+                               onChange={(e) => {setSecurityCode(e.target.value)}}
                         />
                     </div>
                     <div className="flex mb-6 justify-end">
