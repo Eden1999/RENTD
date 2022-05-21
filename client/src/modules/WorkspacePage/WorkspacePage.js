@@ -147,7 +147,7 @@ const WorkspacePage = () => {
             <Rating precision={0.5} className="pr-1" name="read-only" value={workspace.ratings.reduce((total, currRating) => total + parseInt(currRating.rating), 0) /
                 workspace.ratings.length} readOnly /> 
           )}
-          <p className="text-sm text-white pr-3">({workspace.ratings.length} reviews)</p>  
+          <p className="text-md text-white pr-3">({workspace.ratings.length} reviews)</p>  
           {user?.favorite_workspaces?.includes(workspace.id) ? 
           <IconButton id="editIcon" aria-label="remove from favorites" color='secondary' onClick={() => onRemoveFavoriteClick(workspace)}>
             <FavoriteIcon />
@@ -157,7 +157,7 @@ const WorkspacePage = () => {
             </IconButton> 
           }
         </div>
-        {workspace.spaceType && <p className="text-md text-white">{workspace.spaceType.name}</p>}
+        {workspace.spaceType && <p className="text-lg text-white">{workspace.spaceType.name}</p>}
         {/* <p className="text-amber-800 pb-7">Hurry up! {workspace.capacity} spots left</p> */}
         <div className="details">
           <div className="flex flex-column">
@@ -167,7 +167,7 @@ const WorkspacePage = () => {
         <div className="hero container mx-auto w-96 pb-10">
           <img src={workspace.photo} />
         </div>
-        <span className="text-md text-white">
+        <span className="text-lg text-white">
           <p className="pb-10">{workspace.description}</p>
           <div className="extra-details pb-10">
             {workspace.wifi && (

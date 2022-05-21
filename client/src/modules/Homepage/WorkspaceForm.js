@@ -45,7 +45,7 @@ function WorkspaceForm() {
   return (
     <form autoComplete="off">
       <div className="mb-6">
-        <label htmlFor="location" className="block mb-2 text-sm font-medium text-zinc-400">
+        <label htmlFor="location" className="block mb-2 text-md font-medium text-zinc-400">
           Search for workspace at:
         </label>
         <div className="relative">
@@ -60,7 +60,7 @@ function WorkspaceForm() {
         </div>
       </div>
       <div className="mb-6">
-        <label htmlFor="environment" className="block mb-2 text-sm font-medium text-zinc-400">
+        <label htmlFor="environment" className="block mb-2 text-md font-medium text-zinc-400">
           Environment:
         </label>
         <select
@@ -76,7 +76,7 @@ function WorkspaceForm() {
       </div>
       <div className="flex justify-between items-end mb-6">
         <div className="w-1/2">
-          <label htmlFor="capacity" className="block mb-2 text-sm font-medium text-zinc-400">
+          <label htmlFor="capacity" className="block mb-2 text-md font-medium text-zinc-400">
             Number of people:
           </label>
           <NumberInput id="capacity" value={capacity} setValue={setCapacity} />

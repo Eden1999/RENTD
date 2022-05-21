@@ -54,11 +54,11 @@ const Login = () => {
                     alignItems: 'center',
                 }}
             >
-                <span className={"font-semibold text-3xl text-zinc-300"}>
+                <span className={"mb-6 font-semibold text-3xl text-zinc-300"}>
                   Login
                 </span>
                 <div className="mb-6">
-                    <label className="block mb-2 text-sm font-medium text-zinc-400">
+                    <label className="block mb-2 text-md font-medium text-zinc-400">
                         Email Address:
                     </label>
                     <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -67,7 +67,7 @@ const Login = () => {
                     />
                 </div>
                 <div className="mb-6">
-                    <label className="block mb-2 text-sm font-medium text-zinc-400">
+                    <label className="block mb-2 text-md font-medium text-zinc-400">
                         Password:
                     </label>
                     <input type="password"
@@ -77,7 +77,7 @@ const Login = () => {
                     />
                 </div>
                 <label
-                    className={'mt-6 text-sm text-blue-500 cursor-pointer underline decoration-blue-500'}
+                    className={'mt-3 mb-3 text-md text-blue-500 cursor-pointer underline decoration-blue-500'}
                     onClick={() => navigate('/reset-password')}
                 >
                     reset password

@@ -82,7 +82,7 @@ const Register = () => {
           Register
         </span>
           <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-zinc-400">
+              <label className="block mb-2 text-md font-medium text-zinc-400">
                   Email Address:
               </label>
               <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -91,7 +91,7 @@ const Register = () => {
               />
           </div>
           <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-zinc-400">
+              <label className="block mb-2 text-md font-medium text-zinc-400">
                   User name:
               </label>
               <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -100,7 +100,7 @@ const Register = () => {
               />
           </div>
           <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-zinc-400">
+              <label className="block mb-2 text-md font-medium text-zinc-400">
                   Password:
               </label>
               <input type="password"

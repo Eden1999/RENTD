@@ -52,7 +52,7 @@ function PaymentView() {
                     <span className="text-white text-2xl">Your Details</span>
                     <div className="flex mb-6 justify-between">
                         <div className="w-1/2 mb-6">
-                            <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                            <label className="label block mb-2 text-md font-medium text-zinc-400">
                                 Full Name:
                             </label>
                             <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -62,7 +62,7 @@ function PaymentView() {
                             />
                         </div>
                         <div className="w-1/2 ml-6 mb-6">
-                            <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                            <label className="label block mb-2 text-md font-medium text-zinc-400">
                                 Phone Number:
                             </label>
                             <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -72,7 +72,7 @@ function PaymentView() {
                         </div>
                     </div>
                     <div className="w-1/2 mb-6">
-                        <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                        <label className="label block mb-2 text-md font-medium text-zinc-400">
                             Email Address:
                         </label>
                         <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -84,7 +84,7 @@ function PaymentView() {
                     <span className="text-white text-2xl">Billing Details</span>
                     <div className="flex mb-6 justify-between">
                         <div className="w-1/2">
-                            <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                            <label className="label block mb-2 text-md font-medium text-zinc-400">
                                 Card Number:
                             </label>
                             <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
@@ -94,7 +94,7 @@ function PaymentView() {
                             />
                         </div>
                         <div className="w-1/2 ml-6">
-                            <label className="flex flex-row label block mb-2 text-sm font-medium text-zinc-400">
+                            <label className="flex flex-row label block mb-2 text-md font-medium text-zinc-400">
                                 Expiration:
                             </label>
                             <div className="flex">
@@ -116,7 +116,7 @@ function PaymentView() {
                         </div>
                     </div>
                     <div className="w-1/2 mb-6">
-                        <label className="label block mb-2 text-sm font-medium text-zinc-400">
+                        <label className="label block mb-2 text-md font-medium text-zinc-400">
                             Security Code:
                         </label>
                         <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
