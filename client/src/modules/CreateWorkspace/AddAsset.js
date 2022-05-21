@@ -39,8 +39,8 @@ const AddAsset = ({asset, handleChange, index, handleDelete}) => {
     return (
         <div className="mb-6 child inline-block-child">
             <div>
-            <IconButton aria-label="new workspace" color="primary" >
-              <DeleteIcon onClick={() => {handleDelete(index)}}/>
+            <IconButton aria-label="new workspace">
+              <DeleteIcon htmlColor="#EB586F" onClick={() => {handleDelete(index)}}/>
             </IconButton>
             </div>
             <div className="mb-6">
