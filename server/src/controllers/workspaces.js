@@ -89,7 +89,10 @@ const getUserFavoriteWorkspaces = (req,res) => {
                     const spaceType = await sequelize.models.space_types.findOne({
                       where: { id: workspace.space_type_id },
                     });
-                    return { ...workspace, ratings, host, spaceType };
+                    const assets = await sequelize.models.assets.findAll({
+                      where: { workspace_id: workspace.id },
+                    }); 
+                    return { ...workspace, ratings, host, spaceType, assets };
                   })
                 );
                 return res.status(200).send(fullWorkspaces);
