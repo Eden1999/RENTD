@@ -135,11 +135,11 @@ const WorkspacePage = () => {
     <div>
         <div className="flex flex-row items-center">
         {isEditable && (<span>
-            <IconButton id="editIcon" aria-label="edit workspace" color='primary' onClick={(e) => onEditClick(e, workspace)}>
-              <EditIcon />
+            <IconButton id="editIcon" aria-label="edit workspace" onClick={(e) => onEditClick(e, workspace)}>
+              <EditIcon htmlColor="#4AA0D5"/>
             </IconButton>
-            <IconButton id="deleteIcon" aria-label="edit workspace" color='primary' onClick={(e) => onDeleteClick(e, workspace)}>
-              <DeleteIcon />
+            <IconButton id="deleteIcon" aria-label="edit workspace" onClick={(e) => onDeleteClick(e, workspace)}>
+              <DeleteIcon htmlColor="#EB586F"/>
             </IconButton>
         </span>)}
           <p className="text-3xl text-white pr-3">{workspace.name}</p>

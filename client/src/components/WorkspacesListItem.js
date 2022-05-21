@@ -85,12 +85,12 @@ const WorkspacesListItem = ({
             <span className="flex self-center">
               <button className="btn btn-sm btn-circle"
                       onClick={(e) => onEditClick(e, workspace)}>
-                <EditIcon />
+                <EditIcon htmlColor="#4AA0D5"/>
               </button>
             <button className="btn btn-sm btn-circle mx-4"
                 onClick={(e) => onDeleteClick(e, workspace)}
             >
-              <DeleteIcon />
+              <DeleteIcon htmlColor="#EB586F"/>
             </button>
           </span>
         )}
