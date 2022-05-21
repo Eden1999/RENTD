@@ -18,7 +18,7 @@ import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
 
-import AddAsset from "./AddAsset"
+import AddAsset from "./AddAsset";
 import _ from "lodash";
 
 import TimePicker from "react-time-picker";
@@ -66,7 +66,8 @@ const CreateWorkspace = () => {
   const [cityBounds, setCityBounds] = useState({});
   const { token } = useToken();
   const [spaceTypes, setSpaceTypes] = useState([{ id: 1, name: "" }]);
-  const [showAddAsset, setShowAddAsset] = useState(false)
+  const [showAddAsset, setShowAddAsset] = useState(false);
+  const [editProps, setEditProps] = useState({});
 
   useEffect(() => {
     const workspace = _.get(location, "state.workspace");
@@ -74,6 +75,11 @@ const CreateWorkspace = () => {
     if (!_.isEmpty(workspace)) {
       setWorkspace(workspace);
       setIsInCreateMode(false);
+      setEditProps({
+        ...editProps,
+        city: { key: workspace.city, defaultValue: workspace.city },
+        address: { key: workspace.address, defaultValue: workspace.address },
+      });
     }
   }, [location, spaceTypes]);
 
@@ -105,15 +111,15 @@ const CreateWorkspace = () => {
 
   const handleChangeAsset = (asset, index) => {
     let newArray = [...workspace.assets];
-    newArray[index] = asset
+    newArray[index] = asset;
     setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  }
+  };
 
   const handleDeleteAsset = (index) => {
     let newArray = [...workspace.assets];
-    newArray.splice(index, 1)
+    newArray.splice(index, 1);
     setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  }
+  };
 
   const handleSave = useCallback(async () => {
     if (checkUserValidation()) {
@@ -189,17 +195,17 @@ const CreateWorkspace = () => {
   };
 
   const onAddAssetClick = useCallback(async (e) => {
-    console.log("hey")
+    console.log("hey");
     let newArray = [...workspace.assets];
     let asset = {
       capacity: 2,
       cost_per_hour: 20,
       asset_id: "1",
-      text: "Room"
-    }
-    newArray.push(asset)
+      text: "Room",
+    };
+    newArray.push(asset);
     setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  })
+  });
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -233,13 +239,14 @@ const CreateWorkspace = () => {
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setCityBounds(place.geometry.viewport);
-          setWorkspace((workspace) => ({ ...workspace, city: place.name }));
+          setWorkspace((workspace) => ({ ...workspace, city: place.name, address: "" }));
+          document.getElementById("address").value = "";
         });
       }, 1000);
     } catch (err) {
       console.log(`Failed to fetch cities autocompletion: ${err.message}`);
     }
-  }, []);
+  }, [editProps]);
 
   useEffect(async () => {
     try {
@@ -263,9 +270,9 @@ const CreateWorkspace = () => {
             location_x: place.geometry.location.lng(),
           }));
         });
-      }, 1000);
+      }, 0);
     } catch (err) {
-      console.log(`Failed to fetch cities autocompletion: ${err.message}`);
+      console.log(`Failed to fetch addresses autocompletion: ${err.message}`);
     }
   }, [workspace.city]);
 
@@ -307,7 +314,7 @@ const CreateWorkspace = () => {
           name="city"
           placeholder="city"
           type="city"
-          value={workspace.city}
+          {...editProps.city}
         />
         <OutlinedInput
           required
@@ -319,8 +326,8 @@ const CreateWorkspace = () => {
                     border-zinc-600 rounded-lg mb-6"
           type="address"
           id="address"
-          value={workspace.address}
           disabled={!workspace.city}
+          {...editProps.address}
         />
         <OutlinedInput
           required
@@ -370,15 +377,15 @@ const CreateWorkspace = () => {
             Environment:
           </label>
           <select
-              className="select select-bordered 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-              onChange={(event, value) => {
-                setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
-              }}
+            className="select select-bordered 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+            onChange={(event, value) => {
+              setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
+            }}
           >
             {spaceTypes.map((item, index) => (
-                <option value={index} key={item.id}>
-                  {item.name}
-                </option>
+              <option value={index} key={item.id}>
+                {item.name}
+              </option>
             ))}
           </select>
         </div>
@@ -400,10 +407,18 @@ const CreateWorkspace = () => {
         </div>
         <a className="text-zinc-400">set hours</a>
         <a className="text-zinc-400">opening hour</a>
-        <TimePicker className="text-zinc-400" onChange={setOpeningHour} value={workspace.opening_hour} />
-        <TimePicker className="text-zinc-400" onChange={setClosingHour} value={workspace.closing_hour} />
+        <TimePicker
+          className="text-zinc-400"
+          onChange={setOpeningHour}
+          value={workspace.opening_hour}
+        />
+        <TimePicker
+          className="text-zinc-400"
+          onChange={setClosingHour}
+          value={workspace.closing_hour}
+        />
         <input
-            className="text-zinc-400"
+          className="text-zinc-400"
           type="file"
           label="Photo"
           name="photo"
@@ -415,13 +430,21 @@ const CreateWorkspace = () => {
         </div>
         <div>
           <a className="text-zinc-400">Add Assets</a>
-            <IconButton aria-label="new workspace" color="primary" >
-              <AddCircleOutline onClick={onAddAssetClick}/>
-            </IconButton>
-            {workspace.assets && workspace.assets.map((curAsset, index) => {
-              return (<AddAsset asset={curAsset} handleChange={handleChangeAsset} index={index} handleDelete={handleDeleteAsset}/>)
-            }
-            )}
+          <IconButton aria-label="new workspace" color="primary" onClick={onAddAssetClick}>
+            <AddCircleOutline />
+          </IconButton>
+          {workspace.assets &&
+            workspace.assets.map((curAsset, index) => {
+              return (
+                <AddAsset
+                  key={curAsset.id}
+                  asset={curAsset}
+                  handleChange={handleChangeAsset}
+                  index={index}
+                  handleDelete={handleDeleteAsset}
+                />
+              );
+            })}
         </div>
         <Button
           fullWidth
