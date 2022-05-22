@@ -6,18 +6,19 @@ import { useNavigate } from "react-router";
 import { AppContext } from "../../store/AppContext";
 import Checkbox from "@mui/material/Checkbox";
 import useToken from "../../helpers/useToken";
+import { useForm } from "react-hook-form";
+import { validate as validate_email } from "email-validator";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
   const [, dispatch] = useContext(AppContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const [isHost, setIsHost] = useState(false);
   const [photo, setPhoto] = useState("");
   const { token, setToken } = useToken();
+  const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' });
 
-  const handleRegister = () => {
+  const handleRegister = ({ username, password, email }) => {
     const query = { username, password, email, isHost, photo };
 
     axios
@@ -35,11 +36,12 @@ const Register = () => {
         });
 
         sessionStorage.setItem("user", JSON.stringify(res.data.user));
+        toast.success("Registration successfull!");
 
         navigate(res.data.user.is_host ? "/my-spaces" : "/homepage");
       })
       .catch((err) => {
-        alert(err.response.data);
+        toast.error(err.response.data);
       });
   };
 
@@ -78,57 +80,70 @@ const Register = () => {
           alignItems: "center",
         }}
       >
-        <span className={"font-semibold text-3xl text-zinc-300"}>
-          Register
-        </span>
+        <form onSubmit={handleSubmit(handleRegister)}>
+          <span className={"font-semibold text-3xl text-zinc-300"}>
+            Register
+          </span>
           <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-zinc-400">
-                  Email Address:
-              </label>
-              <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-                     placeholder={'email@address.com'}
-                     onChange={(event) => setEmail(event.target.value)}
-              />
+            <label className="block mb-2 text-sm font-medium text-zinc-400">
+              Email Address:
+            </label>
+            <input
+              type="text"
+              {...register("email", { required: true, minLength: 4, validate: value => validate_email(value) })}
+              className={`input 2xl:select-lg font-normal w-full bg-zinc-700 text-white invalid:ring-red-700 invalid:border-red-700 ${errors.email ? "invalid-input" : "valid-input"}`}
+              placeholder={'email@address.com'}
+
+            />
+            {errors.email && <div className="text-red-700">Invalid email address</div>}
           </div>
           <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-zinc-400">
-                  User name:
-              </label>
-              <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-                     placeholder={'user'}
-                     onChange={(event) => setUsername(event.target.value)}
-              />
+            <label className="block mb-2 text-sm font-medium text-zinc-400">
+              User name:
+            </label>
+            <input
+              {...register("username", { required: true })}
+              type="text"
+              className={`input 2xl:select-lg font-normal w-full bg-zinc-700 text-white invalid:ring-red-700 invalid:border-red-700 ${errors.username ? "invalid-input" : "valid-input"}`}
+              placeholder={'user'}
+            />
+            {errors.username && <div className="text-red-700">Invalid username</div>}
           </div>
           <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-zinc-400">
-                  Password:
-              </label>
-              <input type="password"
-                     className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-                     placeholder={'******'}
-                     onChange={(event) => setPassword(event.target.value)}
-              />
+            <label className="block mb-2 text-sm font-medium text-zinc-400">
+              Password:
+            </label>
+            <input
+              {...register("password", { required: true, pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$&*_^()+])(?=.*[0-9]).{8,20}$/ })}
+              type="password"
+              className={`input 2xl:select-lg font-normal w-full bg-zinc-700 text-white invalid:ring-red-700 invalid:border-red-700 ${errors.password ? "invalid-input" : "valid-input"}`}
+              placeholder={'******'}
+            />
+            {errors.password && <div className="text-red-700">Password must be between 8 and 20 characters and include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character</div>}
           </div>
-          <span className={"font-semibold text-zinc-300"}>are you an host?</span>
-        <Checkbox
-          checked={isHost}
-          onChange={handleIsHostChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
-        <input
+          <div class="flex items-center">
+            <span className={"font-semibold text-zinc-300"}>Are you a host?</span>
+            <Checkbox
+              checked={isHost}
+              onChange={handleIsHostChange}
+              inputProps={{ "aria-label": "controlled" }}
+            />
+          </div>
+          <input
             className={"text-zinc-300"}
-          type="file"
-          label="Photo"
-          name="photo"
-          accept=".jpeg, .png, .jpg"
-          onChange={handlePhotoUpload}
-        />
-        <div className="photo-preview">
-          <img src={photo} />
-        </div>
-          <div className="flex mb-6 justify-end">
-              <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
+            type="file"
+            label="Photo"
+            name="photo"
+            accept=".jpeg, .png, .jpg"
+            onChange={handlePhotoUpload}
+          />
+          <div className="photo-preview">
+            <img src={photo} />
           </div>
+          <div className="flex mb-6 justify-end">
+            <button type="submit" className={"btn btn-lg btn-primary"}>Register</button>
+          </div>
+        </form>
       </Box>
     </Container>
   );

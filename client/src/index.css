@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.invalid-input {
+  @apply ring-1 ring-red-700 border-red-700 focus:ring-2 focus:ring-red-700 focus:border-red-700;
+}
+.valid-input {
+  @apply focus:ring-1 focus:ring-blue-700 focus:border-blue-700;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
