@@ -24,7 +24,7 @@ const SearchResultsView = () => {
       <div className="flex w-1/2">
         <div className={"flex-1 flex flex-col"}>
           <div className={"h-20 mt-8"}>
-            <div className={"ml-[17.5rem] text-white text-left text-3xl"}>
+            <div className={"ml-[17.5rem] text-primary text-4xl text-left font-medium"}>
               We found multiple options for you
             </div>
           </div>

@@ -1,7 +1,5 @@
 import React from "react";
-import WorkspacesListItem from "../../components/WorkspacesListItem";
 import WorkspaceHero from "./WorkspaceHero";
-
 
 const RecommendationCarousel = () => {
 
@@ -39,8 +37,8 @@ const RecommendationCarousel = () => {
           <div id={index} key={workspace.id} className="carousel-item relative w-full">
             <WorkspaceHero workspace={workspace} />
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-              <a href={'#' + (index + recommendedWorkspaces.length - 1) % recommendedWorkspaces.length} className="btn btn-circle">❮</a>
-              <a href={'#' + (index + 1) % recommendedWorkspaces.length} className="btn btn-circle">❯</a>
+              <a href={'#' + (index + recommendedWorkspaces.length - 1) % recommendedWorkspaces.length} className="btn btn-secondary text-white btn-circle">❮</a>
+              <a href={'#' + (index + 1) % recommendedWorkspaces.length} className="btn btn-secondary text-white btn-circle">❯</a>
             </div>
           </div>
           );

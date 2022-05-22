@@ -1,5 +1,5 @@
 import { LocationOn } from "@mui/icons-material";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import NumberInput from "../../components/NumberInput";
@@ -45,26 +45,26 @@ function WorkspaceForm() {
   return (
     <form autoComplete="off">
       <div className="mb-6">
-        <label htmlFor="location" className="block mb-2 text-md font-medium text-zinc-400">
+        <label htmlFor="location" className="block mb-2 text-lg font-medium text-primary">
           Search for workspace at:
         </label>
         <div className="relative">
-          <LocationOn className="absolute top-1/2 transform -translate-y-1/2 left-4 text-white" />
+          <LocationOn className="absolute top-1/2 transform -translate-y-1/2 left-4 text-secondary" />
           <input
             id="location"
             type="text"
             placeholder="Tel Aviv"
             required
-            className="input input-bordered 2xl:input-lg w-full bg-zinc-700 pl-11 2xl:pl-11 text-white"
+            className="input input-bordered 2xl:input-lg w-full pl-11 2xl:pl-11 text-secondary"
           />
         </div>
       </div>
       <div className="mb-6">
-        <label htmlFor="environment" className="block mb-2 text-md font-medium text-zinc-400">
+        <label htmlFor="environment" className="block mb-2 text-lg font-medium text-primary">
           Environment:
         </label>
         <select
-          className="select select-bordered 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+          className="select select-bordered 2xl:select-lg font-normal w-full text-secondary"
           onChange={(event) => setSpaceType(spaceTypes[event.target.value])}
         >
           {spaceTypes.map((item, index) => (
@@ -76,7 +76,7 @@ function WorkspaceForm() {
       </div>
       <div className="flex justify-between items-end mb-6">
         <div className="w-1/2">
-          <label htmlFor="capacity" className="block mb-2 text-md font-medium text-zinc-400">
+          <label htmlFor="capacity" className="block mb-2 text-lg font-medium text-primary">
             Number of people:
           </label>
           <NumberInput id="capacity" value={capacity} setValue={setCapacity} />

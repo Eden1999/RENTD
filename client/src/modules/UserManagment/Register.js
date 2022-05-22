@@ -68,69 +68,65 @@ const Register = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <span className={"font-semibold text-3xl text-zinc-300"}>
-          Register
-        </span>
+      <div className="w-1/3 self-center m-8">
+          <div className="mb-12">
+                <span className="font-semibold text-6xl text-primary">
+                  Register
+                </span>
+          </div>
           <div className="mb-6">
-              <label className="block mb-2 text-md font-medium text-zinc-400">
+              <label className="block mb-2 text-lg font-medium text-primary">
                   Email Address:
               </label>
-              <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+              <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
                      placeholder={'email@address.com'}
                      onChange={(event) => setEmail(event.target.value)}
               />
           </div>
           <div className="mb-6">
-              <label className="block mb-2 text-md font-medium text-zinc-400">
-                  User name:
+              <label className="block mb-2 text-lg font-medium text-primary">
+                  User Name:
               </label>
-              <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-                     placeholder={'user'}
+              <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                     placeholder={'email@address.com'}
                      onChange={(event) => setUsername(event.target.value)}
               />
           </div>
           <div className="mb-6">
-              <label className="block mb-2 text-md font-medium text-zinc-400">
+              <label className="block mb-2 text-lg font-medium text-primary">
                   Password:
               </label>
               <input type="password"
-                     className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+                     className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
                      placeholder={'******'}
                      onChange={(event) => setPassword(event.target.value)}
               />
           </div>
-          <span className={"font-semibold text-zinc-300"}>are you an host?</span>
-        <Checkbox
-          checked={isHost}
-          onChange={handleIsHostChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
-        <input
-            className={"text-zinc-300"}
-          type="file"
-          label="Photo"
-          name="photo"
-          accept=".jpeg, .png, .jpg"
-          onChange={handlePhotoUpload}
-        />
-        <div className="photo-preview">
-          <img src={photo} />
-        </div>
+          <div className="mb-6">
+              <label className="label cursor-pointer">
+                  <span className="label-text font-medium text-primary">register as a host</span>
+                  <input type="checkbox"
+                         checked={isHost}
+                         onChange={handleIsHostChange}
+                         className="checkbox checkbox-primary"
+                  />
+              </label>
+          </div>
+          <div className="mb-6">
+              <img class="mask mask-circle w-36 h-36 mb-2" src={photo} />
+              <input
+                  className="block mb-2 font-medium text-primary"
+                  type="file"
+                  label="Photo"
+                  name="photo"
+                  accept=".jpeg, .png, .jpg"
+                  onChange={handlePhotoUpload}
+                />
+          </div>
           <div className="flex mb-6 justify-end">
               <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
           </div>
-      </Box>
-    </Container>
+    </div>
   );
 };
 

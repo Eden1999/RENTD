@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import useToken from "../../helpers/useToken";
@@ -142,12 +142,12 @@ const WorkspacePage = () => {
               <DeleteIcon htmlColor="#EB586F"/>
             </IconButton>
         </span>)}
-          <p className="text-3xl text-white pr-3">{workspace.name}</p>
+          <p className="text-3xl text-primary pr-3">{workspace.name}</p>
           {workspace.ratings.length > 0 && (
             <Rating precision={0.5} className="pr-1" name="read-only" value={workspace.ratings.reduce((total, currRating) => total + parseInt(currRating.rating), 0) /
                 workspace.ratings.length} readOnly /> 
           )}
-          <p className="text-md text-white pr-3">({workspace.ratings.length} reviews)</p>  
+          <p className="text-sm text-primary pr-3">({workspace.ratings.length} reviews)</p>
           {user?.favorite_workspaces?.includes(workspace.id) ? 
           <IconButton id="editIcon" aria-label="remove from favorites" color='secondary' onClick={() => onRemoveFavoriteClick(workspace)}>
             <FavoriteIcon />
@@ -157,7 +157,7 @@ const WorkspacePage = () => {
             </IconButton> 
           }
         </div>
-        {workspace.spaceType && <p className="text-lg text-white">{workspace.spaceType.name}</p>}
+        {workspace.spaceType && <p className="text-md text-primary">{workspace.spaceType.name}</p>}
         {/* <p className="text-amber-800 pb-7">Hurry up! {workspace.capacity} spots left</p> */}
         <div className="details">
           <div className="flex flex-column">
@@ -167,20 +167,20 @@ const WorkspacePage = () => {
         <div className="hero container mx-auto w-96 pb-10">
           <img src={workspace.photo} />
         </div>
-        <span className="text-lg text-white">
+        <span className="text-md text-secondary">
           <p className="pb-10">{workspace.description}</p>
           <div className="extra-details pb-10">
             {workspace.wifi && (
-              <div className="text-md text-white wifi">
+              <div className="text-md text-secondary wifi">
                 <Wifi /> Wifi
               </div>
             )}
             {workspace.disabled_access && (
-              <div className="text-md text-white disabled-access">
+              <div className="text-md text-secondary disabled-access">
                 <Accessible /> Disabled accessible
               </div>
             )}
-            <div className="text-md text-white smoking">
+            <div className="text-md text-secondary smoking">
               {workspace.smoke_friendly ? (
                 <span>
                   <SmokeFree /> Smoking forbidden
@@ -197,16 +197,16 @@ const WorkspacePage = () => {
             {workspace.ratings.length > 0 && (
             <>
               <div className="reviews-title">
-                <h2 className="text-xl text-white pb-3">Reviews</h2>
+                <h2 className="text-xl text-secondary pb-3">Reviews</h2>
               </div>
               <div className="reviews">
                 {workspace.ratings.map((rating) => (
                   <div key={rating.id} className="flex justify-between pb-3">
                     <div className="user-photo">
                       <Rating name="read-only" value={rating.rating} readOnly 
-                      emptyIcon={<StarBorderRounded style={{ opacity: 0.55, color : "white" }} fontSize="inherit"/>}/>
+                      emptyIcon={<StarBorderRounded style={{ opacity: 0.55, color : "primary" }} fontSize="inherit"/>}/>
                     </div>
-                    <span className="flex flex-col text-md text-white">
+                    <span className="flex flex-col text-md text-secondary">
                         <h2 className="text-right">{rating.user.username}</h2>
                         <span>{rating.comment}</span>
                     </span>
@@ -216,11 +216,9 @@ const WorkspacePage = () => {
             </>
             )}
             {!user.is_host &&
-            <button onClick={() => {setOpen(true)}}
-                    className="text-white 2xl:text-lg text-sm bg-blue-600 hover:bg-blue-700 focus:ring-4
-                      focus:outline-none focus:ring-blue-800 font-medium rounded-lg
-                      px-5 py-2.5 text-center">
-                Write a review
+            <button className="btn btn-lg btn-primary"
+                    onClick={() => {setOpen(true)}}>
+              Write a review
             </button>
             }
             <Dialog open={open} onClose={handleClose}>
@@ -238,7 +236,7 @@ const WorkspacePage = () => {
                 fullWidth
                 value={comment}
                 className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none 
-                  w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                  w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-primary"
                 placeholder="Type your comment"
                 onChange={(event) => setComment(event.target.value)}
                 />

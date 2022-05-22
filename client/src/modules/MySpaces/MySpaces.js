@@ -9,7 +9,7 @@ const MySpaces = () => {
     <Container className="h-full">
       <div className="flex h-full">
         <div className="flex flex-1 flex-col mr-10">
-          <div className="flex justify-between mt-8 text-3xl text-zinc-200">
+          <div className="flex justify-between mt-8 text-primary text-5xl font-medium">
             <span>My workspaces</span>
             <Link to={"/manage/newWorkspace"}>
               <button className="btn btn-circle">
