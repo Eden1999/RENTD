@@ -29,7 +29,7 @@ const OrdersHistory = () => {
 
   return (
     <div className={'m-16'}>
-      <div className="flex text-3xl text-zinc-200">Here are the orders you've been made!</div>
+      <div className="flex text-primary text-5xl font-medium">Here are the orders you've been made!</div>
       {orders.map((order) => (
         <div key={order.id}
              className={`flex flex-row flex-1 bg-zinc-500 hover:bg-zinc-500/90 rounded-lg p-3 mt-5 w-1/3`}>

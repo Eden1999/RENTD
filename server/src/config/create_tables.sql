@@ -117,7 +117,6 @@ CREATE TABLE IF NOT EXISTS public.assets
     workspace_id bigint NOT NULL,
     cost_per_hour INTEGER NOT NULL DEFAULT 0,
     capacity INTEGER NOT NULL,
-    description character varying COLLATE pg_catalog."default" NOT NULL
 )
 
 TABLESPACE pg_default;

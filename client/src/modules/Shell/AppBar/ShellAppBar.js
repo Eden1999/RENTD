@@ -38,7 +38,7 @@ export default function ShellAppBar() {
     }, [user])
 
     return (
-        <Disclosure as="nav" className="bg-zinc-700">
+        <Disclosure as="nav" className="bg-neutral">
             {({ open }) => (
             <>
                 <div className="mx-auto px-2 sm:px-6 lg:px-8">
