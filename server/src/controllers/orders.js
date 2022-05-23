@@ -65,8 +65,11 @@ const getOrdersByUserId = (req, res) => {
                 const spaceType = await sequelize.models.space_types.findOne({
                     where: { id: order.workspace.dataValues.space_type_id },
                 });
+                const assets = await sequelize.models.assets.findAll({
+                    where: { workspace_id: order.workspace.id },
+                }); 
 
-                return {...order,workspace : {...order.workspace.dataValues, ratings, host, spaceType }};
+                return {...order,workspace : {...order.workspace.dataValues, ratings, host, spaceType, assets }};
                 })
             );
 
