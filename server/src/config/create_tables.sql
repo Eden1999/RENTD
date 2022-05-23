@@ -23,7 +23,7 @@ ALTER TABLE IF EXISTS public.orders
 
 CREATE TABLE IF NOT EXISTS public.ratings
 (
-    id bigint NOT NULL,
+    id SERIAL,
     workspace_id bigint NOT NULL,
     user_id bigint NOT NULL,
     rating INTEGER NOT NULL,

@@ -1,9 +1,13 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "store/AppContext";
 import './OrdersHistory.scss'
+import Review from "./Review"
+
 const OrdersHistory = () => {
+  const [open, setOpen] = useState(false);
+  const [workspace_id, setWorkspaceId] = useState(-1);
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [{ user }] = useContext(AppContext);
@@ -39,10 +43,13 @@ const OrdersHistory = () => {
             </span>
           </div>
           <div className={'flex flex-col flex-1 self-center'}>
+            {new Date(order.enddate) <= new Date() && 
+            <button className="btn btn-ghost text-zinc-300" onClick={() => {setOpen(true); setWorkspaceId(order.workspace.id)}}>Write Review</button>}
             <button className="btn btn-ghost text-zinc-300" onClick={() => {onItemClick(order.workspace)}}>order again</button>
           </div>
         </div>
       ))}
+      <Review open={open} setOpen={setOpen} setOrders={setOrders} orders={orders} workspace_id={workspace_id}/>
     </div>
   );
 };

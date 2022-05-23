@@ -30,34 +30,6 @@ const WorkspacePage = () => {
   const navigate = useNavigate();
   const { token, setToken } = useToken();
 
-  const handleClose = () => {
-    setRating(0);
-    setComment("");
-    setOpen(false);
-  }
-
-  const handleWriteComment = () => {
-    handleClose();
-
-    const query = {
-      workspace_id : workspace.id,
-      comment,
-      rating
-    }
-
-    axios.post(`http://localhost:8000/ratings/create`, query, {
-      headers: {
-        token,
-      }
-    })
-    .then((res) => {
-      console.log(res.data)
-      setWorkspace({...workspace, ratings : [...workspace.ratings, res?.data]})
-    })
-    .catch(err =>{
-      alert(err.response.data)
-  })
-  }
   
   const onEditClick = useCallback((e, workspace) => {
     navigate(`/manage/editWorkspace`, { state: { workspace } });
@@ -215,39 +187,7 @@ const WorkspacePage = () => {
               </div>
             </>
             )}
-            {!user.is_host &&
-            <button onClick={() => {setOpen(true)}}
-                    className="text-white 2xl:text-lg text-sm bg-blue-600 hover:bg-blue-700 focus:ring-4
-                      focus:outline-none focus:ring-blue-800 font-medium rounded-lg
-                      px-5 py-2.5 text-center">
-                Write a review
-            </button>
-            }
-            <Dialog open={open} onClose={handleClose}>
-              <DialogTitle>Write a review</DialogTitle>
-              <DialogContent>
-              <Rating name="rating" 
-                value={rating} 
-                onChange={(_, value) => {
-                  setRating(value);
-                }}/>
-                <TextField
-                id="comment"
-                required
-                multiline
-                fullWidth
-                value={comment}
-                className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none 
-                  w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
-                placeholder="Type your comment"
-                onChange={(event) => setComment(event.target.value)}
-                />
-            </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleWriteComment}>Send review</Button>
-              </DialogActions>
-            </Dialog>
+          
           </>
         <Orders workspace={workspace}/>
     </div>
