@@ -138,7 +138,7 @@ const Orders = ({workspace}) => {
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
-    let { startDate, endDate, userName } = e.appointmentData;
+    let { startDate, endDate, userName, capacity } = e.appointmentData;
     let relAsset = assets.find(asset => asset.id == e.appointmentData.asset_id);
 
     form.option('items', [
@@ -194,7 +194,7 @@ const Orders = ({workspace}) => {
           items: convertCapacityArrayToObject(relAsset.capacity),
           displayExpr: 'number',
           valueExpr: 'number',
-          value: 1,
+          value: capacity || 1,
           onValueChanged(args) {
             capacity = args.value
           },
