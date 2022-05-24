@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS public.assets
     asset_id bigint NOT NULL,
     workspace_id bigint NOT NULL,
     cost_per_hour INTEGER NOT NULL DEFAULT 0,
-    capacity INTEGER NOT NULL,
+    capacity INTEGER NOT NULL
 )
 
 TABLESPACE pg_default;

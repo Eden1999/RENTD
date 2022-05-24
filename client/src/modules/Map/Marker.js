@@ -4,12 +4,8 @@ import "./Marker.css";
 
 const Marker = (props) => {
   return (
-    <div
-      className={`map-marker ${
-        props.$hover || props.hoveredAtList ? "hover" : ""
-      }`}
-    >
-      <p>{props.text}</p>
+    <div className={`map-marker ${props.$hover || props.hoveredAtList ? "hover" : ""}`}>
+      {props.text}
     </div>
   );
 };
