@@ -38,7 +38,7 @@ const Orders = ({workspace}) => {
   const [{ user }] = useContext(AppContext);
   const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);
   const [assets, setAssets] = useState(workspace.assets)
-  const [totalCost, setTotalCost] = useState(20)
+  const [totalPrice, setTotalPrice] = useState(20)
   const navigate = useNavigate();
 
   const getOrders = async (workspace_id) => {
@@ -78,9 +78,9 @@ const Orders = ({workspace}) => {
     setAssets(assets)
   }, [assetTypes])
 
-  const getTotalPrice = (rentingDetails, asset) => {
-    const numOfRentingHours = Math.abs(new Date(rentingDetails.startdate) - new Date(rentingDetails.enddate))/(1000*3600);
-    let total = asset.cost_per_hour * numOfRentingHours * rentingDetails.capacity
+  const getTotalPrice = (startDate, endDate, asset) => {
+    const numOfRentingHours = Math.abs(new Date(startDate) - new Date(endDate))/(1000*3600);
+    let total = asset.cost_per_hour * numOfRentingHours * capacity
     return total;
 }
 
@@ -98,8 +98,6 @@ const Orders = ({workspace}) => {
       workspace_id:workspace.id,
       asset_id:e.appointmentData.asset_id,
     }
-    let totalPrice = getTotalPrice(rentingDetails, relAsset)
-    setTotalCost(totalPrice)
     navigate(`/payment`, {state: {workspace, rentingDetails, totalPrice}});
   });
 
@@ -142,9 +140,9 @@ const Orders = ({workspace}) => {
 
   const onOrderFormOpening = (e) => {
     const { form } = e;
-    let { startDate, endDate, userName } = e.appointmentData;
+    let { startDate, endDate, userName, capacity, cost } = e.appointmentData;
     let relAsset = assets.find(asset => asset.id == e.appointmentData.asset_id);
-    setTotalCost(relAsset.costPerHour)
+    setTotalPrice(getTotalPrice(startDate, endDate, relAsset))
 
     form.option('items', [
       {
@@ -165,6 +163,8 @@ const Orders = ({workspace}) => {
           type: 'datetime',
           onValueChanged(args) {
             startDate = args.value;
+            cost = getTotalPrice(startDate,endDate, relAsset)
+            setTotalPrice(getTotalPrice(startDate,endDate, relAsset))
           },
         },
       },{
@@ -175,6 +175,8 @@ const Orders = ({workspace}) => {
           type: 'datetime',
           onValueChanged(args) {
             endDate = args.value;
+            cost = getTotalPrice(startDate,endDate, relAsset)
+            setTotalPrice(getTotalPrice(startDate,endDate, relAsset))
           },
         },
       }, 
@@ -185,7 +187,7 @@ const Orders = ({workspace}) => {
         name: 'cost',
         editorType: 'dxTextBox',
         editorOptions: {
-          value: relAsset.cost_per_hour + '$',
+          value: totalPrice + '₪',
           readOnly: true
       },
     },
@@ -199,9 +201,12 @@ const Orders = ({workspace}) => {
           items: convertCapacityArrayToObject(relAsset.capacity),
           displayExpr: 'number',
           valueExpr: 'number',
-          value: 1,
+          value: capacity || 1,
           onValueChanged(args) {
             capacity = args.value
+            setCapacity(capacity)
+            cost = getTotalPrice(startDate,endDate, relAsset)
+            setTotalPrice(getTotalPrice(startDate,endDate, relAsset))
           },
         },
       },
