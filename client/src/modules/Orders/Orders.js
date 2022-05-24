@@ -73,35 +73,45 @@ const Orders = ({workspace}) => {
     })
   }, [assetTypes])
 
+  const notifyDisableDate = () => {
+    notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
+  };
+
   const HandalingAddOrder = useCallback(async (e) => {
-    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id)
+    const isValidAppointment = true//Utils.isValidAppointment(e.component, e.appointmentData);
+    if (!isValidAppointment) {
+      // e.cancel = true;
+      // notifyDisableDate();
+    } else {
+      let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id)
 
-    let newOrder = {
-      startdate: e.appointmentData.startDate,
-      enddate: e.appointmentData.endDate,
-      capacity: e.appointmentData.capacity,
-      user_id: user.id,
-      workspace_id: workspace.id,
-      asset_id: e.appointmentData.asset_id,
+      let newOrder = {
+        startdate: e.appointmentData.startDate,
+        enddate: e.appointmentData.endDate,
+        capacity: e.appointmentData.capacity,
+        user_id: user.id,
+        workspace_id: workspace.id,
+        asset_id: e.appointmentData.asset_id,
+      }
+      
+      console.log(newOrder)
+
+      const query = newOrder
+
+      axios.post('http://localhost:8000/orders/create', query)
+      .then((res) => {
+        console.log(res)
+        let newArray = orders
+        newArray[newArray.length - 1].id = res.data.id
+        setOrders(newArray)
+        // res.data.id
+          // TODO: SOME COGO TOAST?
+      })
+      .catch(err =>{
+        //TODO: DO NOT SAVE
+          alert(err.response.data)
+      })
     }
-    
-    console.log(newOrder)
-
-    const query = newOrder
-
-    axios.post('http://localhost:8000/orders/create', query)
-    .then((res) => {
-      console.log(res)
-      let newArray = orders
-      newArray[newArray.length - 1].id = res.data.id
-      setOrders(newArray)
-      // res.data.id
-        // TODO: SOME COGO TOAST?
-    })
-    .catch(err =>{
-      //TODO: DO NOT SAVE
-        alert(err.response.data)
-    })
   })
 
   const HandalingUpdateOrder = useCallback(async (e) => {
@@ -228,7 +238,8 @@ const Orders = ({workspace}) => {
             cellDuration={30}
             appointmentComponent={Appointment}
             onAppointmentFormOpening={onOrderFormOpening}
-            onAppointmentAdded={HandalingAddOrder}
+            // onAppointmentAdded={HandalingAddOrder}
+            onAppointmentAdding={HandalingAddOrder}
             onAppointmentUpdated={HandalingUpdateOrder}
             onAppointmentDeleted={HandalingDeleteOrder}
           >
