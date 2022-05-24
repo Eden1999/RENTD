@@ -70,7 +70,7 @@ const Orders = ({workspace}) => {
     let assets = workspace.assets.map(asset => {
       let assetType = assetTypes.find(type => type.id.toString() === asset.asset_id)
       if(assetType) {
-        asset.text = assetType.name
+        asset.text = assetType.name + ` ${asset.cost_per_hour}₪ per 1 hour/person`
       }
       return asset
     })
