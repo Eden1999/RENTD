@@ -38,6 +38,7 @@ const Orders = ({workspace}) => {
   const [{ user }] = useContext(AppContext);
   const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);
   const [assets, setAssets] = useState(workspace.assets)
+  const [totalCost, setTotalCost] = useState(20)
   const navigate = useNavigate();
 
   const getOrders = async (workspace_id) => {
@@ -77,15 +78,17 @@ const Orders = ({workspace}) => {
     setAssets(assets)
   }, [assetTypes])
 
-  const continueToPayment = useCallback(async (e) => {
+  const getTotalPrice = (rentingDetails, asset) => {
+    const numOfRentingHours = Math.abs(new Date(rentingDetails.startdate) - new Date(rentingDetails.enddate))/(1000*3600);
+    let total = asset.cost_per_hour * numOfRentingHours * rentingDetails.capacity
+    return total;
+}
 
-    let costPerHour = await axios.get(`http://localhost:8000/assets/${e.appointmentData.asset_id}`)
-        .then((res) => {
-          return(res.data.cost_per_hour);
-        })
-        .catch(err =>{
-          alert(err.response.data);
-        });
+  const continueToPayment = useCallback(async (e) => {
+    let relAsset = assets.find(asset => asset.id == e.appointmentData.asset_id);
+
+
+    let costPerHour = relAsset.cost_per_hour
 
     let rentingDetails = {
       startdate: e.appointmentData.startDate,
@@ -95,8 +98,9 @@ const Orders = ({workspace}) => {
       workspace_id:workspace.id,
       asset_id:e.appointmentData.asset_id,
     }
-
-    navigate(`/payment`, {state: {workspace, rentingDetails, costPerHour}});
+    let totalPrice = getTotalPrice(rentingDetails, relAsset)
+    setTotalCost(totalPrice)
+    navigate(`/payment`, {state: {workspace, rentingDetails, totalPrice}});
   });
 
   const HandalingUpdateOrder = useCallback(async (e) => {
@@ -140,6 +144,7 @@ const Orders = ({workspace}) => {
     const { form } = e;
     let { startDate, endDate, userName } = e.appointmentData;
     let relAsset = assets.find(asset => asset.id == e.appointmentData.asset_id);
+    setTotalCost(relAsset.costPerHour)
 
     form.option('items', [
       {

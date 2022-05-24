@@ -82,7 +82,7 @@ const routes = [
   {
     path: "/payment",
     Component: <PaymentView />,
-    allowed: [userTypes.guest],
+    allowed: [userTypes.guest, userTypes.host],
   },
 ];
 

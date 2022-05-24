@@ -6,7 +6,7 @@ import {ToastContainer, toast } from "react-toastify";
 function PaymentView() {
     const [workspace, setWorkspace] = useState(useLocation().state.workspace);
     const [rentingDetails, setRentingDetails] = useState(useLocation().state.rentingDetails);
-    const [costPerHour, setCostPerHour] = useState(useLocation().state.costPerHour);
+    const [totalPrice, setTotalPrice] = useState(useLocation().state.totalPrice);
     const [fullName, setFullName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
@@ -38,11 +38,6 @@ function PaymentView() {
                 });
                 console.log(err.response.data);
             })
-    }
-
-    const getTotalPrice = () => {
-        const numOfRentingHours = Math.abs(new Date(rentingDetails.startdate) - new Date(rentingDetails.enddate))/(1000*3600);
-        return(costPerHour * numOfRentingHours);
     }
 
     return (
@@ -137,7 +132,7 @@ function PaymentView() {
                             <span className={"text-secondary mt-1.5"}>{rentingDetails.startdate.toLocaleString()} - {rentingDetails.enddate.toLocaleString()}</span>
                             <span className={"text-secondary mt-1.5"}>{rentingDetails.capacity} guests</span>
                             <div className={"divider"} />
-                            <span className={"font-semibold text-2xl text-primary"}>Total: {getTotalPrice()}₪ </span>
+                            <span className={"font-semibold text-2xl text-primary"}>Total: {totalPrice}₪ </span>
                         </span>
                     </div>
                 </div>
