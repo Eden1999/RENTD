@@ -1,0 +1,214 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0", 
+    "title": "My User Project CRUD",
+    "description": "My User Project Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:8000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+    "paths": {
+      "/users": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Get all users in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Users"
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "update user by id",
+              "schema": {
+                "type": "object",
+                "properties":{
+                  "id":{"type":"string"},
+                  "photo":{"type":"string"}
+                }
+
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Users"
+              }
+            },
+            "500":{
+              "description": "Could not update. User with id: ${id} does not exists"
+            }
+          }
+        }
+      },
+      "/users/register": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "uregister new user",
+              "schema": {
+                "$ref": "#/definitions/newUser"
+                }
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            "500":{
+              "description": "error when tring register!"
+            }
+          }
+        }
+      },
+      "/users/signIn": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "uregister new user",
+              "schema": {
+                "$ref": "#/definitions/signUser"
+                }
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            "500":{
+              "description": "error when tring register!"
+            },
+            "400":{
+              "description": "User is not registered, Sign Up first"
+            }
+          }
+        }
+      },
+      "/workspaces":{
+
+      },
+      "/spacetypes":{
+
+      },
+      "/rating":{
+
+      },
+      "/orders":{
+
+      },
+      "/assettypes":{
+
+      },
+      "/assets":{
+
+      }
+    },
+    "definitions": {
+      "User": {
+        "required": ["id", "username", "email", "is_host", "password", "token"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "is_host": {
+            "type": "object"
+          },
+          "password": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "favorite_workspaces": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "newUser": {
+        "required": ["email"],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "isHost": {
+            "type": "object"
+          },
+          "password": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string"
+          }
+        }
+      },
+      "signUser": {
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Users": {
+        "type": "array",
+        "$ref": "#/definitions/User"
+      }
+    }
+}

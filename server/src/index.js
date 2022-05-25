@@ -1,5 +1,9 @@
 const express = require("express");
 var cors = require("cors");
+var swaggerJsdoc = require("swagger-jsdoc")
+var swaggerUi = require("swagger-ui-express");
+var swaggerDocument = require("../swagger.json");
+
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
@@ -26,6 +30,36 @@ app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use(indexRouter);
 
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "RENTD Express API with Swagger",
+      version: "0.1.0",
+      description:
+        "This is a simple API application made with Express and documented with Swagger",
+      contact: {
+        name: "RENTD",
+        url: "http://localhost:3000",
+        email: "shirelbar100@gmail.com",
+      },
+    },
+    servers: [
+      {
+        url: "http://localhost:8000",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const specs = swaggerJsdoc(options);
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
 app.listen(8000, async () => {
   await assertDatabaseConnectionOk();
 

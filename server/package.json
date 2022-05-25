@@ -34,6 +34,8 @@
     "pg-hstore": "^2.3.4",
     "rand-token": "^1.0.1",
     "react-toastify": "^9.0.1",
-    "sequelize": "^6.17.0"
+    "sequelize": "^6.17.0",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.4.0"
   }
 }
