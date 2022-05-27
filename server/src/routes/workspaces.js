@@ -11,6 +11,8 @@ router.get('/:userId', WorkspacesController.getWorkspacesByUserId);
 
 router.get('/hosts/:hostId', WorkspacesController.getWorkspacesByHostId);
 
+router.get('/recommendations/:userId', WorkspacesController.getUserRecommendations);
+
 router.post('/create', WorkspacesController.createNewWorkspace);
 
 router.post('/search', WorkspacesController.searchWorkspaces)
