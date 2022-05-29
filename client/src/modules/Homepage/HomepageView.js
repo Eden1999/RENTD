@@ -1,8 +1,22 @@
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "store/AppContext";
 import WorkspaceForm from "./WorkspaceForm";
 import RecommendationCarousel from "./RecommendationCarousel";
-import React from "react";
 
 function HomepageView() {
+    const [recommendations, setrecommendations] = useState([]);
+    const [{ user }] = useContext(AppContext);
+  
+    useEffect(async () => {
+        try {
+        const res = await axios.get(`http://localhost:8000/workspaces/recommendations/${user.id}`);
+        setrecommendations(res.data);
+        } catch (err) {
+        console.log(`Failed to fetch recommendations ${err.message}`);
+        }
+    }, []);
+
     return (
         <div className="flex flex-row flex-1 mx-20 my-10 2xl:my-20">
             <div className="w-1/3 self-center">
@@ -15,9 +29,9 @@ function HomepageView() {
                 </div>
             </div>
             <div className="flex-1 flex-col flex ml-36">
-                <span className="text-secondary text-3xl font-medium italic">Recommended Workspaces - Just For You!</span>
+                {recommendations.length && <span className="text-secondary text-3xl font-medium italic">Recommended Workspaces - Just For You!</span>}
                 <div className="mt-4 flex-grow">
-                    <RecommendationCarousel />
+                    <RecommendationCarousel recommendations={recommendations} />
                 </div>
             </div>
         </div>
