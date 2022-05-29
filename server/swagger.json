@@ -36,7 +36,7 @@
         },
         "put": {
           "tags": ["Users"],
-          "summary": "user id",
+          "summary": "update user",
           "parameters": [
             {
               "name": "body",
@@ -68,12 +68,12 @@
       "/users/register": {
         "post": {
           "tags": ["Users"],
-          "summary": "user id",
+          "summary": "register a new user",
           "parameters": [
             {
               "name": "body",
               "in": "body",
-              "description": "uregister new user",
+              "description": "register new user",
               "schema": {
                 "$ref": "#/definitions/newUser"
                 }
@@ -95,12 +95,12 @@
       "/users/signIn": {
         "post": {
           "tags": ["Users"],
-          "summary": "user id",
+          "summary": "sign in exist user",
           "parameters": [
             {
               "name": "body",
               "in": "body",
-              "description": "uregister new user",
+              "description": "data needed for sign in",
               "schema": {
                 "$ref": "#/definitions/signUser"
                 }
@@ -114,7 +114,7 @@
               }
             },
             "500":{
-              "description": "error when tring register!"
+              "description": "error when tring signing in"
             },
             "400":{
               "description": "User is not registered, Sign Up first"
@@ -122,13 +122,488 @@
           }
         }
       },
+      "/users/addWorkspaceToFavorites": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "add workspace to favorits of user",
+              "schema": {
+                "$ref": "#/definitions/userFavorite"
+                }
+              },
+              {
+                "name": "token",
+                "in": "header",
+                "description": "token to be passed as a header",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+                },
+                "style": "simple"
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "Added to favorites successfully!"
+            },
+            "500":{
+              "description": "Something went wrong! Workspace was not added to list"
+            }
+          }
+        }
+      },
+      "/users/removeFavoriteWorkspace": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "remove workspace to favorits of user",
+              "schema": {
+                "$ref": "#/definitions/userFavorite"
+                },
+                "example":{
+                  "workspaceId":4
+                } 
+              },
+              {
+                "name": "token",
+                "in": "header",
+                "description": "token to be passed as a header",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+                },
+                "style": "simple"
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "Workspace was removed from favorites successfully!"
+            },
+            "500":{
+              "description": "Something went wrong! Workspace was not removed from list"
+            }
+          }
+        }
+      },
+      "/users//validate-token": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "reset password of user",
+              "schema": {
+                "type":"object",
+                "required":["token", "id"],
+                "properties":{
+                  "token":{"type":"string"},
+                  "id":{"type":"integer"}
+                },
+                "example":{
+                  "token":"eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw",
+                  "id":0
+                } 
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401":{
+              "description": "token is invalid"
+            },
+            "404":{
+              "description":"user is not registered"
+            }
+          }
+        }
+      },
+      "/users/update-password": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "update password of user",
+              "schema": {
+                "type":"object",
+                "required":["id", "password"],
+                "properties":{
+                  "id":{"type":"integer"},
+                  "password":{"type":"string"}
+                },
+                "example":{
+                  "id":0,
+                  "password":"admin"
+                } 
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "password is updated"
+            },
+            "500":{
+              "description": "error finding user"
+            }
+          }
+        }
+      },
+      "/users//update-username": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "update username of user",
+              "schema": {
+                "type":"object",
+                "required":["email"],
+                "properties":{
+                  "id":{"type":"integer"},
+                  "username":{"type":"string"}
+                },
+                "example":{
+                  "id":0,
+                  "username":"shirel"
+                } 
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "username is updated"
+            },
+            "500":{
+              "description": "error finding user"
+            }
+          }
+        }
+      },
+      "/users/reset-password": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "user id",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "reset password of user",
+              "schema": {
+                "type":"object",
+                "required":["email"],
+                "properties":{
+                  "email":{"type":"string"}
+                },
+                "example":{
+                  "email":"rentd@gmail.com"
+                } 
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "{token, id}"
+            },
+            "500":{
+              "description": "cannot send email"
+            },
+            "404":{
+              "description":"email is not registered with us"
+            }
+          }
+        }
+      },
       "/workspaces":{
-
+        "get": {
+          "tags": ["Workspaces"],
+          "summary": "Get all workspaces in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Workspaces"
+              }
+            },
+            "500":{
+              "description":"workspaces not found"
+            }
+          }
+        }
+      },
+      "/workspaces/userFavoriteWorkspaces":{
+        "get": {
+          "tags": ["Workspaces"],
+          "summary": "Get all user favorite workspaces in system",
+          "parameters": [
+              {
+                "name": "token",
+                "in": "header",
+                "description": "token to be passed as a header",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+                },
+                "style": "simple"
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/FullWorkspace"
+              }
+            },
+            "500":{"description":"workspaces not found"}
+          }
+        }
+      },
+      "/workspaces/hosts/{hostId}":{
+        "get": {
+          "tags": ["Workspaces"],
+          "summary": "get workspaces of specific host",
+          "parameters": [
+            {
+              "name": "hostId",
+              "in": "path",
+              "description": "id of host",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            }
+        ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Workspaces"
+              }
+            },
+            "500":{"description":"workspaces not found"}
+          }
+        }
+      },
+      "/workspaces/create":{
+        "post": {
+          "tags": ["Workspaces"],
+          "summary": "create new workspace",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "workspace to add",
+              "schema": {
+                "$ref": "#/definitions/Workspace"
+                }
+              },
+              {
+                "name": "token",
+                "in": "header",
+                "description": "token to be passed as a header",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+                },
+                "style": "simple"
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Workspaces"
+              }
+            },
+            "500":{"description":"user not found"}
+          }
+        }
+      },
+      "/workspaces/search":{
+        "post": {
+          "tags": ["Workspaces"],
+          "summary": "Get all workspaces by filter",
+          "parameters": [
+            {
+              "name": "city",
+              "in": "query",
+              "description": "city where workspace is",
+              "schema": {
+                "type":"string",
+                "example":"Bat-Yam"
+              }
+            },
+            {
+              "name": "capacity",
+              "in": "query",
+              "description": "amount of people",
+              "schema": {
+                "type":"integer",
+                "example":3
+              }
+            },{
+              "name": "space_type_id",
+              "in": "query",
+              "description": "space id",
+              "schema": {
+                "type":"integer",
+                "example":1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Workspaces"
+              }
+            },
+            "400":{
+              "description":"Failed to find workspaces"
+            }
+          }
+        }
+      },
+      "/workspaces/edit/{workspaceId}":{
+        "put": {
+          "tags": ["Workspaces"],
+          "summary": "edit specific workspace",
+          "parameters": [
+            {
+              "name": "workspaceId",
+              "in": "path",
+              "description": "id of workspace",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "token to be passed as a header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+              },
+              "style": "simple"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "workspace to add",
+              "schema": {
+                "$ref": "#/definitions/FullWorkspace"
+                }
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Workspaces"
+              }
+            }
+          }
+        }
+      },
+      "/workspaces/{id}":{
+        "delete": {
+          "tags": ["Workspaces"],
+          "summary": "delete specific workspace",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "id of workspace",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "token to be passed as a header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500":{"description":"user not found"}
+          }
+        }
+      },
+      "/ratings/create":{
+        "post": {
+          "tags": ["Ratings"],
+          "summary": "create new rating",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "workspace to add",
+              "schema": {
+                "$ref": "#/definitions/Rating"
+                }
+              },
+              {
+                "name": "token",
+                "in": "header",
+                "description": "token to be passed as a header",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+                },
+                "style": "simple"
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Rating"
+              }
+            },
+            "500":{"description":"user not found"}
+          }
+        }
       },
       "/spacetypes":{
-
-      },
-      "/rating":{
 
       },
       "/orders":{
@@ -206,9 +681,129 @@
           }
         }
       },
+      "userFavorite": {
+        "required": ["workspaceId"],
+        "properties": {
+          "workspaceId": {
+            "type": "integer"
+          }
+        }
+      },
       "Users": {
         "type": "array",
         "$ref": "#/definitions/User"
+      },
+      "Rating":{
+        "type":"object",
+        "properties":{
+          "id":{"type": "integer"},
+        "workspace_id":{"type": "integer"},
+        "user_id":{"type": "integer"},
+        "rating":{"type": "integer"},
+        "comment":{"type":"string"}
+        }
+      },
+      "Type":{
+        "type":"object",
+        "properties":{
+          "id":{"type":"integer"},
+        "name":{"type":"string"}
+        }
+        
+      },
+      "Asset":{
+        "type":"object",
+        "properties":{
+          "id":{"type":"integer"},
+        "text":{"type":"string"},
+        "asset_id":{"type":"integer"},
+        "workspace_id":{"type":"integer"},
+        "cost_per_hour":{"type":"integer"},
+        "capacity":{"type":"integer"}
+        }
+      },
+      "Workspace":{
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "host_id": {
+            "type": "integer"
+          },
+          "location_x": {
+            "type": "integer"
+          },
+          "location_y": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "wifi": {
+            "type": "string"
+          },
+          "disabled_access": {
+            "type": "string"
+          },
+          "space_type_id": {
+            "type": "integer"
+          },
+          "smoke_friendly": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string"
+          },
+          "opening_days": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "opening_hour": {
+            "type": "string"
+          },
+          "closing_hour": {
+            "type": "string"
+          }
+        }
+      },
+      "FullWorkspace":{
+        "type":"object",
+        "properties":{
+          "workspace":{
+            "$ref": "#/definitions/Workspace"
+          },
+          "ratings":{
+            "type": "array",
+            "$ref": "#/definitions/Rating"
+          },
+          "host":{
+            "$ref": "#/definitions/User"
+          },
+          "spaceType":{
+            "$ref": "#/definitions/Type"
+          },
+          "assets":{
+            "type": "array",
+            "$ref": "#/definitions/Asset"
+          }
+        }
+      },
+      "Workspaces": {
+        "type": "array",
+        "$ref": "#/definitions/FullWorkspace"
       }
     }
 }

@@ -201,6 +201,8 @@ const updatePassword = async (req, res) => {
                     return res.status(200).send('password is updated');
                 });
             });
+        } else {
+            return res.status(500).send('error finding user');
         }
     });
 };
@@ -213,6 +215,8 @@ const updateUsername = async (req, res) => {
             user.set({username});
             await user.save();
             return res.status(200).send('username is updated');
+        } else {
+            return res.status(500).send('error finding user');
         }
     });
 };

@@ -1,6 +1,7 @@
 const { sequelize } = require("../config/sequelize");
 const { Op } = require("@sequelize/core");
 const jwt = require("jsonwebtoken");
+const { mostFrequent } = require("../helpers");
 
 const getWorkspacesList = (req, res) => {
   sequelize.models.workspaces
@@ -183,7 +184,7 @@ const editWorkspace = (req, res) => {
   let assets = workspace.assets
   delete workspace.assets
   
-  let assetsArray = assets.filter(asset => asset.id).map(x=> {return x.id})
+  let assetsArray = assets ? assets.filter(asset => asset.id).map(x=> {return x.id}) : []
 
   // check if user is already exist
   sequelize.models.users
@@ -335,6 +336,113 @@ const deleteWorkspace = async (req, res) => {
     });
 };
 
+const getUserRecommendations = async (req, res) => {
+  const { userId } = req.params;
+
+    sequelize.models.orders
+      .findAll({
+            include : [{
+                model : sequelize.models.workspaces,
+                required : true
+            }],
+            where: { user_id: userId }
+        })
+      .then(async (orders) => {
+        if (orders) {
+          let priorities = [
+            {
+              name : 'wifi',
+              count : 0,
+              value : true
+            },
+            {
+              name : 'disabled_access',
+              count : 0,
+              value : true
+            },
+            {
+              name : 'smoke_friendly',
+              count : 0,
+              value : true
+            }
+          ]
+
+          let cities = []; 
+          let spaceTypes = [];
+          let visitedWorkspaces = [];
+
+          orders.map((order) => {
+            cities.push(order.workspace.dataValues.city)
+            spaceTypes.push(order.workspace.dataValues.space_type_id)
+            order.workspace.dataValues.wifi && priorities[0].count++;
+            order.workspace.dataValues.disabled_access && priorities[1].count++;
+            order.workspace.dataValues.smoke_friendly && priorities[2].count++;
+            visitedWorkspaces.push(order.workspace.dataValues.id);
+          });
+
+          let resCity = mostFrequent(cities, cities.length)
+          let resSpaceType = mostFrequent(spaceTypes,spaceTypes.length)
+
+          priorities.push({name : 'city', count : resCity.max_count, value : resCity.res})
+          priorities.push({name : 'space_type_id', count : resSpaceType.max_count, value : resSpaceType.res})
+          
+          priorities.sort((a,b) => a.count - b.count); 
+
+          let workspaces = await sequelize.models.workspaces.findAll();
+
+          let ranks = [];
+
+          // Rank each workspace according to wether he has the most ordered elements, and by priority
+          workspaces.forEach((workspace) => {
+            let rank = 0;
+            !visitedWorkspaces.includes(workspace.dataValues.id) && priorities.forEach((priority, index) => {
+              if(workspace.dataValues[priority.name] == priority.value) {
+                rank += index;
+              }
+            })
+
+            ranks.push({rank, workspace : workspace});
+          })
+
+          ranks.sort((a,b) => b.rank - a.rank); 
+          ranks = ranks.map((rank) => rank.workspace);
+          
+          workspaces = await workspaceStructure(ranks.slice(0,3));
+          
+          return res.status(200).send(workspaces);
+        } else {
+          let workspaces = await sequelize.models.workspaces.findAll({ limit: 3 });
+          return res.status(200).send(workspaces);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err);
+      });
+};
+
+const workspaceStructure = async (workspaces) => {
+  return await Promise.all(
+    workspaces.map(async ({ dataValues: workspace }) => {
+      const ratings = await sequelize.models.ratings.findAll({
+        where: { workspace_id: workspace.id },
+        include: {
+          model: sequelize.models.users,
+        },
+      });
+      const host = await sequelize.models.users.findOne({
+        where: { id: workspace.host_id },
+      });
+      const spaceType = await sequelize.models.space_types.findOne({
+        where: { id: workspace.space_type_id },
+      });
+      const assets = await sequelize.models.assets.findAll({
+        where: { workspace_id: workspace.id },
+      }); 
+      return { ...workspace, ratings, host, spaceType, assets };
+    })
+  );
+}
 module.exports = {
   getWorkspacesList,
   getWorkspacesByUserId,
@@ -343,5 +451,6 @@ module.exports = {
   searchWorkspaces,
   getWorkspacesByHostId,
   deleteWorkspace,
-  getUserFavoriteWorkspaces
+  getUserFavoriteWorkspaces,
+  getUserRecommendations
 };
