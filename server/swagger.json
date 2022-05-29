@@ -734,13 +734,38 @@
           }
         }
       },
+      "/assets/{id}":{
+        "get": {
+          "tags": ["Assets"],
+          "summary": "id of specific asset",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "id of specific asset",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema":{
+                "$ref": "#/definitions/Asset"
+              }
+            },
+            "500":{"description":"asset not found"}
+          }
+        }
+      },
       "/spacetypes":{
 
       },
       "/assettypes":{
-
-      },
-      "/assets":{
 
       }
     },
