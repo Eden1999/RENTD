@@ -603,10 +603,138 @@
           }
         }
       },
-      "/spacetypes":{
-
+      "/orders/{workspaceId}":{
+        "get": {
+          "tags": ["Orders"],
+          "summary": "get orders of specific workspaces",
+          "parameters": [
+            {
+              "name": "workspaceId",
+              "in": "path",
+              "description": "id of workspace",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            }
+        ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Orders"
+              }
+            },
+            "500":{"description":"orders not found"}
+          }
+        }
       },
-      "/orders":{
+      "/orders/{id}":{
+        "put": {
+          "tags": ["Orders"],
+          "summary": "edit specific order",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "id of order",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "orders to update by",
+              "schema": {
+                "type":"object",
+                "properties":{
+                  "$ref": "#/definitions/Order"
+                },
+                "example":{
+                  "id":8,
+                  "startdate":"2022-05-29T07:00:00.000Z",
+                  "enddate":"2022-05-29T09:00:00.000Z",
+                  "capacity":3,
+                  "workspace_id":3,
+                  "user_id":3,
+                  "asset_id":2
+                } 
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500":{"description":"Internal Server Error"}
+          }
+        },
+        "delete": {
+          "tags": ["Orders"],
+          "summary": "delete specific orders",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "id of order",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "deleted successfuly"
+            },
+            "400":{"description":"order not found"},
+            "500":{"description":"internal Server Error"}
+          }
+        }
+      },
+      "/orders/create":{
+        "post": {
+          "tags": ["Orders"],
+          "summary": "create new order",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "order to add",
+              "schema": {
+                "type":"object",
+                "properties":{
+                  "$ref": "#/definitions/Order"
+                },
+                "example":{
+                  "id":8,
+                  "startdate":"2022-05-29T07:00:00.000Z",
+                  "enddate":"2022-05-29T09:00:00.000Z",
+                  "capacity":3,
+                  "workspace_id":3,
+                  "user_id":3,
+                  "asset_id":2
+                } 
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500":{"description":"Internal Server Error"}
+          }
+        }
+      },
+      "/spacetypes":{
 
       },
       "/assettypes":{
@@ -804,6 +932,36 @@
       "Workspaces": {
         "type": "array",
         "$ref": "#/definitions/FullWorkspace"
+      },
+      "Order":{
+        "type":"object",
+        "properties":{
+          "id": {
+            "type": "integer"
+          },
+          "startdate": {
+            "type": "string"
+          },
+          "enddate": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "workspace_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "asset_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Orders": {
+        "type": "array",
+        "$ref": "#/definitions/Order"
       }
     }
 }

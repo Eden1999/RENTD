@@ -94,7 +94,9 @@ const deleteOrder = (req, res) => {
     .then((deleteOrder) => {
         if (deleteOrder) { 
             console.log('deleted successfuly')
+            return res.status(200).send("deleted successfuly")
         }
+        return res.status(400).send("order not found")
     })
     .catch((err) => {
         console.log(err);
@@ -111,6 +113,7 @@ const updateOrder = (req, res) => {
         if (updatedOrder) { 
             console.log('updated successfily')
         }
+        return res.status(200).send("OK")
     })
     .catch((err) => {
         console.log(err);
@@ -139,7 +142,7 @@ const createNewOrder = (req, res) => {
     })
     .catch((err) => {
         console.log(err);
-        return res.status(err.status || 500).send(err.errors[0].message);
+        return res.status(err.status || 500).send(err.errors ? err.errors[0].message : err);
     });
 }
 
