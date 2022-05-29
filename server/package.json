@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./src/index.js",
     "debug": "node --inspect ./src/index.js",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "test": "docker-compose up -d && NODE_ENV=test mocha test/** --timeout 10000 --exit && docker-compose down"
   },
   "repository": {
     "type": "git",
@@ -37,5 +38,10 @@
     "sequelize": "^6.17.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.4.0"
+  },
+  "devDependencies": {
+    "axios": "^0.27.2",
+    "mocha": "^10.0.0",
+    "chai": "^4.3.6"
   }
 }
