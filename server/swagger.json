@@ -763,7 +763,25 @@
         }
       },
       "/spacetypes":{
-
+        "get": {
+          "tags": ["Space Types"],
+          "summary": "Get all space types in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type":"object",
+                "properties":{
+                  "$ref": "#/definitions/Type"
+                },
+                "example":{
+                  "id":1,
+                  "name":"Resturant"
+                } 
+              }
+            }
+          }
+        }
       },
       "/assettypes":{
 
