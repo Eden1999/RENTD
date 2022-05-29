@@ -1,9 +1,10 @@
 .map-marker {
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  font-size: large;
-  cursor: pointer;
+  background: 'white';
+    border-radius: '12px';
+    padding: '8px';
+    width: '60px';
+    z-index: 1000;
+    position: 'relative';
 }
 
 .hover {

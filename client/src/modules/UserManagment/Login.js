@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Container, CssBaseline, Box, Typography, TextField, Button, InputAdornment} from "@mui/material";
 import Register from "./Register";
 import useToken from "../../helpers/useToken";
-import {Route, Routes, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {AppContext} from "../../store/AppContext";
 import {DraftsOutlined} from "@mui/icons-material";
 
@@ -44,52 +44,46 @@ const Login = () => {
     })
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <span className={"font-semibold text-3xl text-zinc-300"}>
+        <div className="w-1/3 self-center m-8">
+            <div className="mb-12">
+                <span className="font-semibold text-6xl text-primary">
                   Login
                 </span>
-                <div className="mb-6">
-                    <label className="block mb-2 text-sm font-medium text-zinc-400">
-                        Email Address:
-                    </label>
-                    <input className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-                           placeholder={'email@address.com'}
-                           onChange={(event) => setEmail(event.target.value)}
-                    />
-                </div>
-                <div className="mb-6">
-                    <label className="block mb-2 text-sm font-medium text-zinc-400">
-                        Password:
-                    </label>
-                    <input type="password"
-                           className="input 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
-                           placeholder={'******'}
-                           onChange={(event) => setPassword(event.target.value)}
-                    />
-                </div>
-                <label
-                    className={'mt-6 text-sm text-blue-500 cursor-pointer underline decoration-blue-500'}
-                    onClick={() => navigate('/reset-password')}
-                >
-                    reset password
+            </div>
+            <div className="mb-6">
+                <label className="block mb-2 text-lg font-medium text-primary">
+                    Email Address:
                 </label>
-                <div className="flex mb-6 justify-end">
+                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                       placeholder={'email@address.com'}
+                       onChange={(event) => setEmail(event.target.value)}
+                />
+            </div>
+            <div className="mb-6">
+                <label className="block mb-2 text-lg font-medium text-primary">
+                    Password:
+                </label>
+                <input type="password"
+                       className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                       placeholder={'******'}
+                       onChange={(event) => setPassword(event.target.value)}
+                />
+            </div>
+            <span
+                className={'mb-6 text-md text-blue-500 cursor-pointer underline decoration-blue-500'}
+                onClick={() => navigate('/reset-password')}
+            >
+                reset password
+            </span>
+            <div className="flex mb-6 justify-center">
+                <div>
                     <button type="button" className={"btn btn-lg btn-primary"} onClick={handleLogin}>Login</button>
                 </div>
-                <div className="flex mb-6 justify-end">
-                    <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
+                <div className="ml-8">
+                    <button type="button" className={"btn btn-lg btn-secondary text-white"} onClick={handleRegister}>Register</button>
                 </div>
-            </Box>
-        </Container>
+            </div>
+        </div>
     )
 }
 

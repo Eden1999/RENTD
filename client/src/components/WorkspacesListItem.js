@@ -73,10 +73,10 @@ const WorkspacesListItem = ({
       <img src={workspace.photo} className={"h-28 w-48 bg-zinc-400 rounded-md"} />
       <div className={"flex flex-col text-left flex-1 ml-8"}>
         <span className={"text-xl text-zinc-100"}>{workspace.name}</span>
-        <span className={"text-sm text-zinc-300 mt-1.5"}>
+        <span className={"text-md text-zinc-300 mt-1.5"}>
           {workspace.address}, {workspace.city}
         </span>
-        <span className={"mt-auto text-xs text-zinc-300"}>
+        <span className={"mt-auto text-sm text-zinc-300"}>
           Opens: {workspace.opening_hour} - {workspace.closing_hour}
         </span>
       </div>
@@ -85,12 +85,12 @@ const WorkspacesListItem = ({
             <span className="flex self-center">
               <button className="btn btn-sm btn-circle"
                       onClick={(e) => onEditClick(e, workspace)}>
-                <EditIcon />
+                <EditIcon htmlColor="#4AA0D5"/>
               </button>
             <button className="btn btn-sm btn-circle mx-4"
                 onClick={(e) => onDeleteClick(e, workspace)}
             >
-              <DeleteIcon />
+              <DeleteIcon htmlColor="#EB586F"/>
             </button>
           </span>
         )}

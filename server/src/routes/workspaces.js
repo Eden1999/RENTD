@@ -1,23 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const WorkspacesController = require('../controllers/workspaces');
+const WorkspacesController = require("../controllers/workspaces");
 
-router.get('/', WorkspacesController.getWorkspacesList);
+router.get("/userFavoriteWorkspaces", WorkspacesController.getUserFavoriteWorkspaces);
 
-router.get('/userFavoriteWorkspaces', WorkspacesController.getUserFavoriteWorkspaces);
+router.get("/hosts/:hostId", WorkspacesController.getWorkspacesByHostId);
 
-router.get('/:userId', WorkspacesController.getWorkspacesByUserId);
+router.post("/create", WorkspacesController.createNewWorkspace);
 
-router.get('/hosts/:hostId', WorkspacesController.getWorkspacesByHostId);
+router.post("/search", WorkspacesController.searchWorkspaces);
 
-router.post('/create', WorkspacesController.createNewWorkspace);
+router.get("/recommendations/:userId", WorkspacesController.getUserRecommendations);
 
-router.post('/search', WorkspacesController.searchWorkspaces)
+router.post("/create", WorkspacesController.createNewWorkspace);
+router.put("/edit/:workspaceId", WorkspacesController.editWorkspace);
 
-router.put('/edit/:workspaceId', WorkspacesController.editWorkspace);
-
-router.delete('/:id', WorkspacesController.deleteWorkspace)
-
+router.delete("/:id", WorkspacesController.deleteWorkspace);
 
 module.exports = router;

@@ -13,12 +13,12 @@ import {
   IconButton,
 } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
-import { AddCircleOutline, DeleteIcon } from "@mui/icons-material";
+import {Add, AddCircleOutline} from "@mui/icons-material";
 import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
 
-import AddAsset from "./AddAsset"
+import AddAsset from "./AddAsset";
 import _ from "lodash";
 
 import TimePicker from "react-time-picker";
@@ -66,7 +66,8 @@ const CreateWorkspace = () => {
   const [cityBounds, setCityBounds] = useState({});
   const { token } = useToken();
   const [spaceTypes, setSpaceTypes] = useState([{ id: 1, name: "" }]);
-  const [showAddAsset, setShowAddAsset] = useState(false)
+  const [showAddAsset, setShowAddAsset] = useState(false);
+  const [editProps, setEditProps] = useState({});
 
   useEffect(() => {
     const workspace = _.get(location, "state.workspace");
@@ -74,6 +75,11 @@ const CreateWorkspace = () => {
     if (!_.isEmpty(workspace)) {
       setWorkspace(workspace);
       setIsInCreateMode(false);
+      setEditProps({
+        ...editProps,
+        city: { key: workspace.city, defaultValue: workspace.city },
+        address: { key: workspace.address, defaultValue: workspace.address },
+      });
     }
   }, [location, spaceTypes]);
 
@@ -105,15 +111,15 @@ const CreateWorkspace = () => {
 
   const handleChangeAsset = (asset, index) => {
     let newArray = [...workspace.assets];
-    newArray[index] = asset
+    newArray[index] = asset;
     setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  }
+  };
 
   const handleDeleteAsset = (index) => {
     let newArray = [...workspace.assets];
-    newArray.splice(index, 1)
+    newArray.splice(index, 1);
     setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  }
+  };
 
   const handleSave = useCallback(async () => {
     if (checkUserValidation()) {
@@ -195,11 +201,11 @@ const CreateWorkspace = () => {
       capacity: 2,
       cost_per_hour: 20,
       asset_id: "1",
-      text: "Room"
-    }
-    newArray.push(asset)
+      text: "Room",
+    };
+    newArray.push(asset);
     setWorkspace((workspace) => ({ ...workspace, assets: newArray }));
-  })
+  });
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -233,13 +239,14 @@ const CreateWorkspace = () => {
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setCityBounds(place.geometry.viewport);
-          setWorkspace((workspace) => ({ ...workspace, city: place.name }));
+          setWorkspace((workspace) => ({ ...workspace, city: place.name, address: "" }));
+          document.getElementById("address").value = "";
         });
       }, 1000);
     } catch (err) {
       console.log(`Failed to fetch cities autocompletion: ${err.message}`);
     }
-  }, []);
+  }, [editProps]);
 
   useEffect(async () => {
     try {
@@ -263,180 +270,153 @@ const CreateWorkspace = () => {
             location_x: place.geometry.location.lng(),
           }));
         });
-      }, 1000);
+      }, 0);
     } catch (err) {
-      console.log(`Failed to fetch cities autocompletion: ${err.message}`);
+      console.log(`Failed to fetch addresses autocompletion: ${err.message}`);
     }
   }, [workspace.city]);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div className={"mt-8 text-3xl text-zinc-200"}>
+      <div className="w-1/3 self-center m-8">
+        <div className={"text-5xl text-primary font-medium mb-6"}>
           {isInCreateMode ? "Create new Workspace" : `Edit Workspace`}
         </div>
-        <OutlinedInput
-          id="name"
-          autoComplete="name"
-          required
-          fullWidth
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          placeholder="name"
-          value={workspace.name}
-          onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, name: event.target.value }));
-          }}
-        />
-        <OutlinedInput
-          id="city"
-          required
-          fullWidth
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          name="city"
-          placeholder="city"
-          type="city"
-          defaultValue={workspace.city}
-        />
-        <OutlinedInput
-          required
-          fullWidth
-          name="address"
-          placeholder="address"
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          type="address"
-          id="address"
-          defaultValue={workspace.address}
-          disabled={!workspace.city}
-        />
-        <OutlinedInput
-          required
-          fullWidth
-          sx={{ color: "white" }}
-          className="block shadow-sm-light bg-zinc-700 border
-                    border-zinc-600 rounded-lg mb-6"
-          name="description"
-          placeholder="description"
-          type="description"
-          id="description"
-          autoComplete="description"
-          value={workspace.description}
-          onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
-          }}
-        />
-        <a className="text-zinc-400">Do you have any from the next:</a>
-        <div className="all-checkbox">
-          <div className="single-checkbox">
-            <a className="text-zinc-400">wifi</a>
-            <Checkbox
-              checked={workspace.wifi}
-              onChange={handleChangeIsWifi}
-              inputProps={{ "aria-label": "controlled" }}
-            />
-          </div>
-          <div className="single-checkbox">
-            <a className="text-zinc-400">disabled access</a>
-            <Checkbox
-              checked={workspace.disabled_access}
-              onChange={handleChangeDisabledAccess}
-              inputProps={{ "aria-label": "controlled" }}
-            />
-          </div>
-          <div className="single-checkbox">
-            <a className="text-zinc-400">smoke friendly</a>
-            <Checkbox
-              checked={workspace.smoke_friendly}
-              onChange={HandleChangeSmokeFriendly}
-              inputProps={{ "aria-label": "controlled" }}
-            />
-          </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-lg font-medium text-primary">
+            Name:
+          </label>
+          <input className="input input-bordered select-lg font-normal w-full text-secondary"
+                 value={workspace.name}
+                 onChange={(event) => {
+                   setWorkspace((workspace) => ({ ...workspace, name: event.target.value }));
+                 }}
+          />
         </div>
         <div className="mb-6">
-          <label htmlFor="environment" className="block mb-2 text-sm font-medium text-zinc-400">
+          <label className="block mb-2 text-lg font-medium text-primary">
+            City:
+          </label>
+          <input className="input input-bordered select-lg font-normal w-full text-secondary"
+                 type="city"
+                 id="city"
+                 value={workspace.city}
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-lg font-medium text-primary">
+            Address:
+          </label>
+          <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                 type="address"
+                 id="address"
+                 value={workspace.address}
+                 disabled={!workspace.city}
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-lg font-medium text-primary">
+            Description:
+          </label>
+          <textarea className="textarea textarea-bordered 2xl:select-lg font-normal w-full text-secondary"
+                 value={workspace.description}
+                 onChange={(event) => {
+                   setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
+                 }}
+          />
+        </div>
+        <div className="mb-6">
+          <a className="text-primary">Do you have any from the next:</a>
+          <label className="label cursor-pointer">
+            <span className="label-text font-medium text-primary">wifi</span>
+            <input type="checkbox"
+                   checked={workspace.wifi}
+                   onChange={handleChangeIsWifi}
+                   className="checkbox checkbox-primary"
+            />
+          </label>
+          <label className="label cursor-pointer">
+            <span className="label-text font-medium text-primary">disabled access</span>
+            <input type="checkbox"
+                   checked={workspace.disabled_access}
+                   onChange={handleChangeDisabledAccess}
+                   className="checkbox checkbox-primary"
+            />
+          </label>
+          <label className="label cursor-pointer">
+            <span className="label-text font-medium text-primary">smoke friendly</span>
+            <input type="checkbox"
+                   checked={workspace.smoke_friendly}
+                   onChange={HandleChangeSmokeFriendly}
+                   className="checkbox checkbox-primary"
+            />
+          </label>
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-lg font-medium text-primary">
             Environment:
           </label>
           <select
-              className="select select-bordered 2xl:select-lg font-normal w-full bg-zinc-700 text-white"
+              className="select select-bordered select-lg mb-2 font-medium w-full text-primary"
               onChange={(event, value) => {
                 setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
               }}
           >
             {spaceTypes.map((item, index) => (
-                <option value={index} key={item.id}>
+                <option value={index}
+                        key={item.id}>
                   {item.name}
                 </option>
             ))}
           </select>
         </div>
-        <a className="text-zinc-400">set opening days</a>
-        <div className="all-checkbox">
+        <div className="mb-6">
+          <label className="text-primary">set opening days</label>
           {daysCheckBox.map((day, index) => {
             return (
-              <div key={index} className="single-checkbox">
-                <a className="text-zinc-400">{day.dayName}</a>
-                <Checkbox
-                  checked={workspace.opening_days[index]}
-                  id={index.toString()}
-                  onChange={HandleChangeOpeningDays}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-              </div>
-            );
+                <label className="label cursor-pointer">
+                  <span className="label-text font-medium text-primary">{day.dayName}</span>
+                  <input type="checkbox"
+                         checked={workspace.opening_days[index]}
+                         id={index.toString()}
+                         onChange={HandleChangeOpeningDays}
+                         className="checkbox checkbox-primary"
+                  />
+                </label>
+                );
           })}
         </div>
-        <a className="text-zinc-400">set hours</a>
-        <a className="text-zinc-400">opening hour</a>
-        <TimePicker className="text-zinc-400" onChange={setOpeningHour} value={workspace.opening_hour} />
-        <TimePicker className="text-zinc-400" onChange={setClosingHour} value={workspace.closing_hour} />
-        <input
-            className="text-zinc-400"
-          type="file"
-          label="Photo"
-          name="photo"
-          accept=".jpeg, .png, .jpg"
-          onChange={handlePhotoUpload}
-        />
-        <div className="photo-preview">
-          <img src={workspace.photo} />
+        <div className="mb-6">
+          <label className="label cursor-pointer">
+              <span className="label-text font-medium text-primary">opening hours:</span>
+              <TimePicker className="text-primary" onChange={setOpeningHour} value={workspace.opening_hour} /> -
+              <TimePicker className="text-primary" onChange={setClosingHour} value={workspace.closing_hour} />
+          </label>
         </div>
-        <div>
-          <a className="text-zinc-400">Add Assets</a>
-            <IconButton aria-label="new workspace" color="primary" >
-              <AddCircleOutline onClick={onAddAssetClick}/>
-            </IconButton>
-            {workspace.assets && workspace.assets.map((curAsset, index) => {
-              return (<AddAsset asset={curAsset} handleChange={handleChangeAsset} index={index} handleDelete={handleDeleteAsset}/>)
-            }
-            )}
+        <div className="mb-6">
+          <img className="mask mask-circle w-36 h-36 mb-2" src={workspace.photo}/>
+          <input
+              className="block mb-2 font-medium text-primary"
+              type="file"
+              label="Photo"
+              name="photo"
+              accept=".jpeg, .png, .jpg"
+              onChange={handlePhotoUpload}
+          />
         </div>
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={handleSave}
-          className="text-white 2xl:text-lg text-sm bg-blue-600 hover:bg-blue-700 focus:ring-4
-                          focus:outline-none focus:ring-blue-800 font-medium rounded-lg
-                          px-5 py-2.5 text-center"
-        >
-          Save
-        </Button>
-      </Box>
-    </Container>
+        <div className="mb-6">
+          <span className="text-primary">Add Assets</span>
+          <button className="btn btn-circle" onClick={onAddAssetClick}>
+            <Add/>
+          </button>
+          {workspace.assets && workspace.assets.map((curAsset, index) => {
+                return (<AddAsset asset={curAsset} handleChange={handleChangeAsset} index={index} handleDelete={handleDeleteAsset}/>)
+              }
+          )}
+        </div>
+        <div className="flex mb-6 justify-end">
+          <button type="button" className={"btn btn-lg btn-primary"} onClick={handleSave}>Save</button>
+        </div>
+      </div>
   );
 };
 

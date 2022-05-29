@@ -14,8 +14,8 @@ export default function Items(props) {
                             navigate(item.href);
                         }}
                         className={
-                            item == props.currentItem ? 'text-gray-300 bg-zinc-600 hover:text-white hover:cursor-pointer px-3 py-2 rounded-md text-sm font-bold' :
-                                'text-gray-300 hover:bg-zinc-600 hover:text-white hover:cursor-pointer px-3 py-2 rounded-md text-sm font-medium'
+                            item == props.currentItem ? 'text-white bg-secondary hover:text-white hover:cursor-pointer px-3 py-2 rounded-md text-sm font-bold' :
+                                'text-white hover:bg-secondary hover:bg-opacity-40 hover:cursor-pointer px-3 py-2 rounded-md text-sm font-medium'
                         }
                         aria-current={item == props.currentItem ? 'page' : undefined}
                     >

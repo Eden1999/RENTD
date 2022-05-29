@@ -23,7 +23,7 @@ ALTER TABLE IF EXISTS public.orders
 
 CREATE TABLE IF NOT EXISTS public.ratings
 (
-    id bigint NOT NULL,
+    id SERIAL,
     workspace_id bigint NOT NULL,
     user_id bigint NOT NULL,
     rating INTEGER NOT NULL,
@@ -116,8 +116,7 @@ CREATE TABLE IF NOT EXISTS public.assets
     asset_id bigint NOT NULL,
     workspace_id bigint NOT NULL,
     cost_per_hour INTEGER NOT NULL DEFAULT 0,
-    capacity INTEGER NOT NULL,
-    description character varying COLLATE pg_catalog."default" NOT NULL
+    capacity INTEGER NOT NULL
 )
 
 TABLESPACE pg_default;

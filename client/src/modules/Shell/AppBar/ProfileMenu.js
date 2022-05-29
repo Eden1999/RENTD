@@ -25,7 +25,7 @@ export default function ProfileMenu() {
             <Menu as="div" className="ml-3 relative">
                 <div>
                     <Menu.Button
-                        className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        className="bg-primary p-0.5 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
                         <img
                             className="h-8 w-8 rounded-full"
@@ -44,7 +44,7 @@ export default function ProfileMenu() {
                     leaveTo="transform opacity-0 scale-95"
                 >
                     <Menu.Items
-                        className="bg-zinc-700 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none hover:cursor-pointer">
+                        className="bg-neutral-focus origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none hover:cursor-pointer">
                         {menuItems.map((item) => (
                             <Menu.Item
                                 key={item.name}>
@@ -54,7 +54,7 @@ export default function ProfileMenu() {
                                             item.onClick && item.onClick(dispatch);
                                             navigate(item.href);
                                         }}
-                                        className={classNames(active ? 'bg-zinc-600' : '', 'block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white')}
+                                        className={classNames(active ? 'bg-secondary' : '', 'block px-4 py-2 text-sm text-gray-300 hover:bg-secondary hover:bg-opacity-40 hover:text-white')}
                                     >
                                         {item.name}
                                     </div>

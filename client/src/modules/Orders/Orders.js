@@ -37,6 +37,7 @@ const Orders = ({workspace}) => {
   let [capacity, setCapacity] = useState(1)
   const [{ user }] = useContext(AppContext);
   const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);
+  const [assets, setAssets] = useState(workspace.assets)
   const navigate = useNavigate();
 
   const getOrders = async (workspace_id) => {
@@ -55,14 +56,25 @@ const Orders = ({workspace}) => {
     getOrders(workspace.id)
   }, [])
 
+  useEffect(async () => {
+    try {
+      const query = {};
+      const res = await axios.get("http://localhost:8000/assetTypes", query);
+      setAssetTypes(res.data);
+    } catch (err) {
+      console.log(`Failed to fetch spaceTypes ${err.message}`);
+    }
+  }, []);
+
   useEffect(() => {
-    workspace.assets = workspace.assets.map(asset => {
+    let assets = workspace.assets.map(asset => {
       let assetType = assetTypes.find(type => type.id.toString() === asset.asset_id)
       if(assetType) {
-        asset.text = assetType.name
+        asset.text = assetType.name + ` ${asset.cost_per_hour}₪ per 1 hour/person`
       }
       return asset
     })
+    setAssets(assets)
   }, [assetTypes])
 
   const continueToPayment = useCallback(async (e) => {
@@ -127,7 +139,7 @@ const Orders = ({workspace}) => {
   const onOrderFormOpening = (e) => {
     const { form } = e;
     let { startDate, endDate, userName } = e.appointmentData;
-    let relAsset = workspace.assets.find(asset => asset.id == e.appointmentData.asset_id);
+    let relAsset = assets.find(asset => asset.id == e.appointmentData.asset_id);
 
     form.option('items', [
       {
@@ -219,7 +231,7 @@ const Orders = ({workspace}) => {
             <Resource
             fieldExpr="asset_id"
             allowMultiple={false}
-            dataSource={workspace.assets}
+            dataSource={assets}
             label="Assets"
           />
           </Scheduler>
