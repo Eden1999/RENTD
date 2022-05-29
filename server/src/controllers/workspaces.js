@@ -184,7 +184,7 @@ const editWorkspace = (req, res) => {
   let assets = workspace.assets
   delete workspace.assets
   
-  let assetsArray = assets.filter(asset => asset.id).map(x=> {return x.id})
+  let assetsArray = assets ? assets.filter(asset => asset.id).map(x=> {return x.id}) : []
 
   // check if user is already exist
   sequelize.models.users

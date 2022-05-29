@@ -441,9 +441,86 @@
         }
       },
       "/workspaces/search":{
-        "get": {
+        "post": {
           "tags": ["Workspaces"],
-          "summary": "Get all workspaces in system",
+          "summary": "Get all workspaces by filter",
+          "parameters": [
+            {
+              "name": "city",
+              "in": "query",
+              "description": "city where workspace is",
+              "schema": {
+                "type":"string",
+                "example":"Bat-Yam"
+              }
+            },
+            {
+              "name": "capacity",
+              "in": "query",
+              "description": "amount of people",
+              "schema": {
+                "type":"integer",
+                "example":3
+              }
+            },{
+              "name": "space_type_id",
+              "in": "query",
+              "description": "space id",
+              "schema": {
+                "type":"integer",
+                "example":1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Workspaces"
+              }
+            },
+            "400":{
+              "description":"Failed to find workspaces"
+            }
+          }
+        }
+      },
+      "/workspaces/edit/{workspaceId}":{
+        "put": {
+          "tags": ["Workspaces"],
+          "summary": "edit specific workspace",
+          "parameters": [
+            {
+              "name": "workspaceId",
+              "in": "path",
+              "description": "id of workspace",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "token to be passed as a header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+              },
+              "style": "simple"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "workspace to add",
+              "schema": {
+                "$ref": "#/definitions/FullWorkspace"
+                }
+              }
+          ],
           "responses": {
             "200": {
               "description": "OK",
@@ -454,52 +531,79 @@
           }
         }
       },
-      "/workspaces":{
-        "get": {
+      "/workspaces/{id}":{
+        "delete": {
           "tags": ["Workspaces"],
-          "summary": "Get all workspaces in system",
+          "summary": "delete specific workspace",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "id of workspace",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 4
+              },
+              "style": "simple"
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "token to be passed as a header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+              },
+              "style": "simple"
+            }
+          ],
           "responses": {
             "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/Workspaces"
-              }
-            }
+              "description": "OK"
+            },
+            "500":{"description":"user not found"}
           }
         }
       },
-      "/workspaces":{
-        "get": {
-          "tags": ["Workspaces"],
-          "summary": "Get all workspaces in system",
+      "/ratings/create":{
+        "post": {
+          "tags": ["Ratings"],
+          "summary": "create new rating",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "workspace to add",
+              "schema": {
+                "$ref": "#/definitions/Rating"
+                }
+              },
+              {
+                "name": "token",
+                "in": "header",
+                "description": "token to be passed as a header",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiJ9.MQ.i-fCP3knpvD-OfzlctSht71xAGSfdLUxSyCP8k_kVEw"
+                },
+                "style": "simple"
+              }
+          ],
           "responses": {
             "200": {
               "description": "OK",
               "schema": {
-                "$ref": "#/definitions/Workspaces"
+                "$ref": "#/definitions/Rating"
               }
-            }
-          }
-        }
-      },
-      "/workspaces":{
-        "get": {
-          "tags": ["Workspaces"],
-          "summary": "Get all workspaces in system",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/Workspaces"
-              }
-            }
+            },
+            "500":{"description":"user not found"}
           }
         }
       },
       "/spacetypes":{
-
-      },
-      "/rating":{
 
       },
       "/orders":{
