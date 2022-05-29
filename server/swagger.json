@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0", 
-    "title": "My User Project CRUD",
-    "description": "My User Project Application API",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
+    "title": "RENTD Express API with Swagger",
+    "description": "This is a simple API application made with Express and documented with Swagger",
+    "contact": {
+      "name": "RENTD",
+      "url": "http://localhost:3000"
     }
   },
   "host": "localhost:8000",
