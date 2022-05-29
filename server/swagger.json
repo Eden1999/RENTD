@@ -784,7 +784,25 @@
         }
       },
       "/assettypes":{
-
+        "get": {
+          "tags": ["Assets"],
+          "summary": "Get all asset types in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type":"object",
+                "properties":{
+                  "$ref": "#/definitions/Type"
+                },
+                "example":{
+                  "id":1,
+                  "name":"Room"
+                } 
+              }
+            }
+          }
+        }
       }
     },
     "definitions": {
