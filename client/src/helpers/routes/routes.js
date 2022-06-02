@@ -12,6 +12,7 @@ import ResetPassword from "../../modules/UserManagment/ResetPassword";
 import PaymentView from "../../modules/Payment/PaymentView";
 import FavoriteWorkspaces from "modules/Favorites/FavoriteWorkspaces";
 import AddAsset from "modules/CreateWorkspace/AddAsset";
+import AddWorkspace from "modules/CreateWorkspace/AddWorkspace";
 
 const routes = [
   {
@@ -46,12 +47,12 @@ const routes = [
   },
   {
     path: "/manage/newWorkspace",
-    Component: <CreateWorkspace />,
+    Component: <AddWorkspace />,
     allowed: [userTypes.host],
   },
   {
     path: "/manage/editWorkspace",
-    Component: <CreateWorkspace />,
+    Component: <AddWorkspace />,
     allowed: [userTypes.host],
   },
   {
