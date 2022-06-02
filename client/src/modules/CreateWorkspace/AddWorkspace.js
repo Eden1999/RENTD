@@ -12,7 +12,6 @@ import TimePicker from "react-time-picker";
 import Axios from "axios";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import ImagesUpload from "./ImagesUpload";
 
 const daysCheckBox = [
   { dayName: "sunday" },
