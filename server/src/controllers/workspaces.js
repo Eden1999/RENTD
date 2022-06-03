@@ -126,9 +126,7 @@ const createNewWorkspace = (req, res) => {
   const { token } = req.headers;
   const { workspace } = req.body;
 
-  if (process.env.NODE_ENV != "test") {
-    const decodeId = jwt.verify(token, process.env.SECRET_KEY);
-  }
+  const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
   let assets = workspace.assets;
   delete workspace.assets;
