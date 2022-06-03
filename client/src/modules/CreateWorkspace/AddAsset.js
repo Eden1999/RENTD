@@ -38,13 +38,8 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
   }, [assetTypes]);
 
     return (
-        <div className="w-1/3 self-center m-8">
-            <div className="mb-6">
-                <button className="btn btn-circle" onClick={() => {handleDelete(index)}}>
-                    <DeleteIcon />
-                </button>
-            </div>
-            <div className="mb-6">
+        <div className="self-center m-8 border border-black rounded-lg w-60">
+            <div className="mb-6 pr-10 pl-10 pt-5">
                 <label className="block mb-2 text-lg font-medium text-primary">
                     capacity:
                 </label>
@@ -57,7 +52,7 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                        }}
                 />
             </div>
-            <div className="mb-6">
+            <div className="mb-6 pr-10 pl-10">
                 <label className="block mb-2 text-lg font-medium text-primary">
                     cost per hour:
                 </label>
@@ -70,7 +65,7 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                        }}
                 />
             </div>
-            <div className="mb-6">
+            <div className="mb-6 pr-10 pl-10">
                 <label htmlFor="environment" className="block mb-2 text-lg font-medium text-primary">
                     Environment:
                 </label>
@@ -89,6 +84,11 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                         </option>
                     ))}
                 </select>
+            </div>
+            <div className="mb-6 pr-10 pl-10">
+                <button className="btn btn-circle" onClick={() => {handleDelete(index)}}>
+                    <DeleteIcon />
+                </button>
             </div>
         </div>
     )

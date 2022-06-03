@@ -284,7 +284,7 @@ const AddWorkspace = () => {
     switch (step) {
       case 0:
         return (
-          <div className="pl-20 pr-20 mt-5">
+          <div className="pl-24 pr-24 mt-5 h-screen">
             <div className="mb-6">
               <label className="block mb-2 text-lg font-medium text-primary">
                 Name:
@@ -362,7 +362,7 @@ const AddWorkspace = () => {
         );
       case 1:
         return (
-          <div className="mt-10 pl-20 pr-20 text-center">
+          <div className="mt-10 pl-24 pr-24 text-center h-screen">
             <a className="text-primary text-2xl font-medium">
               Do you have any of the following in the workspace?
             </a>
@@ -406,7 +406,7 @@ const AddWorkspace = () => {
         );
       case 2:
         return (
-          <div className="pl-20 pr-20 mt-10">
+          <div className="pl-24 pr-24 mt-10 h-screen">
             <div className="mb-6">
               <label className="text-primary">set opening days</label>
               {daysCheckBox.map((day, index) => {
@@ -448,7 +448,7 @@ const AddWorkspace = () => {
         );
       case 3:
         return (
-          <div className="mb-6 pl-20 pr-20 mt-10">
+          <div className="mb-6 pl-24 pr-24 mt-10 h-screen">
             <img
               className="mask mask-circle w-36 h-36 mb-2"
               src={workspace.photo}
@@ -465,22 +465,28 @@ const AddWorkspace = () => {
         );
       case 4:
         return (
-          <div className="mb-6">
-            <span className="text-primary">Add Assets</span>
-            <button className="btn btn-circle" onClick={onAddAssetClick}>
-              <Add />
-            </button>
-            {workspace.assets &&
-              workspace.assets.map((curAsset, index) => {
-                return (
-                  <AddAsset
-                    asset={curAsset}
-                    handleChange={handleChangeAsset}
-                    index={index}
-                    handleDelete={handleDeleteAsset}
-                  />
-                );
-              })}
+          <div className="mb-6 pl-24 pr-24 mt-10 h-screen">
+            <a className="text-primary text-2xl font-medium">
+              Add your workspace rooms and tables
+            </a>
+            <div className="flex flex-row text-center flex-wrap">
+              {workspace.assets &&
+                workspace.assets.map((curAsset, index) => {
+                  return (
+                    <AddAsset
+                      asset={curAsset}
+                      handleChange={handleChangeAsset}
+                      index={index}
+                      handleDelete={handleDeleteAsset}
+                    />
+                  );
+                })}
+              <div className="flex items-center">
+                <button className="btn btn-circle" onClick={onAddAssetClick}>
+                  <Add />
+                </button>
+              </div>
+            </div>
           </div>
         );
       default:
@@ -500,7 +506,7 @@ const AddWorkspace = () => {
       {renderSwitch()}
       {step !== 0 && (
         <button
-          className="btn btn-lg btn-primary ml-20 absolute bottom-5 left-0"
+          className="btn btn-lg btn-primary ml-20 sticky bottom-5 left-0"
           onClick={() => {
             setStep((step) => step - 1);
           }}
@@ -509,7 +515,7 @@ const AddWorkspace = () => {
         </button>
       )}
       <button
-        className="btn btn-lg btn-primary mr-20 absolute bottom-5 right-0"
+        className="btn btn-lg btn-primary mr-20 sticky bottom-5 float-right"
         onClick={() => {
           step === 4 ? handleSave() : setStep((step) => step + 1);
         }}
