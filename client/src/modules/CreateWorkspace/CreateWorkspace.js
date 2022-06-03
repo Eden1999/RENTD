@@ -308,7 +308,7 @@ const CreateWorkspace = () => {
           className="input input-bordered select-lg font-normal w-full text-secondary"
           type="city"
           id="city"
-          value={workspace.city}
+          {...editProps.city}
         />
       </div>
       <div className="mb-6">
@@ -317,8 +317,8 @@ const CreateWorkspace = () => {
           className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
           type="address"
           id="address"
-          value={workspace.address}
           disabled={!workspace.city}
+          {...editProps.address}
         />
       </div>
       <div className="mb-6">
