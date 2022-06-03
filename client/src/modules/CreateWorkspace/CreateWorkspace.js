@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
-import {Add, AddCircleOutline} from "@mui/icons-material";
+import { Add, AddCircleOutline } from "@mui/icons-material";
 import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
@@ -54,9 +54,15 @@ const CreateWorkspace = () => {
     description: "",
     photo: "",
     spaceType: { id: 1, name: "" },
-    opening_days: [false, false, false, false, false, false, false],
-    opening_hour: "10:00",
-    closing_hour: "23:00",
+    opening_days: [
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+    ],
     spaceTypes: [{ id: 1, name: "" }],
     assets: [],
   });
@@ -125,6 +131,7 @@ const CreateWorkspace = () => {
     if (checkUserValidation()) {
       workspace.space_type_id = workspace.spaceType.id;
       if (isInCreateMode) {
+        console.log(workspace);
         axios
           .post(
             "http://localhost:8000/workspaces/create",
@@ -172,12 +179,16 @@ const CreateWorkspace = () => {
     setWorkspace((workspace) => ({ ...workspace, wifi: !workspace.wifi }));
   };
 
-  const setOpeningHour = (value) => {
-    setWorkspace((workspace) => ({ ...workspace, opening_hour: value }));
+  const handleOpeningHour = (index, value) => {
+    let newArray = [...workspace.opening_days];
+    newArray[index].opening_hour = value;
+    setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
-  const setClosingHour = (value) => {
-    setWorkspace((workspace) => ({ ...workspace, closing_hour: value }));
+  const handleClosingHour = (index, value) => {
+    let newArray = [...workspace.opening_days];
+    newArray[index].closing_hour = value;
+    setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
   const handleChangeDisabledAccess = () => {
@@ -190,12 +201,12 @@ const CreateWorkspace = () => {
 
   const HandleChangeOpeningDays = ({ target: { checked, id } }) => {
     let newArray = [...workspace.opening_days];
-    newArray[id] = checked;
+    newArray[id].open = checked;
     setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
   const onAddAssetClick = useCallback(async (e) => {
-    console.log("hey")
+    console.log("hey");
     let newArray = [...workspace.assets];
     let asset = {
       capacity: 2,
@@ -277,146 +288,164 @@ const CreateWorkspace = () => {
   }, [workspace.city]);
 
   return (
-      <div className="w-1/3 self-center m-8">
-        <div className={"text-5xl text-primary font-medium mb-6"}>
-          {isInCreateMode ? "Create new Workspace" : `Edit Workspace`}
-        </div>
-        <div className="mb-6">
-          <label className="block mb-2 text-lg font-medium text-primary">
-            Name:
-          </label>
-          <input className="input input-bordered select-lg font-normal w-full text-secondary"
-                 value={workspace.name}
-                 onChange={(event) => {
-                   setWorkspace((workspace) => ({ ...workspace, name: event.target.value }));
-                 }}
+    <div className="w-1/3 self-center m-8">
+      <div className={"text-5xl text-primary font-medium mb-6"}>
+        {isInCreateMode ? "Create new Workspace" : `Edit Workspace`}
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">Name:</label>
+        <input
+          className="input input-bordered select-lg font-normal w-full text-secondary"
+          value={workspace.name}
+          onChange={(event) => {
+            setWorkspace((workspace) => ({ ...workspace, name: event.target.value }));
+          }}
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">City:</label>
+        <input
+          className="input input-bordered select-lg font-normal w-full text-secondary"
+          type="city"
+          id="city"
+          {...editProps.city}
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">Address:</label>
+        <input
+          className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+          type="address"
+          id="address"
+          disabled={!workspace.city}
+          {...editProps.address}
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">Description:</label>
+        <textarea
+          className="textarea textarea-bordered 2xl:select-lg font-normal w-full text-secondary"
+          value={workspace.description}
+          onChange={(event) => {
+            setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
+          }}
+        />
+      </div>
+      <div className="mb-6">
+        <a className="text-primary">Do you have any from the next:</a>
+        <label className="label cursor-pointer">
+          <span className="label-text font-medium text-primary">wifi</span>
+          <input
+            type="checkbox"
+            checked={workspace.wifi}
+            onChange={handleChangeIsWifi}
+            className="checkbox checkbox-primary"
           />
-        </div>
-        <div className="mb-6">
-          <label className="block mb-2 text-lg font-medium text-primary">
-            City:
-          </label>
-          <input className="input input-bordered select-lg font-normal w-full text-secondary"
-                 type="city"
-                 id="city"
-                 value={workspace.city}
+        </label>
+        <label className="label cursor-pointer">
+          <span className="label-text font-medium text-primary">disabled access</span>
+          <input
+            type="checkbox"
+            checked={workspace.disabled_access}
+            onChange={handleChangeDisabledAccess}
+            className="checkbox checkbox-primary"
           />
-        </div>
-        <div className="mb-6">
-          <label className="block mb-2 text-lg font-medium text-primary">
-            Address:
-          </label>
-          <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                 type="address"
-                 id="address"
-                 value={workspace.address}
-                 disabled={!workspace.city}
+        </label>
+        <label className="label cursor-pointer">
+          <span className="label-text font-medium text-primary">smoke friendly</span>
+          <input
+            type="checkbox"
+            checked={workspace.smoke_friendly}
+            onChange={HandleChangeSmokeFriendly}
+            className="checkbox checkbox-primary"
           />
-        </div>
-        <div className="mb-6">
-          <label className="block mb-2 text-lg font-medium text-primary">
-            Description:
-          </label>
-          <textarea className="textarea textarea-bordered 2xl:select-lg font-normal w-full text-secondary"
-                 value={workspace.description}
-                 onChange={(event) => {
-                   setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
-                 }}
-          />
-        </div>
-        <div className="mb-6">
-          <a className="text-primary">Do you have any from the next:</a>
-          <label className="label cursor-pointer">
-            <span className="label-text font-medium text-primary">wifi</span>
-            <input type="checkbox"
-                   checked={workspace.wifi}
-                   onChange={handleChangeIsWifi}
-                   className="checkbox checkbox-primary"
-            />
-          </label>
-          <label className="label cursor-pointer">
-            <span className="label-text font-medium text-primary">disabled access</span>
-            <input type="checkbox"
-                   checked={workspace.disabled_access}
-                   onChange={handleChangeDisabledAccess}
-                   className="checkbox checkbox-primary"
-            />
-          </label>
-          <label className="label cursor-pointer">
-            <span className="label-text font-medium text-primary">smoke friendly</span>
-            <input type="checkbox"
-                   checked={workspace.smoke_friendly}
-                   onChange={HandleChangeSmokeFriendly}
-                   className="checkbox checkbox-primary"
-            />
-          </label>
-        </div>
-        <div className="mb-6">
-          <label className="block mb-2 text-lg font-medium text-primary">
-            Environment:
-          </label>
-          <select
-              className="select select-bordered select-lg mb-2 font-medium w-full text-primary"
-              onChange={(event, value) => {
-                setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
-              }}
-          >
-            {spaceTypes.map((item, index) => (
-                <option value={index}
-                        key={item.id}>
-                  {item.name}
-                </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-6">
-          <label className="text-primary">set opening days</label>
-          {daysCheckBox.map((day, index) => {
-            return (
+        </label>
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">Environment:</label>
+        <select
+          className="select select-bordered select-lg mb-2 font-medium w-full text-primary"
+          onChange={(event, value) => {
+            setWorkspace((workspace) => ({ ...workspace, spaceType: value }));
+          }}
+        >
+          {spaceTypes.map((item, index) => (
+            <option value={index} key={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="mb-6">
+        <label className="text-primary">set opening days</label>
+        {daysCheckBox.map((day, index) => {
+          return (
+            <div key={day.dayName}>
+              <label className="label cursor-pointer">
+                <span className="label-text font-medium text-primary">{day.dayName}</span>
+                <input
+                  type="checkbox"
+                  checked={workspace.opening_days[index].open}
+                  id={index.toString()}
+                  onChange={HandleChangeOpeningDays}
+                  className="checkbox checkbox-primary"
+                />
+              </label>
+
+              {workspace.opening_days[index].open && (
                 <label className="label cursor-pointer">
-                  <span className="label-text font-medium text-primary">{day.dayName}</span>
-                  <input type="checkbox"
-                         checked={workspace.opening_days[index]}
-                         id={index.toString()}
-                         onChange={HandleChangeOpeningDays}
-                         className="checkbox checkbox-primary"
+                  <span className="label-text font-medium text-secondary">opening hours:</span>
+                  <TimePicker
+                    className="text-primary"
+                    onChange={(value) => handleOpeningHour(index, value)}
+                    value={workspace.opening_days[index].opening_hour}
+                  />{" "}
+                  -
+                  <TimePicker
+                    className="text-primary"
+                    onChange={(value) => handleClosingHour(index, value)}
+                    value={workspace.opening_days[index].closing_hour}
                   />
                 </label>
-                );
-          })}
-        </div>
-        <div className="mb-6">
-          <label className="label cursor-pointer">
-              <span className="label-text font-medium text-primary">opening hours:</span>
-              <TimePicker className="text-primary" onChange={setOpeningHour} value={workspace.opening_hour} /> -
-              <TimePicker className="text-primary" onChange={setClosingHour} value={workspace.closing_hour} />
-          </label>
-        </div>
-        <div className="mb-6">
-          <img className="mask mask-circle w-36 h-36 mb-2" src={workspace.photo}/>
-          <input
-              className="block mb-2 font-medium text-primary"
-              type="file"
-              label="Photo"
-              name="photo"
-              accept=".jpeg, .png, .jpg"
-              onChange={handlePhotoUpload}
-          />
-        </div>
-        <div className="mb-6">
-          <span className="text-primary">Add Assets</span>
-          <button className="btn btn-circle" onClick={onAddAssetClick}>
-            <Add/>
-          </button>
-          {workspace.assets && workspace.assets.map((curAsset, index) => {
-                return (<AddAsset asset={curAsset} handleChange={handleChangeAsset} index={index} handleDelete={handleDeleteAsset}/>)
-              }
-          )}
-        </div>
-        <div className="flex mb-6 justify-end">
-          <button type="button" className={"btn btn-lg btn-primary"} onClick={handleSave}>Save</button>
-        </div>
+              )}
+            </div>
+          );
+        })}
       </div>
+      <div className="mb-6">
+        <img className="mask mask-circle w-36 h-36 mb-2" src={workspace.photo} />
+        <input
+          className="block mb-2 font-medium text-primary"
+          type="file"
+          label="Photo"
+          name="photo"
+          accept=".jpeg, .png, .jpg"
+          onChange={handlePhotoUpload}
+        />
+      </div>
+      <div className="mb-6">
+        <span className="text-primary">Add Assets</span>
+        <button className="btn btn-circle" onClick={onAddAssetClick}>
+          <Add />
+        </button>
+        {workspace.assets &&
+          workspace.assets.map((curAsset, index) => {
+            return (
+              <AddAsset
+                asset={curAsset}
+                handleChange={handleChangeAsset}
+                index={index}
+                handleDelete={handleDeleteAsset}
+              />
+            );
+          })}
+      </div>
+      <div className="flex mb-6 justify-end">
+        <button type="button" className={"btn btn-lg btn-primary"} onClick={handleSave}>
+          Save
+        </button>
+      </div>
+    </div>
   );
 };
 
