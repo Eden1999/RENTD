@@ -48,12 +48,6 @@ module.exports = (sequelize) => {
       opening_days: {
         type: DataTypes.ARRAY,
       },
-      opening_hour: {
-        type: DataTypes.STRING,
-      },
-      closing_hour: {
-        type: DataTypes.STRING,
-      }
     },
     {
       freezeTableName: true, // Model tableName will be the same as the model name
