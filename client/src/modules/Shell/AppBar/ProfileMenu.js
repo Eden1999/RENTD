@@ -16,7 +16,7 @@ const menuItems = [
 
 
 export default function ProfileMenu() {
-    const [ , dispatch] = useContext(AppContext);
+    const [ {user} , dispatch] = useContext(AppContext);
     const navigate = useNavigate();
 
     return (
@@ -28,7 +28,7 @@ export default function ProfileMenu() {
                         <span className="sr-only">Open user menu</span>
                         <img
                             className="h-8 w-8 rounded-full"
-                            src="https://api.lorem.space/image/fashion?w=1000&h=800"
+                            src={user?.photo}
                             alt=""
                         />
                     </Menu.Button>
