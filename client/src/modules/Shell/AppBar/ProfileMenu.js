@@ -11,7 +11,6 @@ function classNames(...classes) {
 
 const menuItems = [
     { name: 'Your Profile', href: '/profile', active: false},
-    { name: 'Settings', href: '#', active: false },
     { name: 'Sign Out', href: '/login', active: false, onClick : (dispatch) => {signOut(dispatch)} },
 ]
 
