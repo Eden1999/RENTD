@@ -41,9 +41,15 @@ const AddWorkspace = () => {
     description: "",
     photo: "",
     spaceType: { id: 1, name: "" },
-    opening_days: [false, false, false, false, false, false, false],
-    opening_hour: "10:00",
-    closing_hour: "23:00",
+    opening_days: [
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+      { open: false },
+    ],
     spaceTypes: [{ id: 1, name: "" }],
     assets: [],
   });
@@ -160,12 +166,16 @@ const AddWorkspace = () => {
     setWorkspace((workspace) => ({ ...workspace, wifi: !workspace.wifi }));
   };
 
-  const setOpeningHour = (value) => {
-    setWorkspace((workspace) => ({ ...workspace, opening_hour: value }));
+  const handleOpeningHour = (index, value) => {
+    let newArray = [...workspace.opening_days];
+    newArray[index].opening_hour = value;
+    setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
-  const setClosingHour = (value) => {
-    setWorkspace((workspace) => ({ ...workspace, closing_hour: value }));
+  const handleClosingHour = (index, value) => {
+    let newArray = [...workspace.opening_days];
+    newArray[index].closing_hour = value;
+    setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
   const handleChangeDisabledAccess = () => {
@@ -184,7 +194,7 @@ const AddWorkspace = () => {
 
   const HandleChangeOpeningDays = ({ target: { checked, id } }) => {
     let newArray = [...workspace.opening_days];
-    newArray[id] = checked;
+    newArray[id].open = checked;
     setWorkspace((workspace) => ({ ...workspace, opening_days: newArray }));
   };
 
@@ -308,7 +318,7 @@ const AddWorkspace = () => {
                 className="input input-bordered select-lg font-normal w-full text-secondary"
                 type="city"
                 id="city"
-                value={workspace.city}
+                {...editProps.city}
               />
             </div>
             <div className="mb-6">
@@ -319,8 +329,8 @@ const AddWorkspace = () => {
                 className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
                 type="address"
                 id="address"
-                value={workspace.address}
                 disabled={!workspace.city}
+                {...editProps.address}
               />
             </div>
             <div className="mb-6">
@@ -406,49 +416,55 @@ const AddWorkspace = () => {
         );
       case 2:
         return (
-          <div className="pl-24 pr-24 mt-10 h-screen">
-            <div className="mb-6">
-              <label className="text-primary">set opening days</label>
-              {daysCheckBox.map((day, index) => {
-                return (
+          <div className="mt-10 pl-24 pr-24 text-center h-screen">
+            <a className="text-primary text-2xl font-medium">
+              What days and hours will your workspace be open?
+            </a>
+            {daysCheckBox.map((day, index) => {
+              return (
+                <div key={day.dayName}>
                   <label className="label cursor-pointer">
                     <span className="label-text font-medium text-primary">
                       {day.dayName}
                     </span>
                     <input
                       type="checkbox"
-                      checked={workspace.opening_days[index]}
+                      checked={workspace.opening_days[index].open}
                       id={index.toString()}
                       onChange={HandleChangeOpeningDays}
                       className="checkbox checkbox-primary"
                     />
                   </label>
-                );
-              })}
-            </div>
-            <div className="mb-6">
-              <label className="label cursor-pointer">
-                <span className="label-text font-medium text-primary">
-                  opening hours:
-                </span>
-                <TimePicker
-                  className="text-primary"
-                  onChange={setOpeningHour}
-                  value={workspace.opening_hour}
-                />{" "}
-                -
-                <TimePicker
-                  className="text-primary"
-                  onChange={setClosingHour}
-                  value={workspace.closing_hour}
-                />
-              </label>
-            </div>
+
+                  {workspace.opening_days[index].open && (
+                    <label className="label cursor-pointer">
+                      <span className="label-text font-medium text-secondary">
+                        opening hours:
+                      </span>
+                      <TimePicker
+                        className="text-primary"
+                        onChange={(value) => handleOpeningHour(index, value)}
+                        value={workspace.opening_days[index].opening_hour}
+                      />{" "}
+                      -
+                      <TimePicker
+                        className="text-primary"
+                        onChange={(value) => handleClosingHour(index, value)}
+                        value={workspace.opening_days[index].closing_hour}
+                      />
+                    </label>
+                  )}
+                </div>
+              );
+            })}
           </div>
         );
       case 3:
         return (
-          <div className="mb-6 pl-24 pr-24 mt-10 h-screen">
+          <div className="mb-6 pl-24 pr-24 mt-10 text-center h-screen">
+            <a className="text-primary text-2xl font-medium">
+              Choose images to show your space, please select at least 5
+            </a>
             <img
               className="mask mask-circle w-36 h-36 mb-2"
               src={workspace.photo}
@@ -465,7 +481,7 @@ const AddWorkspace = () => {
         );
       case 4:
         return (
-          <div className="mb-6 pl-24 pr-24 mt-10 h-screen">
+          <div className="mb-6 pl-24 pr-24 mt-10 text-center h-screen">
             <a className="text-primary text-2xl font-medium">
               Add your workspace rooms and tables
             </a>
