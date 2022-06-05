@@ -42,8 +42,8 @@ module.exports = (sequelize) => {
       smoke_friendly: {
         type: DataTypes.BOOLEAN,
       },
-      photo: {
-        type: DataTypes.STRING,
+      photos: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
       },
       opening_days: {
         type: DataTypes.ARRAY,

@@ -137,7 +137,7 @@ const WorkspacePage = () => {
           <div className="location">{workspace.location}</div>
         </div>
         <div className="hero container mx-auto w-96 pb-10">
-          <img src={workspace.photo} />
+          <img src={workspace.photos?.[0]} />
         </div>
         <span className="text-md text-secondary">
           <p className="pb-10">{workspace.description}</p>

@@ -39,7 +39,7 @@ const AddWorkspace = () => {
     location_x: 1.0,
     location_y: 1.0,
     description: "",
-    photo: "",
+    photos: [],
     spaceType: { id: 1, name: "" },
     opening_days: [
       { open: false },
@@ -225,9 +225,15 @@ const AddWorkspace = () => {
   };
 
   const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
-    const base64Photo = await convertToBase64(file);
-    setWorkspace((workspace) => ({ ...workspace, photo: base64Photo }));
+    let filesToAdd = [];
+    let base64Photo;
+
+    for (const file of e.target.files) {
+      base64Photo = await convertToBase64(file);
+      filesToAdd.push(base64Photo);
+    }
+
+    setWorkspace((workspace) => ({ ...workspace, photos: [...workspace.photos, ...filesToAdd] }));
   };
 
   useEffect(async () => {
@@ -294,7 +300,7 @@ const AddWorkspace = () => {
     switch (step) {
       case 0:
         return (
-          <div className="pl-24 pr-24 mt-5 h-screen">
+          <div className="pl-44 pr-44 mt-5 h-screen">
             <div className="mb-6">
               <label className="block mb-2 text-lg font-medium text-primary">
                 Name:
@@ -372,13 +378,13 @@ const AddWorkspace = () => {
         );
       case 1:
         return (
-          <div className="mt-10 pl-24 pr-24 text-center h-screen">
+          <div className="mt-10 pl-44 pr-44 text-center h-screen">
             <a className="text-primary text-2xl font-medium">
               Do you have any of the following in the workspace?
             </a>
             <div className="flex flex-row justify-center mt-20">
               <div
-                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-black
+                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-indigo-400
                      ${workspace.wifi ? "border-2" : "border"} rounded-lg`}
                 onClick={handleChangeIsWifi}
               >
@@ -388,7 +394,7 @@ const AddWorkspace = () => {
                 </span>
               </div>
               <div
-                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-black
+                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-indigo-400
                      ${
                        workspace.disabled_access ? "border-2" : "border"
                      } ml-10 rounded-lg`}
@@ -400,7 +406,7 @@ const AddWorkspace = () => {
                 </span>
               </div>
               <div
-                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-black
+                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-indigo-400
                      ${
                        workspace.smoke_friendly ? "border-2" : "border"
                      } ml-10 rounded-lg`}
@@ -416,17 +422,18 @@ const AddWorkspace = () => {
         );
       case 2:
         return (
-          <div className="mt-10 pl-24 pr-24 text-center h-screen">
-            <a className="text-primary text-2xl font-medium">
+          <div className="mt-10 pl-44 pr-44 text-center h-screen">
+            <a className="text-primary text-2xl font-medium mb-10">
               What days and hours will your workspace be open?
             </a>
+            <div className="pt-10">
             {daysCheckBox.map((day, index) => {
               return (
                 <div key={day.dayName}>
                   <label className="label cursor-pointer">
-                    <span className="label-text font-medium text-primary">
+                    <a className="label-text text-primary text-lg font-medium">
                       {day.dayName}
-                    </span>
+                    </a>
                     <input
                       type="checkbox"
                       checked={workspace.opening_days[index].open}
@@ -457,31 +464,42 @@ const AddWorkspace = () => {
                 </div>
               );
             })}
+            </div>
           </div>
         );
       case 3:
         return (
-          <div className="mb-6 pl-24 pr-24 mt-10 text-center h-screen">
+          <div className="mb-6 pl-44 pr-44 mt-10 text-center h-screen">
             <a className="text-primary text-2xl font-medium">
               Choose images to show your space, please select at least 5
             </a>
-            <img
-              className="mask mask-circle w-36 h-36 mb-2"
-              src={workspace.photo}
-            />
+            <div className="flex flex-row flex-wrap justify-center mt-10">
+            {workspace.photos?.map((photo) => {
+              return <img
+                className="mask w-44 h-44 mb-2 mr-5"
+                src={photo}
+              />
+            })}
+            </div>
+
             <input
-              className="block mb-2 font-medium text-primary"
+              id="photos"
               type="file"
               label="Photo"
               name="photo"
+              multiple="multiple"
               accept=".jpeg, .png, .jpg"
               onChange={handlePhotoUpload}
+              hidden
             />
+            <label htmlFor="photos" id="button" class="mt-10 rounded-sm px-3 py-1 btn btn-primary hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+              Upload photos
+            </label>
           </div>
         );
       case 4:
         return (
-          <div className="mb-6 pl-24 pr-24 mt-10 text-center h-screen">
+          <div className="mb-6 pl-44 pr-44 mt-10 text-center h-screen">
             <a className="text-primary text-2xl font-medium">
               Add your workspace rooms and tables
             </a>

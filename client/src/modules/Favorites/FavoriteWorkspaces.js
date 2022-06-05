@@ -33,7 +33,7 @@ const FavoriteWorkspaces = () => {
              className={`flex flex-row flex-1 bg-zinc-500 hover:bg-zinc-500/90 rounded-lg p-3 mt-5 w-1/3`}
              onClick={(e) => onItemClick(workspace)}>
           <div className={'flex w-11/12'}>
-            <img className={"h-28 w-48 bg-zinc-400 rounded-md"} src={workspace.photo} alt="Man looking at item at a store"/>
+            <img className={"h-28 w-48 bg-zinc-400 rounded-md"} src={workspace.photos?.[0]} alt="Man looking at item at a store"/>
             <span className={"flex flex-col text-left flex-1 ml-8 hover:cursor-default"}>
                 <span className={"text-xl text-zinc-100"}>{workspace.name}</span>
                 <span className={"text-md text-zinc-300 mt-1.5"}>

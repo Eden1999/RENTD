@@ -3,7 +3,7 @@ import React from "react";
 function WorkspaceHero({workspace}) {
     return (
         <div className="hero"
-             style={{backgroundImage: `url(` + workspace.photo + `)`}}>
+             style={{backgroundImage: `url(` + workspace.photos?.[0] + `)`}}>
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">
