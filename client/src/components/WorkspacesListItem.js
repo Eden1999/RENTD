@@ -70,7 +70,7 @@ const WorkspacesListItem = ({
       id="listItem"
       onClick={(e) => onItemClick(e, workspace)}
     >
-      <img src={workspace.photo} className={"h-28 w-48 bg-zinc-400 rounded-md"} />
+      <img src={workspace.photos?.[0]} className={"h-28 w-48 bg-zinc-400 rounded-md"} />
       <div className={"flex flex-col text-left flex-1 ml-8"}>
         <span className={"text-xl text-zinc-100"}>{workspace.name}</span>
         <span className={"text-md text-zinc-300 mt-1.5"}>

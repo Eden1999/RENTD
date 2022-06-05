@@ -34,7 +34,7 @@ const OrdersHistory = () => {
         <div key={order.id}
              className={`flex flex-row flex-1 bg-zinc-500 hover:bg-zinc-500/90 rounded-lg p-3 mt-5 w-1/3`}>
           <div className={'flex w-11/12'}>
-            <img className={"h-28 w-48 bg-zinc-400 rounded-md"} src={order.workspace.photo} alt="Man looking at item at a store"/>
+            <img className={"h-28 w-48 bg-zinc-400 rounded-md"} src={order.workspace.photos?.[0]} alt="Man looking at item at a store"/>
             <span className={"flex flex-col text-left flex-1 ml-8 hover:cursor-default"}>
               <span className={"text-xl text-zinc-100"}>{order.workspace.name}</span>
               <span className={"text-sm text-zinc-300 mt-1.5"}>Rent start time : {order.startdate}</span>
