@@ -5,6 +5,7 @@ import { AppContext } from "../../store/AppContext";
 import useToken from "../../helpers/useToken";
 import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
+import "./AddWorkspace.scss";
 import { Wifi, SmokingRooms, Accessible, Add } from "@mui/icons-material";
 import AddAsset from "./AddAsset";
 import _ from "lodash";
@@ -444,21 +445,21 @@ const AddWorkspace = () => {
                   </label>
 
                   {workspace.opening_days[index].open && (
-                    <label className="label cursor-pointer">
-                      <span className="label-text font-medium text-secondary">
+                    <label className="label cursor-pointer justify-start">
+                      <a className="label-text font-medium text-secondary text-base">
                         opening hours:
-                      </span>
-                      <TimePicker
-                        className="text-primary"
-                        onChange={(value) => handleOpeningHour(index, value)}
-                        value={workspace.opening_days[index].opening_hour}
-                      />{" "}
-                      -
-                      <TimePicker
-                        className="text-primary"
-                        onChange={(value) => handleClosingHour(index, value)}
-                        value={workspace.opening_days[index].closing_hour}
-                      />
+                      </a>
+                      <div className="ml-5">
+                        <TimePicker
+                          onChange={(value) => handleOpeningHour(index, value)}
+                          value={workspace.opening_days[index].opening_hour}
+                        />{" "}
+                        -
+                        <TimePicker
+                          onChange={(value) => handleClosingHour(index, value)}
+                          value={workspace.opening_days[index].closing_hour}
+                        />
+                      </div>
                     </label>
                   )}
                 </div>
