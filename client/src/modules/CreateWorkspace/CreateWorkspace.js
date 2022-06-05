@@ -52,7 +52,7 @@ const CreateWorkspace = () => {
     location_x: 1.0,
     location_y: 1.0,
     description: "",
-    photo: "",
+    photos: [],
     spaceType: { id: 1, name: "" },
     opening_days: [
       { open: false },
@@ -192,11 +192,17 @@ const CreateWorkspace = () => {
   };
 
   const handleChangeDisabledAccess = () => {
-    setWorkspace((workspace) => ({ ...workspace, disabled_access: !workspace.disabled_access }));
+    setWorkspace((workspace) => ({
+      ...workspace,
+      disabled_access: !workspace.disabled_access,
+    }));
   };
 
   const HandleChangeSmokeFriendly = () => {
-    setWorkspace((workspace) => ({ ...workspace, smoke_friendly: !workspace.smoke_friendly }));
+    setWorkspace((workspace) => ({
+      ...workspace,
+      smoke_friendly: !workspace.smoke_friendly,
+    }));
   };
 
   const HandleChangeOpeningDays = ({ target: { checked, id } }) => {
@@ -232,9 +238,18 @@ const CreateWorkspace = () => {
   };
 
   const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
-    const base64Photo = await convertToBase64(file);
-    setWorkspace((workspace) => ({ ...workspace, photo: base64Photo }));
+    let filesToAdd = [];
+    let base64Photo;
+
+    for (const file of e.target.files) {
+      base64Photo = await convertToBase64(file);
+      filesToAdd.push(base64Photo);
+    }
+
+    setWorkspace((workspace) => ({
+      ...workspace,
+      photos: [...workspace.photos, ...filesToAdd],
+    }));
   };
 
   useEffect(async () => {
@@ -246,11 +261,18 @@ const CreateWorkspace = () => {
         types: ["locality"],
       };
       setTimeout(() => {
-        const autoComplete = new window.google.maps.places.Autocomplete(locationInput, options);
+        const autoComplete = new window.google.maps.places.Autocomplete(
+          locationInput,
+          options
+        );
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setCityBounds(place.geometry.viewport);
-          setWorkspace((workspace) => ({ ...workspace, city: place.name, address: "" }));
+          setWorkspace((workspace) => ({
+            ...workspace,
+            city: place.name,
+            address: "",
+          }));
           document.getElementById("address").value = "";
         });
       }, 1000);
@@ -271,7 +293,10 @@ const CreateWorkspace = () => {
         types: ["address"],
       };
       setTimeout(() => {
-        const autoComplete = new window.google.maps.places.Autocomplete(addressInput, options);
+        const autoComplete = new window.google.maps.places.Autocomplete(
+          addressInput,
+          options
+        );
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setWorkspace((workspace) => ({
@@ -293,17 +318,24 @@ const CreateWorkspace = () => {
         {isInCreateMode ? "Create new Workspace" : `Edit Workspace`}
       </div>
       <div className="mb-6">
-        <label className="block mb-2 text-lg font-medium text-primary">Name:</label>
+        <label className="block mb-2 text-lg font-medium text-primary">
+          Name:
+        </label>
         <input
           className="input input-bordered select-lg font-normal w-full text-secondary"
           value={workspace.name}
           onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, name: event.target.value }));
+            setWorkspace((workspace) => ({
+              ...workspace,
+              name: event.target.value,
+            }));
           }}
         />
       </div>
       <div className="mb-6">
-        <label className="block mb-2 text-lg font-medium text-primary">City:</label>
+        <label className="block mb-2 text-lg font-medium text-primary">
+          City:
+        </label>
         <input
           className="input input-bordered select-lg font-normal w-full text-secondary"
           type="city"
@@ -312,7 +344,9 @@ const CreateWorkspace = () => {
         />
       </div>
       <div className="mb-6">
-        <label className="block mb-2 text-lg font-medium text-primary">Address:</label>
+        <label className="block mb-2 text-lg font-medium text-primary">
+          Address:
+        </label>
         <input
           className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
           type="address"
@@ -322,12 +356,17 @@ const CreateWorkspace = () => {
         />
       </div>
       <div className="mb-6">
-        <label className="block mb-2 text-lg font-medium text-primary">Description:</label>
+        <label className="block mb-2 text-lg font-medium text-primary">
+          Description:
+        </label>
         <textarea
           className="textarea textarea-bordered 2xl:select-lg font-normal w-full text-secondary"
           value={workspace.description}
           onChange={(event) => {
-            setWorkspace((workspace) => ({ ...workspace, description: event.target.value }));
+            setWorkspace((workspace) => ({
+              ...workspace,
+              description: event.target.value,
+            }));
           }}
         />
       </div>
@@ -343,7 +382,9 @@ const CreateWorkspace = () => {
           />
         </label>
         <label className="label cursor-pointer">
-          <span className="label-text font-medium text-primary">disabled access</span>
+          <span className="label-text font-medium text-primary">
+            disabled access
+          </span>
           <input
             type="checkbox"
             checked={workspace.disabled_access}
@@ -352,7 +393,9 @@ const CreateWorkspace = () => {
           />
         </label>
         <label className="label cursor-pointer">
-          <span className="label-text font-medium text-primary">smoke friendly</span>
+          <span className="label-text font-medium text-primary">
+            smoke friendly
+          </span>
           <input
             type="checkbox"
             checked={workspace.smoke_friendly}
@@ -362,7 +405,9 @@ const CreateWorkspace = () => {
         </label>
       </div>
       <div className="mb-6">
-        <label className="block mb-2 text-lg font-medium text-primary">Environment:</label>
+        <label className="block mb-2 text-lg font-medium text-primary">
+          Environment:
+        </label>
         <select
           className="select select-bordered select-lg mb-2 font-medium w-full text-primary"
           onChange={(event, value) => {
@@ -382,7 +427,9 @@ const CreateWorkspace = () => {
           return (
             <div key={day.dayName}>
               <label className="label cursor-pointer">
-                <span className="label-text font-medium text-primary">{day.dayName}</span>
+                <span className="label-text font-medium text-primary">
+                  {day.dayName}
+                </span>
                 <input
                   type="checkbox"
                   checked={workspace.opening_days[index].open}
@@ -394,7 +441,9 @@ const CreateWorkspace = () => {
 
               {workspace.opening_days[index].open && (
                 <label className="label cursor-pointer">
-                  <span className="label-text font-medium text-secondary">opening hours:</span>
+                  <span className="label-text font-medium text-secondary">
+                    opening hours:
+                  </span>
                   <TimePicker
                     className="text-primary"
                     onChange={(value) => handleOpeningHour(index, value)}
@@ -412,16 +461,33 @@ const CreateWorkspace = () => {
           );
         })}
       </div>
-      <div className="mb-6">
-        <img className="mask mask-circle w-36 h-36 mb-2" src={workspace.photo} />
+      <div className="mb-6 pl-44 pr-44 mt-10 text-center h-screen">
+        <a className="text-primary text-2xl font-medium">
+          Choose images to show your space, please select at least 5
+        </a>
+        <div className="flex flex-row flex-wrap justify-center mt-10">
+          {workspace.photos?.map((photo) => {
+            return <img className="mask w-44 h-44 mb-2 mr-5" src={photo} />;
+          })}
+        </div>
+
         <input
-          className="block mb-2 font-medium text-primary"
+          id="photos"
           type="file"
           label="Photo"
           name="photo"
+          multiple="multiple"
           accept=".jpeg, .png, .jpg"
           onChange={handlePhotoUpload}
+          hidden
         />
+        <label
+          htmlFor="photos"
+          id="button"
+          class="mt-10 rounded-sm px-3 py-1 btn btn-primary hover:bg-gray-300 focus:shadow-outline focus:outline-none"
+        >
+          Upload photos
+        </label>
       </div>
       <div className="mb-6">
         <span className="text-primary">Add Assets</span>
@@ -441,7 +507,11 @@ const CreateWorkspace = () => {
           })}
       </div>
       <div className="flex mb-6 justify-end">
-        <button type="button" className={"btn btn-lg btn-primary"} onClick={handleSave}>
+        <button
+          type="button"
+          className={"btn btn-lg btn-primary"}
+          onClick={handleSave}
+        >
           Save
         </button>
       </div>

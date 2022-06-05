@@ -951,8 +951,11 @@
           "smoke_friendly": {
             "type": "string"
           },
-          "photo": {
-            "type": "string"
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "opening_days": {
             "type": "array",

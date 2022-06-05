@@ -17,7 +17,7 @@ describe("workspaces", () => {
     location_x: 1.0,
     location_y: 1.0,
     description: "Good place",
-    photo: "",
+    photos: [""],
     space_type_id: 1,
     opening_days: [true, false, false, false, false, false, false],
     opening_hour: "10:00",
