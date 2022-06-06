@@ -7,6 +7,7 @@ import MobileMenuItems from "./MobileMenuItems";
 import {useContext, useEffect, useState} from "react";
 import {AppContext} from "../../../store/AppContext";
 import {useNavigate} from "react-router";
+import _ from "lodash";
 
 const navigationByRole = {
     host: [
@@ -58,7 +59,7 @@ export default function ShellAppBar() {
                                    setCurrentItem={setCurrentItem}
                             />
                         </div>
-                        <ProfileMenu />
+                        { !_.isEmpty(user) && <ProfileMenu />}
                     </div>
                 </div>
                 <MobileMenuItems navigation={navigationItems} />
