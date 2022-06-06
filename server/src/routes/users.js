@@ -23,6 +23,8 @@ router.post('/validate-token', UsersController.validateToken);
 
 router.post('/update-password', UsersController.updatePassword);
 
+router.post('/change-password', UsersController.changePassword);
+
 router.post('/update-username', UsersController.updateUsername);
 
 router.post('/upload-profile-image', UsersController.uploadProfilePhoto);
