@@ -69,6 +69,9 @@ CREATE TABLE IF NOT EXISTS public.users
     photo character varying COLLATE pg_catalog."default" NOT NULL,
     token character varying COLLATE pg_catalog."default" NULL,
     favorite_workspaces INTEGER[],
+    card_number character varying COLLATE pg_catalog."default",
+    card_expiration_month smallint,
+    card_expiration_year smallint,
     CONSTRAINT users_pkey PRIMARY KEY (id),
     UNIQUE(username),
     UNIQUE(email)

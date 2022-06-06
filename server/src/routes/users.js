@@ -5,7 +5,7 @@ const UsersController = require('../controllers/users');
 
 router.get('/', UsersController.getUsersList);
 
-router.get('/:id', UsersController.getUserById);
+router.get('/:id(\\d+)', UsersController.getUserById);
 
 router.post('/register', UsersController.registerNewUser);
 
@@ -26,5 +26,7 @@ router.post('/update-password', UsersController.updatePassword);
 router.post('/update-username', UsersController.updateUsername);
 
 router.post('/upload-profile-image', UsersController.uploadProfilePhoto);
+
+router.get('/getCardInfo', UsersController.getCreditCardInfo);
 
 module.exports = router;
