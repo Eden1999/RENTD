@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const sendMail = require('../utils/sendMail.js');
 const randToken = require('rand-token');
 const {hash} = require("bcrypt");
+const creditcardutils = require('creditcardutils');
 
 const getUsersList = (req, res) => {
     sequelize.models.users
@@ -18,7 +19,6 @@ const getUsersList = (req, res) => {
 
 const getUserById = (req, res) => {
     const {token} = req.headers;
-
     const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
     // check if user is already exist
@@ -47,7 +47,7 @@ const getUserById = (req, res) => {
 
 const registerNewUser = async (req, res) => {
     try {
-        const {username, password, email, isHost, photo} = req.body;
+        const {username, password, email, isHost, photo, cardNumber, expirationYear, expirationMonth} = req.body;
         var EnteredPassword = bcrypt.hashSync(password, 10);
 
         // TODO: chnage id and is_host
@@ -57,6 +57,9 @@ const registerNewUser = async (req, res) => {
             is_host: isHost,
             password: EnteredPassword,
             photo,
+            card_number: cardNumber,
+            card_expiration_year: expirationYear,
+            card_expiration_month: expirationMonth
         };
 
         // check if user is already exist
@@ -294,6 +297,30 @@ const RemoveWorkspaceFromFavorites = async (req, res) => {
     });
 }
 
+const getCreditCardInfo = (req, res) => {
+    const {token} = req.headers;
+    const id = jwt.verify(token, process.env.SECRET_KEY);
+    // Check if user already exists
+    sequelize.models.users
+        .findOne({where: {id: id}})
+        .then((user) => {
+            if (user.card_number) {
+                res.status(200).send(
+                    {
+                        card_number: creditcardutils.formatCardNumber(user.card_number).replace(/\S(?=.{4,}$)/g, '-'),
+                        expiration_month: user.card_expiration_month,
+                        expiration_year: user.card_expiration_year
+                    });
+            } else {
+                res.status(204).send();
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(err.status || 500).send(err);
+        })
+}
+
 module.exports = {
     getUsersList,
     getUserById,
@@ -306,5 +333,6 @@ module.exports = {
     uploadProfilePhoto,
     updateUsername,
     addWorkspaceToFavorites,
-    RemoveWorkspaceFromFavorites
+    RemoveWorkspaceFromFavorites,
+    getCreditCardInfo
 };
