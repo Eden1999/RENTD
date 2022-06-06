@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS public.workspaces
     opening_days json[] NOT NULL,
     photos character varying[] COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT workspace_pkey PRIMARY KEY (id)
-);
+)
 
 TABLESPACE pg_default;
 

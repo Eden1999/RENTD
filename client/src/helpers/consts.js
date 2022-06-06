@@ -9,3 +9,8 @@ export const defaultRoutes = {
     'GUEST' : 'homepage',
     'NOT_SIGNED' : 'login'
 }
+
+export const workspaceListType = {
+    history : 'HISTORY',
+    general : 'GENERAL',
+}
