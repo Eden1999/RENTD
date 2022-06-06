@@ -12,7 +12,7 @@ import { StarBorderRounded, Wifi, SmokeFree, SmokingRooms, Accessible } from "@m
 import Orders from "../Orders/Orders";
 
 import "./WorkspacePage.scss";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField } from "@mui/material";
+import { Rating } from "@mui/material";
 import { AppContext } from "store/AppContext";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -24,9 +24,6 @@ const WorkspacePage = () => {
   const [comment, setComment] = useState("");
   const [{ user }, dispatch] = useContext(AppContext);
   const [workspace, setWorkspace] = useState(useLocation().state.workspace)
-  const {
-    state: { isEditable },
-  } = useLocation();
   const navigate = useNavigate();
   const { token, setToken } = useToken();
 
@@ -106,7 +103,7 @@ const WorkspacePage = () => {
     <div className="flex flex-column justify-center h-full px-20 py-10 2xl:py-20">
     <div>
         <div className="flex flex-row items-center">
-        {isEditable && (<span>
+        {workspace.host_id === user.id.toString() && (<span>
             <IconButton id="editIcon" aria-label="edit workspace" onClick={(e) => onEditClick(e, workspace)}>
               <EditIcon htmlColor="#4AA0D5"/>
             </IconButton>

@@ -134,7 +134,7 @@ function PaymentView() {
                         <img className={"rounded-md mb-5"} src={workspace.photos?.[0]} alt={workspace.name} />
                         <span className={"flex flex-col text-left flex-1"}>
                             <span className={"font-semibold text-2xl text-primary mt-1.5"}>{workspace.name}, {workspace.city}, {workspace.address}</span>
-                            <span className={"text-secondary mt-1.5"}>{rentingDetails.startdate.toLocaleString()} - {rentingDetails.enddate.toLocaleString()}</span>
+                            <span className={"text-secondary mt-1.5"}>{new Date(rentingDetails.startdate).toLocaleString()} - {new Date(rentingDetails.enddate).toLocaleString()}</span>
                             <span className={"text-secondary mt-1.5"}>{rentingDetails.capacity} guests</span>
                             <div className={"divider"} />
                             <span className={"font-semibold text-2xl text-primary"}>Total: {getTotalPrice()}₪ </span>

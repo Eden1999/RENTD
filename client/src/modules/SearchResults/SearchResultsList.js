@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import WorkspacesListItem from "../../components/WorkspacesListItem";
 import Axios from "axios";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import WorkspacesList from "../../components/WorkspacesList";
+import {workspaceListType} from "../../helpers/consts";
 
 const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
   const [workspaces, setWorkspaces] = useState([]);
@@ -69,7 +70,7 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
   return (
     <div className={"flex h-full"}>
       <FormGroup
-        className={"flex flex-col text-primary px-8 pt-6 bg-secondary/30 rounded-tr-lg h-full"}
+        className={"w-1/4 text-primary px-8 pt-6 bg-secondary/30 rounded-tr-lg h-full"}
       >
         {Object.values(filters).map(({ label, value, key }) => (
           <FormControlLabel
@@ -85,15 +86,14 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
           />
         ))}
       </FormGroup>
-      <div className={"text-white flex flex-col flex-1 px-12"}>
-        {filteredWorkspaces.map((workspace) => (
-          <WorkspacesListItem
-            key={workspace.id}
-            workspace={workspace}
-            hoveredOnMap={workspace.id == hoveredMarkerId}
-            setHoveredWorkspaceId={setHoveredWorkspaceId}
-          />
-        ))}
+      <div className={"w-4/5 px-12"}>
+        <WorkspacesList
+          workspaces={filteredWorkspaces}
+          workspaceCardBody={ workspaceListType.general}
+          setMapMarkers={setMapMarkers}
+          hoveredMarkerId={hoveredMarkerId}
+          setHoveredWorkspaceId={setHoveredWorkspaceId}
+        />
       </div>
     </div>
   );
