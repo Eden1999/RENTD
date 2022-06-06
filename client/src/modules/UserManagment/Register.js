@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { AppContext } from "../../store/AppContext";
 import Checkbox from "@mui/material/Checkbox";
 import useToken from "../../helpers/useToken";
+import { formatCardNumber } from 'creditcardutils'
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,11 +15,15 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isHost, setIsHost] = useState(false);
+  const [saveCardInfo, setSaveCardInfo] = useState(false);
+  const [cardNumber, setCardNumber] = useState("");
+  const [expirationMonth, setExpirationMonth] = useState("");
+  const [expirationYear, setExpirationYear] = useState("");
   const [photo, setPhoto] = useState("");
   const { token, setToken } = useToken();
 
   const handleRegister = () => {
-    const query = { username, password, email, isHost, photo };
+    const query = { username, password, email, isHost, photo, cardNumber, expirationMonth, expirationYear};
 
     axios
       .post("http://localhost:8000/users/register", query)
@@ -68,64 +73,110 @@ const Register = () => {
   };
 
   return (
-      <div className="w-1/3 self-center m-8">
-          <div className="mb-12">
-                <span className="font-semibold text-6xl text-primary">
-                  Register
-                </span>
+    <div className="w-1/3 self-center m-8">
+      <div className="mb-12">
+        <span className="font-semibold text-6xl text-primary">
+          Register
+        </span>
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">
+          Email Address:
+        </label>
+        <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+          placeholder={'email@address.com'}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">
+          User Name:
+        </label>
+        <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+          placeholder={'Username'}
+          onChange={(event) => setUsername(event.target.value)}
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium text-primary">
+          Password:
+        </label>
+        <input type="password"
+          className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+          placeholder={'******'}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+      </div>
+      <div className="mb-6">
+        <label className="label cursor-pointer">
+          <span className="label-text text-lg font-medium text-primary">I'm a host</span>
+          <input type="checkbox"
+            checked={isHost}
+            onChange={handleIsHostChange}
+            className="checkbox checkbox-primary"
+          />
+        </label>
+      </div>
+      <div className="mb-6">
+        <label className="label cursor-pointer">
+          <span className="label-text text-lg font-medium text-primary">Save credit card info</span>
+          <input type="checkbox"
+            checked={saveCardInfo}
+            onChange={(e) => {setSaveCardInfo(!saveCardInfo)}}
+            className="checkbox checkbox-primary"
+          />
+        </label>
+      </div>
+      { saveCardInfo && <div className="flex mt-2 select-none">
+        <div className="flex mt-4 mb-6 justify-between">
+          <div className="w-1/2">
+            <label className="block mb-2 text-lg font-medium text-primary">
+              Card Number:
+            </label>
+            <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+              placeholder={'XXXX XXXX XXXX XXXX'}
+              value={formatCardNumber(cardNumber)}
+              onChange={(e) => {setCardNumber(e.target.value) }}
+            />
           </div>
-          <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                  Email Address:
-              </label>
-              <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                     placeholder={'email@address.com'}
-                     onChange={(event) => setEmail(event.target.value)}
-              />
-          </div>
-          <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                  User Name:
-              </label>
-              <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                     placeholder={'email@address.com'}
-                     onChange={(event) => setUsername(event.target.value)}
-              />
-          </div>
-          <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                  Password:
-              </label>
-              <input type="password"
-                     className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                     placeholder={'******'}
-                     onChange={(event) => setPassword(event.target.value)}
-              />
-          </div>
-          <div className="mb-6">
-              <label className="label cursor-pointer">
-                  <span className="label-text font-medium text-primary">register as a host</span>
-                  <input type="checkbox"
-                         checked={isHost}
-                         onChange={handleIsHostChange}
-                         className="checkbox checkbox-primary"
-                  />
-              </label>
-          </div>
-          <div className="mb-6">
-              <img class="mask mask-circle w-36 h-36 mb-2" src={photo} />
-              <input
-                  className="block mb-2 font-medium text-primary"
-                  type="file"
-                  label="Photo"
-                  name="photo"
-                  accept=".jpeg, .png, .jpg"
-                  onChange={handlePhotoUpload}
+          <div className="w-1/2 ml-6">
+            <label className="block mb-2 text-lg font-medium text-primary">
+              Expiration:
+            </label>
+            <div className="flex">
+              <div className="w-1/2">
+                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                  value={expirationMonth}
+                  onChange={(e) => { setExpirationMonth(e.target.value) }}
+                  placeholder={'MM'}
                 />
+              </div>
+              <div className="w-1/2 ml-6">
+                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                  value={expirationYear}
+                  onChange={(e) => { setExpirationYear(e.target.value) }}
+                  placeholder={'YY'}
+                />
+              </div>
+            </div>
           </div>
-          <div className="flex mb-6 justify-end">
-              <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
-          </div>
+        </div>
+      </div>
+    }
+      <div className="mb-6">
+        <img className="mask mask-circle w-36 h-36 mb-2" src={photo} />
+        <input
+          className="block mb-2 font-medium text-primary"
+          type="file"
+          label="Photo"
+          name="photo"
+          accept=".jpeg, .png, .jpg"
+          onChange={handlePhotoUpload}
+        />
+      </div>
+      <div className="flex mb-6 justify-end">
+        <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
+      </div>
     </div>
   );
 };

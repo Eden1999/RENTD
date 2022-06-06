@@ -29,6 +29,15 @@ module.exports = (sequelize) => {
       },
       favorite_workspaces: {
         type: DataTypes.ARRAY,
+      },
+      card_number: {
+        type: DataTypes.STRING,
+      },
+      card_expiration_month: {
+        type: DataTypes.SMALLINT
+      },
+      card_expiration_year: {
+        type: DataTypes.SMALLINT
       }
     },
     {

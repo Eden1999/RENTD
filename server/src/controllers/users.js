@@ -1,9 +1,10 @@
-const { sequelize } = require("../config/sequelize");
+const {sequelize} = require("../config/sequelize");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const sendMail = require('../utils/sendMail.js');
 const randToken = require('rand-token');
-const { hash } = require("bcrypt");
+const {hash} = require("bcrypt");
+const creditcardutils = require('creditcardutils');
 
 const getUsersList = (req, res) => {
     sequelize.models.users
@@ -47,7 +48,7 @@ const getUserById = (req, res) => {
 
 const registerNewUser = async (req, res) => {
     try {
-        const { username, password, email, isHost, photo } = req.body;
+        const {username, password, email, isHost, photo, cardNumber, expirationYear, expirationMonth} = req.body;
         var EnteredPassword = bcrypt.hashSync(password, 10);
 
         // TODO: chnage id and is_host
@@ -57,11 +58,14 @@ const registerNewUser = async (req, res) => {
             is_host: isHost,
             password: EnteredPassword,
             photo,
+            card_number: cardNumber,
+            card_expiration_year: expirationYear,
+            card_expiration_month: expirationMonth
         };
 
         // check if user is already exist
         sequelize.models.users
-            .findOne({ where: { email: email } })
+            .findOne({where: {email: email}})
             .then((user) => {
                 if (user) {
                     res.status(400).send("User is already exist!");
@@ -71,7 +75,7 @@ const registerNewUser = async (req, res) => {
                         .create(newUser)
                         .then((addedNewUser) => {
                             const token = jwt.sign(addedNewUser.id, process.env.SECRET_KEY);
-                            res.status(200).send({ token, user: addedNewUser });
+                            res.status(200).send({token, user: addedNewUser});
                         })
                         .catch((err) => {
                             console.log(err);
@@ -91,7 +95,7 @@ const registerNewUser = async (req, res) => {
 
 const signIn = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const {email, password} = req.body;
 
         if (!email || !password) {
             return res.status(500).send("must enter params");
@@ -99,7 +103,7 @@ const signIn = async (req, res) => {
 
         // check if user is already exist
         sequelize.models.users
-            .findOne({ where: { email: email } })
+            .findOne({where: {email: email}})
             .then((user) => {
                 if (user) {
                     bcrypt.compare(password, user.password, (err, result) => {
@@ -109,7 +113,7 @@ const signIn = async (req, res) => {
                         } else if (result === true) {
                             //Checking if credentials match
                             const token = jwt.sign(user.id, process.env.SECRET_KEY);
-                            return res.status(200).send({ token, user });
+                            return res.status(200).send({token, user});
                         } else {
                             //Declaring the errors
                             if (result != true) return res.status(400).send("please enter correct password!");
@@ -146,23 +150,23 @@ const editUser = async ({ body }, res) => {
 };
 
 const resetPassword = async (req, res) => {
-    const { email } = req.body;
+    const {email} = req.body;
 
     if (!email) {
         return res.status(500).send("must enter params");
     }
 
     sequelize.models.users
-        .findOne({ where: { email: email } })
+        .findOne({where: {email: email}})
         .then(async (user) => {
             if (user) {
                 const token = randToken.generate(20);
                 const sent = await sendMail(email, token);
                 if (sent !== '0') {
-                    user.set({ token });
+                    user.set({token});
                     await user.save();
                     const resToken = jwt.sign(user.id, process.env.SECRET_KEY);
-                    return res.status(200).send({ token: resToken, id: user.id });
+                    return res.status(200).send({token: resToken, id: user.id});
                 } else {
                     return res.status(500).send('cannot send email');
                 }
@@ -173,9 +177,9 @@ const resetPassword = async (req, res) => {
 };
 
 const validateToken = async (req, res) => {
-    const { token, id } = req.body;
+    const {token, id} = req.body;
 
-    sequelize.models.users.findOne({ where: { id } }).then(async (user) => {
+    sequelize.models.users.findOne({where: {id}}).then(async (user) => {
         if (user) {
             if (user.token === token) {
                 return res.sendStatus(200);
@@ -190,13 +194,13 @@ const validateToken = async (req, res) => {
 }
 
 const updatePassword = async (req, res) => {
-    const { id, password } = req.body;
-    sequelize.models.users.findOne({ where: { id } }).then((user) => {
+    const {id, password} = req.body;
+    sequelize.models.users.findOne({where: {id}}).then((user) => {
         if (user) {
             const saltRounds = 10;
             bcrypt.genSalt(saltRounds, (err, salt) => {
                 bcrypt.hash(password, salt, async (err, hash) => {
-                    user.set({ password: hash });
+                    user.set({password: hash});
                     await user.save();
                     return res.status(200).send('password is updated');
                 });
@@ -241,10 +245,10 @@ const changePassword = async (req, res) => {
 };
 const updateUsername = async (req, res) => {
     console.log(req.body)
-    const { id, username } = req.body;
-    sequelize.models.users.findOne({ where: { id } }).then(async (user) => {
+    const {id, username} = req.body;
+    sequelize.models.users.findOne({where: {id}}).then(async (user) => {
         if (user) {
-            user.set({ username });
+            user.set({username});
             await user.save();
             return res.status(200).send('username is updated');
         } else {
@@ -254,11 +258,11 @@ const updateUsername = async (req, res) => {
 };
 
 const uploadProfilePhoto = async (req, res) => {
-    const { id, photo } = req.body;
+    const {id, photo} = req.body;
 
-    sequelize.models.users.findOne({ where: { id } }).then(async (user) => {
+    sequelize.models.users.findOne({where: {id}}).then(async (user) => {
         if (user) {
-            await user.set({ photo });
+            await user.set({photo});
             return res.status(200).send('profile photo had been update');
         } else {
             return res.status(404).send('user is not registered');
@@ -267,40 +271,38 @@ const uploadProfilePhoto = async (req, res) => {
 }
 
 const addWorkspaceToFavorites = async (req, res) => {
-    const { workspaceId } = req.body;
-    const { token } = req.headers;
+    const {workspaceId} = req.body;
+    const {token} = req.headers;
 
     const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
     // check if user exists
     sequelize.models.users
-        .findOne({ where: { id: decodeId } })
-        .then(async (user) => {
-            if (user) {
-                try {
-                    await user.update({
-                        favorite_workspaces: sequelize.fn('array_append',
-                            sequelize.col('favorite_workspaces'), workspaceId)
-                    });
-                    return res.status(200).send('Added to favorites successfully!');
-                } catch (err) {
-                    return res.status(500).send('Something went wrong! Workspace was not added to list');
-                }
-            } else {
-                let err = "user not found";
-                console.log(err);
-                return res.status(500).send(err);
+    .findOne({where: {id: decodeId}})
+    .then(async (user) => {
+        if (user) {
+            try {
+                await user.update({favorite_workspaces: sequelize.fn('array_append',
+                    sequelize.col('favorite_workspaces'), workspaceId)});
+                return res.status(200).send('Added to favorites successfully!');
+            } catch (err) {
+                return res.status(500).send('Something went wrong! Workspace was not added to list');
             }
-        })
-        .catch((err) => {
+        } else {
+            let err = "user not found";
             console.log(err);
-            return res.status(err.status || 500).send(err);
-        });
+            return res.status(500).send(err);
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err);
+    });
 }
 
 const RemoveWorkspaceFromFavorites = async (req, res) => {
-    const { workspaceId } = req.body;
-    const { token } = req.headers;
+    const {workspaceId} = req.body;
+    const {token} = req.headers;
 
     const decodeId = jwt.verify(token, process.env.SECRET_KEY);
 
@@ -323,11 +325,40 @@ const RemoveWorkspaceFromFavorites = async (req, res) => {
                 console.log(err);
                 return res.status(500).send(err);
             }
+        } else {
+            let err = "user not found";
+            console.log(err);
+            return res.status(500).send(err);
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err);
+    });
+}
+
+const getCreditCardInfo = (req, res) => {
+    const {token} = req.headers;
+    const id = jwt.verify(token, process.env.SECRET_KEY);
+    // Check if user already exists
+    sequelize.models.users
+        .findOne({where: {id: id}})
+        .then((user) => {
+            if (user.card_number) {
+                res.status(200).send(
+                    {
+                        card_number: creditcardutils.formatCardNumber(user.card_number).replace(/\S(?=.{4,}$)/g, '-'),
+                        expiration_month: user.card_expiration_month,
+                        expiration_year: user.card_expiration_year
+                    });
+            } else {
+                res.status(204).send();
+            }
         })
         .catch((err) => {
             console.log(err);
             return res.status(err.status || 500).send(err);
-        });
+        })
 }
 
 module.exports = {
@@ -343,5 +374,6 @@ module.exports = {
     updateUsername,
     addWorkspaceToFavorites,
     RemoveWorkspaceFromFavorites,
-    changePassword
+    getCreditCardInfo,
+changePassword
 };
