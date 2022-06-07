@@ -1,7 +1,6 @@
 import Login from "../../modules/UserManagment/Login";
 import Profile from "../../modules/UserManagment/Profile";
 import Register from "../../modules/UserManagment/Register";
-import CreateWorkspace from "../../modules/CreateWorkspace/CreateWorkspace";
 import SearchResultsView from "../../modules/SearchResults/SearchResultsView";
 import WorkspacePage from "../../modules/WorkspacePage/WorkspacePage";
 import HomepageView from '../../modules/Homepage/HomepageView'
@@ -52,7 +51,7 @@ const routes = [
   },
   {
     path: "/manage/editWorkspace",
-    Component: <CreateWorkspace />,
+    Component: <AddWorkspace />,
     allowed: [userTypes.host],
   },
   {

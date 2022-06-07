@@ -10,7 +10,6 @@ import {
     IconButton,
   } from "@mui/material";
   import DeleteIcon from '@mui/icons-material/Delete';
-  import "./CreateWorkspace.scss";
   import Axios from "axios";
 import {Add} from "@mui/icons-material";
 
