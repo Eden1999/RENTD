@@ -17,8 +17,8 @@ const Register = () => {
   const [isHost, setIsHost] = useState(false);
   const [saveCardInfo, setSaveCardInfo] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
-  const [expirationMonth, setExpirationMonth] = useState("");
-  const [expirationYear, setExpirationYear] = useState("");
+  const [expirationMonth, setExpirationMonth] = useState(0);
+  const [expirationYear, setExpirationYear] = useState(0);
   const [photo, setPhoto] = useState("");
   const { token, setToken } = useToken();
 
