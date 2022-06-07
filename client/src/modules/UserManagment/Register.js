@@ -7,6 +7,7 @@ import { AppContext } from "../../store/AppContext";
 import Checkbox from "@mui/material/Checkbox";
 import useToken from "../../helpers/useToken";
 import { formatCardNumber } from 'creditcardutils'
+import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,13 +18,13 @@ const Register = () => {
   const [isHost, setIsHost] = useState(false);
   const [saveCardInfo, setSaveCardInfo] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
-  const [expirationMonth, setExpirationMonth] = useState(0);
-  const [expirationYear, setExpirationYear] = useState(0);
+  const [expirationMonth, setExpirationMonth] = useState("");
+  const [expirationYear, setExpirationYear] = useState("");
   const [photo, setPhoto] = useState("");
   const { token, setToken } = useToken();
 
   const handleRegister = () => {
-    const query = { username, password, email, isHost, photo, cardNumber, expirationMonth, expirationYear};
+    const query = { username, password, email, isHost, photo, cardNumber, expirationMonth, expirationYear, saveCardInfo };
 
     axios
       .post("http://localhost:8000/users/register", query)
@@ -44,7 +45,13 @@ const Register = () => {
         navigate(res.data.user.is_host ? "/my-spaces" : "/homepage");
       })
       .catch((err) => {
-        alert(err.response.data);
+        toast.error(err.response.data.message, {
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+        });
       });
   };
 
@@ -122,12 +129,12 @@ const Register = () => {
           <span className="label-text text-lg font-medium text-primary">Save credit card info</span>
           <input type="checkbox"
             checked={saveCardInfo}
-            onChange={(e) => {setSaveCardInfo(!saveCardInfo)}}
+            onChange={(e) => { setSaveCardInfo(!saveCardInfo) }}
             className="checkbox checkbox-primary"
           />
         </label>
       </div>
-      { saveCardInfo && <div className="flex mt-2 select-none">
+      {saveCardInfo && <div className="flex mt-2 select-none">
         <div className="flex mt-4 mb-6 justify-between">
           <div className="w-1/2">
             <label className="block mb-2 text-lg font-medium text-primary">
@@ -136,7 +143,7 @@ const Register = () => {
             <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
               placeholder={'XXXX XXXX XXXX XXXX'}
               value={formatCardNumber(cardNumber)}
-              onChange={(e) => {setCardNumber(e.target.value) }}
+              onChange={(e) => { setCardNumber(e.target.value) }}
             />
           </div>
           <div className="w-1/2 ml-6">
@@ -145,15 +152,21 @@ const Register = () => {
             </label>
             <div className="flex">
               <div className="w-1/2">
-                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                  value={expirationMonth}
+                <input
+                  minLength={2}
+                  maxLength={2}
+                  className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                  value={expirationMonth.replace(/[^\d]/, '')}
                   onChange={(e) => { setExpirationMonth(e.target.value) }}
                   placeholder={'MM'}
                 />
               </div>
               <div className="w-1/2 ml-6">
-                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                  value={expirationYear}
+                <input
+                  minLength={2}
+                  maxLength={2}
+                  className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                  value={expirationYear.replace(/[^\d]/, '')}
                   onChange={(e) => { setExpirationYear(e.target.value) }}
                   placeholder={'YY'}
                 />
@@ -162,7 +175,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-    }
+      }
       <div className="mb-6">
         <img className="mask mask-circle w-36 h-36 mb-2" src={photo} />
         <input
