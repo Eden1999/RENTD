@@ -139,6 +139,12 @@ const Orders = ({ workspace }) => {
       });
   });
 
+  const optionChanged = useCallback(async (e) => {
+    if (e.fullName === "currentDate"){
+      setCurrentDate(e.value)
+    }
+  })
+
   const onOrderFormOpening = (e) => {
     const { form } = e;
     let { startDate, endDate, userName } = e.appointmentData;
@@ -237,6 +243,7 @@ const Orders = ({ workspace }) => {
           onAppointmentAdded={continueToPayment}
           onAppointmentUpdated={HandalingUpdateOrder}
           onAppointmentDeleted={HandalingDeleteOrder}
+          onOptionChanged={optionChanged}
         >
           <Editing allowAdding={true} />
           <Resource fieldExpr="asset_id" allowMultiple={false} dataSource={assets} label="Assets" />
