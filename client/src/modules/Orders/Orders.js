@@ -8,7 +8,7 @@ import Appointment from "./Appointment.js";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
 
-const views = ["day", "week"];
+const views = ["day"];
 const groups = ["asset_id"];
 
 const convertHourToFloat = (dateString) => {
