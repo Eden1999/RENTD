@@ -3,7 +3,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { AppContext } from "../../store/AppContext";
 import useToken from "../../helpers/useToken";
-import "./CreateWorkspace.scss";
+import "./AddWorkspace.scss";
 import "./AddWorkspace.scss";
 import BasicInfoForm from "./BasicInfoForm";
 import _ from "lodash";
