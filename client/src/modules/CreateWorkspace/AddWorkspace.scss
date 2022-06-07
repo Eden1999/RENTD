@@ -3,3 +3,7 @@
     border-radius: 10px;
     border-color: #818cf8;
 }
+
+.step:hover::after {
+    background-color: #5856d6;
+}

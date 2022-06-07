@@ -3,26 +3,17 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { AppContext } from "../../store/AppContext";
 import useToken from "../../helpers/useToken";
-import { Link } from "react-router-dom";
 import "./CreateWorkspace.scss";
 import "./AddWorkspace.scss";
-import { Wifi, SmokingRooms, Accessible, Add } from "@mui/icons-material";
-import AddAsset from "./AddAsset";
+import BasicInfoForm from "./BasicInfoForm";
 import _ from "lodash";
-import TimePicker from "react-time-picker";
 import Axios from "axios";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-
-const daysCheckBox = [
-  { dayName: "sunday" },
-  { dayName: "monday" },
-  { dayName: "tuesday" },
-  { dayName: "wednesday" },
-  { dayName: "thursday" },
-  { dayName: "friday" },
-  { dayName: "saturday" },
-];
+import TagsForm from "./TagsForm";
+import OpenDaysForm from "./OpenDaysForm";
+import UploadImages from "./UploadImages";
+import AddAssets from "./AddAssets";
 
 const AddWorkspace = () => {
   let location = useLocation();
@@ -55,12 +46,9 @@ const AddWorkspace = () => {
     assets: [],
   });
   const [isInCreateMode, setIsInCreateMode] = useState(true);
-  const [location_x, setLocationX] = useState(1.0);
-  const [location_y, setLocationY] = useState(1.0);
   const [cityBounds, setCityBounds] = useState({});
   const { token } = useToken();
   const [spaceTypes, setSpaceTypes] = useState([{ id: 1, name: "" }]);
-  const [showAddAsset, setShowAddAsset] = useState(false);
   const [editProps, setEditProps] = useState({});
   const [step, setStep] = useState(0);
 
@@ -102,6 +90,12 @@ const AddWorkspace = () => {
     }
 
     return isFormValid;
+  };
+
+  const handleImageDelete = (index) => {
+    let newArray = [...workspace.photos];
+    newArray.splice(index, 1);
+    setWorkspace((workspace) => ({ ...workspace, photos: newArray }));
   };
 
   const handleChangeAsset = (asset, index) => {
@@ -234,7 +228,10 @@ const AddWorkspace = () => {
       filesToAdd.push(base64Photo);
     }
 
-    setWorkspace((workspace) => ({ ...workspace, photos: [...workspace.photos, ...filesToAdd] }));
+    setWorkspace((workspace) => ({
+      ...workspace,
+      photos: [...workspace.photos, ...filesToAdd],
+    }));
   };
 
   useEffect(async () => {
@@ -301,80 +298,13 @@ const AddWorkspace = () => {
     switch (step) {
       case 0:
         return (
-          <div className="pl-44 pr-44 mt-5 h-screen">
-            <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                Name:
-              </label>
-              <input
-                className="input input-bordered select-lg font-normal w-full text-secondary"
-                value={workspace.name}
-                onChange={(event) => {
-                  setWorkspace((workspace) => ({
-                    ...workspace,
-                    name: event.target.value,
-                  }));
-                }}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                City:
-              </label>
-              <input
-                className="input input-bordered select-lg font-normal w-full text-secondary"
-                type="city"
-                id="city"
-                {...editProps.city}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                Address:
-              </label>
-              <input
-                className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
-                type="address"
-                id="address"
-                disabled={!workspace.city}
-                {...editProps.address}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                Description:
-              </label>
-              <textarea
-                className="textarea textarea-bordered 2xl:select-lg font-normal w-full text-secondary"
-                value={workspace.description}
-                onChange={(event) => {
-                  setWorkspace((workspace) => ({
-                    ...workspace,
-                    description: event.target.value,
-                  }));
-                }}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-lg font-medium text-primary">
-                Environment:
-              </label>
-              <select
-                className="select select-bordered select-lg mb-2 font-medium w-full text-primary"
-                onChange={(event, value) => {
-                  setWorkspace((workspace) => ({
-                    ...workspace,
-                    spaceType: value,
-                  }));
-                }}
-              >
-                {spaceTypes.map((item, index) => (
-                  <option value={index} key={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="text-left pl-44 pr-44 mt-5 h-screen">
+            <BasicInfoForm
+              editProps={editProps}
+              setWorkspace={setWorkspace}
+              spaceTypes={spaceTypes}
+              workspace={workspace}
+            ></BasicInfoForm>
           </div>
         );
       case 1:
@@ -383,42 +313,12 @@ const AddWorkspace = () => {
             <a className="text-primary text-2xl font-medium">
               Do you have any of the following in the workspace?
             </a>
-            <div className="flex flex-row justify-center mt-20">
-              <div
-                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-indigo-400
-                     ${workspace.wifi ? "border-2" : "border"} rounded-lg`}
-                onClick={handleChangeIsWifi}
-              >
-                <Wifi />
-                <span className="label-text font-medium text-primary">
-                  wifi
-                </span>
-              </div>
-              <div
-                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-indigo-400
-                     ${
-                       workspace.disabled_access ? "border-2" : "border"
-                     } ml-10 rounded-lg`}
-                onClick={handleChangeDisabledAccess}
-              >
-                <Accessible />
-                <span className="label-text font-medium text-primary">
-                  disabled access
-                </span>
-              </div>
-              <div
-                className={`label cursor-pointer flex flex-column justify-center w-40 h-40 border-indigo-400
-                     ${
-                       workspace.smoke_friendly ? "border-2" : "border"
-                     } ml-10 rounded-lg`}
-                onClick={HandleChangeSmokeFriendly}
-              >
-                <SmokingRooms />
-                <span className="label-text font-medium text-primary">
-                  smoke friendly
-                </span>
-              </div>
-            </div>
+            <TagsForm
+              HandleChangeSmokeFriendly={HandleChangeSmokeFriendly}
+              handleChangeDisabledAccess={handleChangeDisabledAccess}
+              handleChangeIsWifi={handleChangeIsWifi}
+              workspace={workspace}
+            />
           </div>
         );
       case 2:
@@ -427,45 +327,12 @@ const AddWorkspace = () => {
             <a className="text-primary text-2xl font-medium mb-10">
               What days and hours will your workspace be open?
             </a>
-            <div className="pt-10">
-            {daysCheckBox.map((day, index) => {
-              return (
-                <div key={day.dayName}>
-                  <label className="label cursor-pointer">
-                    <a className="label-text text-primary text-lg font-medium">
-                      {day.dayName}
-                    </a>
-                    <input
-                      type="checkbox"
-                      checked={workspace.opening_days[index].open}
-                      id={index.toString()}
-                      onChange={HandleChangeOpeningDays}
-                      className="checkbox checkbox-primary"
-                    />
-                  </label>
-
-                  {workspace.opening_days[index].open && (
-                    <label className="label cursor-pointer justify-start">
-                      <a className="label-text font-medium text-secondary text-base">
-                        opening hours:
-                      </a>
-                      <div className="ml-5">
-                        <TimePicker
-                          onChange={(value) => handleOpeningHour(index, value)}
-                          value={workspace.opening_days[index].opening_hour}
-                        />{" "}
-                        -
-                        <TimePicker
-                          onChange={(value) => handleClosingHour(index, value)}
-                          value={workspace.opening_days[index].closing_hour}
-                        />
-                      </div>
-                    </label>
-                  )}
-                </div>
-              );
-            })}
-            </div>
+            <OpenDaysForm
+              HandleChangeOpeningDays={HandleChangeOpeningDays}
+              handleClosingHour={handleClosingHour}
+              handleOpeningHour={handleOpeningHour}
+              workspace={workspace}
+            />
           </div>
         );
       case 3:
@@ -474,28 +341,11 @@ const AddWorkspace = () => {
             <a className="text-primary text-2xl font-medium">
               Choose images to show your space, please select at least 5
             </a>
-            <div className="flex flex-row flex-wrap justify-center mt-10">
-            {workspace.photos?.map((photo) => {
-              return <img
-                className="mask w-44 h-44 mb-2 mr-5"
-                src={photo}
-              />
-            })}
-            </div>
-
-            <input
-              id="photos"
-              type="file"
-              label="Photo"
-              name="photo"
-              multiple="multiple"
-              accept=".jpeg, .png, .jpg"
-              onChange={handlePhotoUpload}
-              hidden
+            <UploadImages
+              workspace={workspace}
+              handlePhotoUpload={handlePhotoUpload}
+              handleImageDelete={handleImageDelete}
             />
-            <label htmlFor="photos" id="button" class="mt-10 rounded-sm px-3 py-1 btn btn-primary hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-              Upload photos
-            </label>
           </div>
         );
       case 4:
@@ -504,24 +354,12 @@ const AddWorkspace = () => {
             <a className="text-primary text-2xl font-medium">
               Add your workspace rooms and tables
             </a>
-            <div className="flex flex-row text-center flex-wrap">
-              {workspace.assets &&
-                workspace.assets.map((curAsset, index) => {
-                  return (
-                    <AddAsset
-                      asset={curAsset}
-                      handleChange={handleChangeAsset}
-                      index={index}
-                      handleDelete={handleDeleteAsset}
-                    />
-                  );
-                })}
-              <div className="flex items-center">
-                <button className="btn btn-circle" onClick={onAddAssetClick}>
-                  <Add />
-                </button>
-              </div>
-            </div>
+            <AddAssets
+              handleChangeAsset={handleChangeAsset}
+              handleDeleteAsset={handleDeleteAsset}
+              onAddAssetClick={onAddAssetClick}
+              workspace={workspace}
+            />
           </div>
         );
       default:
@@ -529,14 +367,14 @@ const AddWorkspace = () => {
     }
   }
 
-  return (
+  return isInCreateMode ? (
     <div>
       <ul class="steps steps-vertical lg:steps-horizontal w-full mt-5">
-        <li class={`step step-primary`}>Basic details</li>
-        <li class={`step ${step >= 1 && "step-primary"}`}>Facilities</li>
-        <li class={`step ${step >= 2 && "step-primary"}`}>Open days & hours</li>
-        <li class={`step ${step >= 3 && "step-primary"}`}>Images</li>
-        <li class={`step ${step >= 4 && "step-primary"}`}>Assets</li>
+        <li class={`step step-primary`} onClick={() => {setStep(0)}}>Basic details</li>
+        <li class={`step ${step >= 1 && "step-primary"}`} onClick={() => {setStep(1)}}>Facilities</li>
+        <li class={`step ${step >= 2 && "step-primary"}`} onClick={() => {setStep(2)}}>Open days & hours</li>
+        <li class={`step ${step >= 3 && "step-primary"}`} onClick={() => {setStep(3)}}>Images</li>
+        <li class={`step ${step >= 4 && "step-primary"}`} onClick={() => {setStep(4)}}>Assets</li>
       </ul>
       {renderSwitch()}
       {step !== 0 && (
@@ -556,6 +394,23 @@ const AddWorkspace = () => {
         }}
       >
         {step === 4 ? "Create workspace" : "Next"}
+      </button>
+    </div>
+  ) : (
+    <div className="text-center">
+      <ul class="steps steps-vertical lg:steps-horizontal w-full mt-5">
+        <li class={`step ${step === 0 ? "step-primary" : ''}`} onClick={() => {setStep(0)}}>Basic details</li>
+        <li class={`step ${step === 1 ? "step-primary" : ''}`} onClick={() => {setStep(1)}}>Facilities</li>
+        <li class={`step ${step === 2 ? "step-primary" : ''}`} onClick={() => {setStep(2)}}>Open days & hours</li>
+        <li class={`step ${step === 3 ? "step-primary" : ''}`} onClick={() => {setStep(3)}}>Images</li>
+        <li class={`step ${step === 4 ? "step-primary" : ''}`} onClick={() => {setStep(4)}}>Assets</li>
+      </ul>
+      {renderSwitch()}
+      <button
+        className="btn btn-lg btn-primary sticky bottom-5"
+        onClick={handleSave}
+      >
+        Edit workspace
       </button>
     </div>
   );

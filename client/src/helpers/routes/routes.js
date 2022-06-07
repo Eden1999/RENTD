@@ -52,7 +52,7 @@ const routes = [
   },
   {
     path: "/manage/editWorkspace",
-    Component: <CreateWorkspace />,
+    Component: <AddWorkspace />,
     allowed: [userTypes.host],
   },
   {
