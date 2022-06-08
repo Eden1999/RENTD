@@ -1,12 +1,16 @@
 .map-marker {
-  background: 'white';
-    border-radius: '12px';
-    padding: '8px';
-    width: '60px';
-    z-index: 1000;
-    position: 'relative';
+  height: 28px;
+  width: 2.5em;
+  background-color: #fafafa;
+  font-size: 22px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 0px 9px;
+  z-index: 1000;
+  position: relative;
 }
 
 .hover {
-  background: gray;
+  background-color: gray;
 }

@@ -69,6 +69,7 @@ const Orders = ({ workspace }) => {
   useEffect(() => {
     let assets = workspace.assets.map((asset) => {
       let assetType = assetTypes.find((type) => type.id.toString() === asset.asset_id);
+      console.log(asset)
       if (assetType) {
         asset.text = assetType.name + ` ${asset.cost_per_hour}₪ per 1 hour/person`;
       }

@@ -41,13 +41,12 @@ const SearchResultsView = () => {
               let workspaceCosts = assets.map((x) => {
                 return x.cost_per_hour;
               });
-              let max = Math.max.apply(Math, workspaceCosts);
               let min = Math.min.apply(Math, workspaceCosts);
               return {
                 id,
                 lat: location_y,
                 lng: location_x,
-                text: `${min}-${max}`,
+                text: `${min}₪`,
               };
             })}
           />
