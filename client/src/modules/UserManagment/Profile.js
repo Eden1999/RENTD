@@ -46,7 +46,7 @@ const Profile = () => {
 
     return (
         <div className={'flex h-full'}>
-            <div className={'flex w-1/3 w-screen mt-7'}>
+            <div className={'flex justify-center w-1/3 w-screen mt-7'}>
                 <ProfileForm />
             </div>
             <div className={'flex-1'}>
