@@ -71,9 +71,11 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                 <select
                     className="select select-bordered 2xl:select-lg font-normal w-full text-secondary"
                     onChange={(event, value) => {
-                        setAssetType(event.target.value);
-                        asset.asset_id = assetTypes[event.target.value]?.id
-                        asset.text = assetTypes[event.target.value]?.name
+                        let index = event.target.value
+                        let newAssetType = assetTypes[index]
+                        setAssetType(newAssetType);
+                        asset.asset_id = newAssetType.id
+                        asset.text = newAssetType.name
                         handleChange(asset, index)
                     }}
                 >
