@@ -80,7 +80,7 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                     }}
                 >
                     {assetTypes.map((item, index) => (
-                        <option value={index} key={item.id}>
+                        <option value={index} key={item.id}  selected={item.id == asset?.asset_id ? 'selected' : ''}>
                             {item.name}
                         </option>
                     ))}
