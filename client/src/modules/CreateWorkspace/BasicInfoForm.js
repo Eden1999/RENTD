@@ -61,16 +61,17 @@ const BasicInfoForm = ({ setWorkspace, editProps, workspace, spaceTypes }) => {
                 Environment:
               </label>
               <select
+                defaultValue={workspace?.spaceType?.id}
                 className="select select-bordered select-lg mb-2 font-medium w-full text-primary"
                 onChange={(event, value) => {
                   setWorkspace((workspace) => ({
                     ...workspace,
-                    spaceType: value,
+                    spaceType: spaceTypes[event.target.value],
                   }));
                 }}
               >
                 {spaceTypes.map((item, index) => (
-                  <option value={index} key={item.id}>
+                  <option value={index} key={item.id} selected={index + 1 === workspace?.spaceType?.id ? 'selected' : ''}>
                     {item.name}
                   </option>
                 ))}
