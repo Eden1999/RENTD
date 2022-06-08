@@ -243,10 +243,7 @@ const AddWorkspace = () => {
         types: ["locality"],
       };
       setTimeout(() => {
-        const autoComplete = new window.google.maps.places.Autocomplete(
-          locationInput,
-          options
-        );
+        const autoComplete = new window.google.maps.places.Autocomplete(locationInput, options);
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setCityBounds(place.geometry.viewport);
@@ -275,10 +272,7 @@ const AddWorkspace = () => {
         types: ["address"],
       };
       setTimeout(() => {
-        const autoComplete = new window.google.maps.places.Autocomplete(
-          addressInput,
-          options
-        );
+        const autoComplete = new window.google.maps.places.Autocomplete(addressInput, options);
         autoComplete.addListener("place_changed", () => {
           const place = autoComplete.getPlace();
           setWorkspace((workspace) => ({
@@ -298,7 +292,7 @@ const AddWorkspace = () => {
     switch (step) {
       case 0:
         return (
-          <div className="text-left pl-44 pr-44 mt-5 h-screen">
+          <div className="text-left pl-44 pr-44 mt-5">
             <BasicInfoForm
               editProps={editProps}
               setWorkspace={setWorkspace}
@@ -309,7 +303,7 @@ const AddWorkspace = () => {
         );
       case 1:
         return (
-          <div className="mt-10 pl-44 pr-44 text-center h-screen">
+          <div className="mt-10 pl-44 pr-44 text-center">
             <a className="text-primary text-2xl font-medium">
               Do you have any of the following in the workspace?
             </a>
@@ -323,7 +317,7 @@ const AddWorkspace = () => {
         );
       case 2:
         return (
-          <div className="mt-10 pl-44 pr-44 text-center h-screen">
+          <div className="mt-10 pl-44 pr-44 text-center">
             <a className="text-primary text-2xl font-medium mb-10">
               What days and hours will your workspace be open?
             </a>
@@ -351,9 +345,7 @@ const AddWorkspace = () => {
       case 4:
         return (
           <div className="mb-6 pl-44 pr-44 mt-10 text-center h-screen">
-            <a className="text-primary text-2xl font-medium">
-              Add your workspace rooms and tables
-            </a>
+            <a className="text-primary text-2xl font-medium">Add your workspace rooms and tables</a>
             <AddAssets
               handleChangeAsset={handleChangeAsset}
               handleDeleteAsset={handleDeleteAsset}
@@ -369,12 +361,47 @@ const AddWorkspace = () => {
 
   return isInCreateMode ? (
     <div>
-      <ul class="steps steps-vertical lg:steps-horizontal w-full mt-5">
-        <li class={`step step-primary`} onClick={() => {setStep(0)}}>Basic details</li>
-        <li class={`step ${step >= 1 && "step-primary"}`} onClick={() => {setStep(1)}}>Facilities</li>
-        <li class={`step ${step >= 2 && "step-primary"}`} onClick={() => {setStep(2)}}>Open days & hours</li>
-        <li class={`step ${step >= 3 && "step-primary"}`} onClick={() => {setStep(3)}}>Images</li>
-        <li class={`step ${step >= 4 && "step-primary"}`} onClick={() => {setStep(4)}}>Assets</li>
+      <ul className="steps steps-vertical lg:steps-horizontal w-full mt-5">
+        <li
+          className={`step step-primary`}
+          onClick={() => {
+            setStep(0);
+          }}
+        >
+          Basic details
+        </li>
+        <li
+          className={`step ${step >= 1 && "step-primary"}`}
+          onClick={() => {
+            setStep(1);
+          }}
+        >
+          Facilities
+        </li>
+        <li
+          className={`step ${step >= 2 && "step-primary"}`}
+          onClick={() => {
+            setStep(2);
+          }}
+        >
+          Open days & hours
+        </li>
+        <li
+          className={`step ${step >= 3 && "step-primary"}`}
+          onClick={() => {
+            setStep(3);
+          }}
+        >
+          Images
+        </li>
+        <li
+          className={`step ${step >= 4 && "step-primary"}`}
+          onClick={() => {
+            setStep(4);
+          }}
+        >
+          Assets
+        </li>
       </ul>
       {renderSwitch()}
       {step !== 0 && (
@@ -398,18 +425,50 @@ const AddWorkspace = () => {
     </div>
   ) : (
     <div className="text-center">
-      <ul class="steps steps-vertical lg:steps-horizontal w-full mt-5">
-        <li class={`step ${step === 0 ? "step-primary" : ''}`} onClick={() => {setStep(0)}}>Basic details</li>
-        <li class={`step ${step === 1 ? "step-primary" : ''}`} onClick={() => {setStep(1)}}>Facilities</li>
-        <li class={`step ${step === 2 ? "step-primary" : ''}`} onClick={() => {setStep(2)}}>Open days & hours</li>
-        <li class={`step ${step === 3 ? "step-primary" : ''}`} onClick={() => {setStep(3)}}>Images</li>
-        <li class={`step ${step === 4 ? "step-primary" : ''}`} onClick={() => {setStep(4)}}>Assets</li>
+      <ul className="steps steps-vertical lg:steps-horizontal w-full mt-5">
+        <li
+          className={`step ${step === 0 ? "step-primary" : ""}`}
+          onClick={() => {
+            setStep(0);
+          }}
+        >
+          Basic details
+        </li>
+        <li
+          className={`step ${step === 1 ? "step-primary" : ""}`}
+          onClick={() => {
+            setStep(1);
+          }}
+        >
+          Facilities
+        </li>
+        <li
+          className={`step ${step === 2 ? "step-primary" : ""}`}
+          onClick={() => {
+            setStep(2);
+          }}
+        >
+          Open days & hours
+        </li>
+        <li
+          className={`step ${step === 3 ? "step-primary" : ""}`}
+          onClick={() => {
+            setStep(3);
+          }}
+        >
+          Images
+        </li>
+        <li
+          className={`step ${step === 4 ? "step-primary" : ""}`}
+          onClick={() => {
+            setStep(4);
+          }}
+        >
+          Assets
+        </li>
       </ul>
       {renderSwitch()}
-      <button
-        className="btn btn-lg btn-primary sticky bottom-5"
-        onClick={handleSave}
-      >
+      <button className="btn btn-lg btn-primary sticky bottom-5" onClick={handleSave}>
         Edit workspace
       </button>
     </div>

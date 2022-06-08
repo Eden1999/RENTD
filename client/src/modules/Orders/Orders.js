@@ -34,7 +34,6 @@ const convertCapacityArrayToObject = (capacity) => {
 const Orders = ({ workspace }) => {
   const [orders, setOrders] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
-  let [capacity, setCapacity] = useState(1);
   const [{ user }] = useContext(AppContext);
   const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);
   const [assets, setAssets] = useState(workspace.assets);
@@ -140,14 +139,15 @@ const Orders = ({ workspace }) => {
   });
 
   const optionChanged = useCallback(async (e) => {
-    if (e.fullName === "currentDate"){
-      setCurrentDate(e.value)
+    if (e.fullName === "currentDate") {
+      setCurrentDate(e.value);
     }
-  })
+  });
 
   const onOrderFormOpening = (e) => {
+    let capacity = 1;
     const { form } = e;
-    let { startDate, endDate, userName } = e.appointmentData;
+    let { startDate, endDate } = e.appointmentData;
     let relAsset = assets.find((asset) => asset.id == e.appointmentData.asset_id);
 
     form.option("items", [
@@ -160,6 +160,7 @@ const Orders = ({ workspace }) => {
         editorOptions: {
           value: user.username || "shirel",
           readOnly: true,
+          disabled: true,
         },
       },
       {
@@ -167,7 +168,8 @@ const Orders = ({ workspace }) => {
         editorType: "dxDateBox",
         editorOptions: {
           width: "100%",
-          type: "datetime",
+          type: "time",
+          pickerType: "list",
           onValueChanged(args) {
             startDate = args.value;
           },
@@ -178,7 +180,8 @@ const Orders = ({ workspace }) => {
         editorType: "dxDateBox",
         editorOptions: {
           width: "100%",
-          type: "datetime",
+          type: "time",
+          pickerType: "list",
           onValueChanged(args) {
             endDate = args.value;
           },
@@ -191,8 +194,9 @@ const Orders = ({ workspace }) => {
         name: "cost",
         editorType: "dxTextBox",
         editorOptions: {
-          value: relAsset.cost_per_hour + "$",
+          value: relAsset.cost_per_hour * capacity + "₪",
           readOnly: true,
+          disabled: true,
         },
       },
       {
@@ -207,7 +211,7 @@ const Orders = ({ workspace }) => {
           valueExpr: "number",
           value: 1,
           onValueChanged(args) {
-            capacity = args.value;
+            capacity = args.value || args.previousValue;
           },
         },
       },
@@ -245,7 +249,7 @@ const Orders = ({ workspace }) => {
           onAppointmentDeleted={HandalingDeleteOrder}
           onOptionChanged={optionChanged}
         >
-          <Editing allowAdding={true} />
+          <Editing allowUpdating={true} allowAdding={true} />
           <Resource fieldExpr="asset_id" allowMultiple={false} dataSource={assets} label="Assets" />
         </Scheduler>
       </div>
