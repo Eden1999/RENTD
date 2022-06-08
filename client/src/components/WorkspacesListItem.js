@@ -9,6 +9,7 @@ import axios from "axios";
 import {toast} from "react-toastify";
 import useToken from "../helpers/useToken";
 import Axios from "axios";
+import {Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
 
 const WorkspacesListItem = ({
   workspace,
@@ -157,6 +158,29 @@ const WorkspacesListItem = ({
                   <div>
                       <span className="text-primary font-medium flex-grow-0">{cheapestAsset.cost_per_hour}₪ per hour</span>
                   </div>
+                  <div className="text-right">
+                    {workspace.wifi && (
+                    <div className="text-md text-secondary wifi">
+                        <Wifi /> Wifi
+                    </div>
+                    )}
+                    {workspace.disabled_access && (
+                    <div className="text-md text-secondary disabled-access">
+                        <Accessible /> Disabled accessible
+                    </div>
+                    )}
+                    <div className="text-md text-secondary smoking">
+                    {workspace.smoke_friendly ? (
+                        <span>
+                        <SmokeFree /> Smoking forbidden
+                        </span>
+                    ) : (
+                        <span>
+                        <SmokingRooms /> Smoking allowed
+                        </span>
+                    )}
+                    </div>
+                </div>
               </div>
             }
             {
