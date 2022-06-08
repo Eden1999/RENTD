@@ -1,33 +1,52 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, {useContext, useState, useCallback, useEffect} from "react";
 import {Link, useLocation} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import useToken from "../../helpers/useToken";
-
-import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AppsIcon from '@mui/icons-material/Apps';
 
-import { StarBorderRounded, Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
+import {
+  StarBorderRounded,
+  Wifi,
+  SmokeFree,
+  SmokingRooms,
+  Accessible,
+  Star
+} from "@mui/icons-material";
 import Orders from "../Orders/Orders";
 
 import "./WorkspacePage.scss";
-import { Rating } from "@mui/material";
+import {Dialog, DialogContent, DialogTitle, ImageList, ImageListItem, ListItemIcon, Rating} from "@mui/material";
 import { AppContext } from "store/AppContext";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { toast } from "react-toastify";
 
 const WorkspacePage = () => {
-  const [open, setOpen] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
   const [{ user }, dispatch] = useContext(AppContext);
-  const [workspace, setWorkspace] = useState(useLocation().state.workspace)
+  const { token } = useToken();
   const navigate = useNavigate();
-  const { token, setToken } = useToken();
+  const workspace = useLocation().state.workspace;
 
-  
+  const [host, setHost] = useState({username:''});
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+
+  // Get workspace's host
+  useEffect(async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/users/${workspace.host_id}`, {
+        headers: {
+          token,
+        }
+      });
+      setHost(res.data);
+    } catch (err) {
+      console.log(`Failed to fetch host ${err.message}`);
+    }
+  }, []);
+
   const onEditClick = useCallback((e, workspace) => {
     navigate(`/manage/editWorkspace`, { state: { workspace } });
     if (!e) var e = window.event;
@@ -100,95 +119,174 @@ const WorkspacePage = () => {
   }, []);
 
   return (
-    <div className="flex flex-column justify-center h-full px-20 py-10 2xl:py-20">
-    <div>
-        <div className="flex flex-row items-center">
-        {workspace.host_id === user.id.toString() && (<span>
-            <IconButton id="editIcon" aria-label="edit workspace" onClick={(e) => onEditClick(e, workspace)}>
-              <EditIcon htmlColor="#4AA0D5"/>
-            </IconButton>
-            <IconButton id="deleteIcon" aria-label="edit workspace" onClick={(e) => onDeleteClick(e, workspace)}>
-              <DeleteIcon htmlColor="#EB586F"/>
-            </IconButton>
-        </span>)}
-          <p className="text-3xl text-primary pr-3">{workspace.name}</p>
-          {workspace.ratings.length > 0 && (
-            <Rating precision={0.5} className="pr-1" name="read-only" value={workspace.ratings.reduce((total, currRating) => total + parseInt(currRating.rating), 0) /
-                workspace.ratings.length} readOnly /> 
-          )}
-          <p className="text-sm text-primary pr-3">({workspace.ratings.length} reviews)</p>
-          {user?.favorite_workspaces?.includes(workspace.id) ? 
-          <IconButton id="editIcon" aria-label="remove from favorites" color='secondary' onClick={() => onRemoveFavoriteClick(workspace)}>
-            <FavoriteIcon />
-          </IconButton> :
-            <IconButton id="editIcon" aria-label="add to favorites" color='secondary' onClick={() => onFavoriteClick(workspace)}>
-              <FavoriteBorderIcon />
-            </IconButton> 
-          }
+    <div className="justify-center h-full px-36 py-5">
+      <div className="flex flex-row items-center justify-between">
+        <p className="text-6xl text-primary pr-3">{workspace.name}</p>
+        { workspace.host_id === user.id.toString() ?
+          <span>
+            <button
+                id="editIcon"
+                className="btn btn-ghost btn-circle text-error"
+                onClick={(e) => onEditClick(e, workspace)}>
+              <EditIcon fontSize="large" />
+            </button>
+            <button
+                id="deleteIcon"
+                className="btn btn-ghost btn-circle text-error"
+                onClick={(e) => onDeleteClick(e, workspace)}>
+              <DeleteIcon fontSize="large" />
+            </button>
+          </span> :
+          <span>
+            { user?.favorite_workspaces?.includes(workspace.id) ?
+                <button
+                    id="removeFavorite"
+                    className="btn btn-ghost btn-circle text-error"
+                    onClick={() => onRemoveFavoriteClick(workspace)}>
+                  <FavoriteIcon fontSize="large"/>
+                </button> :
+                <button
+                    id="addFavorite"
+                    className="btn btn-ghost btn-circle text-primary"
+                    onClick={() => onFavoriteClick(workspace)}>
+                  <FavoriteBorderIcon fontSize="large"/>
+                </button>
+            }
+          </span>
+        }
+      </div>
+      <div className="flex mt-2">
+        {workspace.ratings.length > 0 ?
+            <div className="flex">
+              <p className="flex text-lg text-secondary font-medium">
+                <Star fontSize="small" className="self-center" />
+                {(workspace.ratings.map((review) => review.rating).reduce((total, currRate) => total + currRate, 0) / workspace.ratings.length).toFixed(2)}
+              </p>
+              <p className="text-xl text-secondary font-medium px-2">·</p>
+              <p className="text-lg text-secondary font-medium">{workspace.ratings.length} reviews</p>
+              <p className="text-xl text-secondary font-medium px-2">·</p>
+            </div>:
+            <div />
+        }
+        {workspace.spaceType && <p className="text-lg text-secondary font-medium">{workspace.city}, {workspace.address} </p>}
+      </div>
+      <div className="p-2 bg-base-200 rounded-lg mt-4">
+        <div className="flex grid grid-cols-4 gap-2 h-[40rem] justify-items-stretch">
+          <img className="h-[40rem] col-span-2 row-span-2 object-cover rounded-l-lg" src={workspace.photos?.[0]} />
+          <img className="object-cover h-[19.75rem]" src={workspace.photos?.[1]} />
+          <img className="object-cover h-[19.75rem] rounded-tr-lg" src={workspace.photos?.[2]} />
+          <img className="object-cover h-[19.75rem]" src={workspace.photos?.[3]} />
+          <img className="object-cover h-[19.75rem] rounded-br-lg" src={workspace.photos?.[4]} />
+          <button className="btn btn-secondary bg-base-100 rounded-lg flex absolute self-end justify-self-end m-4">
+            <AppsIcon />
+            <p className="ml-1" onClick={() => setShowAllPhotos(true)}>Show all photos</p>
+          </button>
         </div>
-        {workspace.spaceType && <p className="text-md text-primary">{workspace.spaceType.name}</p>}
-        {/* <p className="text-amber-800 pb-7">Hurry up! {workspace.capacity} spots left</p> */}
-        <div className="details">
-          <div className="flex flex-column">
-          </div>
-          <div className="location">{workspace.location}</div>
-        </div>
-        <div className="hero container mx-auto w-96 pb-10">
-          <img src={workspace.photos?.[0]} />
-        </div>
-        <span className="text-md text-secondary">
-          <p className="pb-10">{workspace.description}</p>
-          <div className="extra-details pb-10">
-            {workspace.wifi && (
-              <div className="text-md text-secondary wifi">
-                <Wifi /> Wifi
+      </div>
+      <div className="flex flex-row justify-between mt-8">
+        <div className="w-5/12">
+          <div className="flex justify-between items-center">
+            <p className="text-3xl text-primary font-medium">{workspace.spaceType.name} hosted by {host.username}</p>
+            <div className="avatar">
+              <div className="w-16 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
+                <img src={host.photo}/>
               </div>
-            )}
-            {workspace.disabled_access && (
-              <div className="text-md text-secondary disabled-access">
-                <Accessible /> Disabled accessible
-              </div>
-            )}
-            <div className="text-md text-secondary smoking">
-              {workspace.smoke_friendly ? (
-                <span>
-                  <SmokeFree /> Smoking forbidden
-                </span>
-              ) : (
-                <span>
-                  <SmokingRooms /> Smoking allowed
-                </span>
-              )}
             </div>
           </div>
-        </span>
-          <>
-            {workspace.ratings.length > 0 && (
-            <>
-              <div className="reviews-title">
-                <h2 className="text-xl text-secondary pb-3">Reviews</h2>
-              </div>
-              <div className="reviews">
-                {workspace.ratings.map((rating) => (
-                  <div key={rating.id} className="flex justify-between pb-3">
-                    <div className="user-photo">
-                      <Rating name="read-only" value={rating.rating} readOnly 
-                      emptyIcon={<StarBorderRounded style={{ opacity: 0.55, color : "primary" }} fontSize="inherit"/>}/>
+          <div className="divider" />
+          <span className="text-2xl text-secondary pb-10">
+            <p>{workspace.description}</p>
+            <div className="pt-10 text-xl">
+              {workspace.wifi && (
+                <p> <Wifi /> Wifi </p>
+              )}
+              {workspace.disabled_access && (
+                <p> <Accessible /> Disabled accessible </p>
+              )}
+              {workspace.smoke_friendly ? (
+                <p>
+                  <SmokeFree /> Smoking forbidden
+                </p>
+              ) : (
+                <p>
+                  <SmokingRooms /> Smoking allowed
+                </p>
+              )}
+            </div>
+          </span>
+        </div>
+        <div className="w-1/2 bg-base-700 shadow-2xl rounded-xl p-4">
+          <div className="flex items-center h-12">
+            <p className="text-3xl text-primary font-bold">Order Now!</p>
+          </div>
+          <div className="divider" />
+          <div className="p-4">
+            <Orders workspace={workspace}/>
+          </div>
+        </div>
+      </div>
+      <div className="divider" />
+      {workspace.ratings.length > 0 && (
+          <div>
+            <div className="flex text-2xl text-primary font-medium">
+              <p className="flex">
+                <Star fontSize="small" className="self-center" />
+                {(workspace.ratings.map((review) => review.rating).reduce((total, currRate) => total + currRate, 0) / workspace.ratings.length).toFixed(2)}
+              </p>
+              <p className="px-2">·</p>
+              <p>{workspace.ratings.length} reviews</p>
+            </div>
+            <div className="grid grid-cols-2">
+              {workspace.ratings.map((rating) => (
+                  <div key={rating.id} className="bg-base-100 shadow-lg m-8 p-4 rounded-lg">
+                    <div className="flex mb-4">
+                      <div className="avatar">
+                        <div className="w-16 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
+                          <img src={rating.user.photo}/>
+                        </div>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-xl text-primary font-medium">{rating.user.username}</p>
+                        <Rating
+                            name="read-only"
+                            value={rating.rating}
+                            emptyIcon={<StarBorderRounded style={{ opacity: 0.55, color : "primary" }} fontSize="inherit"/>}
+                            readOnly
+                        />
+                      </div>
                     </div>
-                    <span className="flex flex-col text-md text-secondary">
-                        <h2 className="text-right">{rating.user.username}</h2>
-                        <span>{rating.comment}</span>
-                    </span>
+                    <span className="text-md text-secondary">{rating.comment}</span>
                   </div>
-                ))}
-              </div>
-            </>
-            )}
-          </>
-        <Orders workspace={workspace}/>
-    </div>
+              ))}
+            </div>
+          </div>
+      )}
+      <Dialog
+          open={showAllPhotos}
+          onClose={() => {setShowAllPhotos(false)}}
+          sx={{
+            "& .MuiDialog-container": {
+              "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "72rem",  // Set your width here
+              },
+            },
+          }}
+      >
+          <div className="h-[60rem] grid grid-cols-2">
+              {workspace.photos.map((photo) => (
+                  <div className="m-2">
+                    <img
+                        className="h-[35rem] w-[35rem] object-cover rounded-lg"
+                        src={photo}
+                    />
+                  </div>
+              ))}
+          </div>
+      </Dialog>
     </div>
   );
 };
+
 
 export default WorkspacePage;

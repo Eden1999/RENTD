@@ -1,4 +1,4 @@
-const {sequelize} = require("../config/sequelize");
+const { sequelize } = require("../config/sequelize");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { Op } = require('sequelize');
@@ -21,11 +21,11 @@ const getUsersList = (req, res) => {
 
 const getUserById = (req, res) => {
     const {token} = req.headers;
-    const decodeId = jwt.verify(token, process.env.SECRET_KEY);
+    const { id } = req.params;
 
     // check if user is already exist
     sequelize.models.users
-        .findOne({ where: { id: decodeId } })
+        .findOne({where: {id: id}})
         .then((user) => {
             if (user) {
                 console.log(`successfuly getting user ${user.id}`);
@@ -80,6 +80,7 @@ const registerNewUser = async (req, res) => {
                 card_expiration_month: expirationMonth
             }
         };
+
 
         // check if user is already exist
         sequelize.models.users

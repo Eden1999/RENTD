@@ -2,11 +2,27 @@ const { sequelize } = require("../config/sequelize");
 const jwt = require("jsonwebtoken");
 
 const getRatingsByWorkspaceId = (req, res) => {
+  const { workspaceId } = req.params;
 
-}
-
-const getRatingsByUserId = (req, res) => {
-
+  sequelize.models.ratings
+      .findAll({
+        where: {
+          workspace_id: workspaceId,
+        },
+      })
+      .then((ratings) => {
+        if (ratings) {
+          return res.status(200).send(ratings);
+        } else {
+          let err = "ratings not found";
+          console.log(err);
+          return res.status(500).send(err);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(err.status || 500).send(err.message);
+      });
 }
 
 const createNewRating = (req, res) => {
@@ -54,4 +70,4 @@ const createNewRating = (req, res) => {
     });
 }
 
-module.exports = { getRatingsByWorkspaceId, getRatingsByUserId, createNewRating }
+module.exports = { getRatingsByWorkspaceId, createNewRating }
