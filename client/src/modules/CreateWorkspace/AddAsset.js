@@ -71,14 +71,14 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                 <select
                     className="select select-bordered 2xl:select-lg font-normal w-full text-secondary"
                     onChange={(event, value) => {
-                        setAssetType(value);
-                        asset.asset_id = value.id
-                        asset.text = value.name
+                        setAssetType(event.target.value);
+                        asset.asset_id = assetTypes[event.target.value]?.id
+                        asset.text = assetTypes[event.target.value]?.name
                         handleChange(asset, index)
                     }}
                 >
                     {assetTypes.map((item, index) => (
-                        <option value={index} key={item.id}>
+                        <option value={index} key={item.id}  selected={item.id == asset?.asset_id ? 'selected' : ''}>
                             {item.name}
                         </option>
                     ))}
