@@ -19,6 +19,15 @@ const getUsersList = (req, res) => {
         });
 };
 
+    const cleanUserObject = (user) => {
+    delete user.password;
+    delete user.card_number;
+    delete user.token;
+    delete user.card_expiration_year;
+    delete user.card_expiration_month;
+    return user;
+};
+
 const getUserById = (req, res) => {
     const {token} = req.headers;
     const { id } = req.params;
@@ -31,10 +40,7 @@ const getUserById = (req, res) => {
                 console.log(`successfuly getting user ${user.id}`);
 
                 let modifiedUser = user.dataValues;
-                delete modifiedUser.id;
-                delete modifiedUser.password;
-
-                return res.status(200).send(modifiedUser);
+                return res.status(200).send(cleanUserObject(modifiedUser));
             } else {
                 let err = "user not found";
                 console.log(err);
@@ -106,7 +112,7 @@ const registerNewUser = async (req, res) => {
                         .create(newUser)
                         .then((addedNewUser) => {
                             const token = jwt.sign(addedNewUser.id, process.env.SECRET_KEY);
-                            res.status(200).send({ token, user: addedNewUser });
+                            res.status(200).send({ token, user: cleanUserObject(addedNewUser.dataValues) });
                         })
                         .catch((err) => {
                             console.log(err);
@@ -143,7 +149,7 @@ const signIn = async (req, res) => {
                         } else if (result === true) {
                             //Checking if credentials match
                             const token = jwt.sign(user.id, process.env.SECRET_KEY);
-                            return res.status(200).send({ token, user });
+                            return res.status(200).send({ token, user: cleanUserObject(user.dataValues) });
                         } else {
                             //Declaring the errors
                             if (result != true) return res.status(400).send("please enter correct password!");
@@ -162,20 +168,52 @@ const signIn = async (req, res) => {
     }
 };
 
-const editUser = async ({ body }, res) => {
-    const { id, photo } = body;
+const shouldUpdate = (newValue, currentValue) => {
+    if (isNullEmptyOrWhitespace(newValue)) return false;
+    if (newValue === currentValue) return false;
+    return true;
+}
+const isNullEmptyOrWhitespace = (value) => {
+    if (value === null) return true;
+    if (/^\s*$/.test(value)) return true;
+    return false;
+}
+const isNotNullEmptyOrWhitespace = (value) => {
+    return !isNullEmptyOrWhitespace(value);
+}
+const editUser = async (req, res) => {
+    const { token } = req.headers;
+    const id = jwt.verify(token, process.env.SECRET_KEY);
 
+    const { email, username, photo, cardNumber, expirationMonth, expirationYear } = req.body;
+
+    if ([cardNumber, expirationMonth, expirationYear].some(isNotNullEmptyOrWhitespace)
+        && !validateCardInfo(cardNumber, expirationMonth, expirationYear)) {
+        return res.status(400).send({ message: "Invalid credit card info" });
+    }
     try {
         const user = await sequelize.models.users.findOne({ where: { id } });
         if (!user) {
-            res.status(500).send(`Could not update. User with id: ${id} does not exists`)
+            res.status(500).send({ message: `Could not update. User with id: ${id} does not exist` })
         } else {
-            user.set({ photo });
+            const valuesToUpdate = {
+                ...shouldUpdate(username, user.username) && {username},
+                ...shouldUpdate(email, user.email) && {email},
+                ...shouldUpdate(photo, user.photo) && {photo},
+                ...shouldUpdate(cardNumber, user.photo) && { card_number: cardNumber },
+                ...shouldUpdate(expirationMonth, user.card_expiration_year) && { card_expiration_month: expirationMonth },
+                ...shouldUpdate(expirationYear, user.card_expiration_year) && { card_expiration_year: expirationYear }
+            }
+            const columnNamesToUpdate = Object.keys(valuesToUpdate);
+            if (columnNamesToUpdate.length == 0) return res.status(200).send({ message: `No values were updated`, updatedValues: columnNamesToUpdate });
+            user.set(valuesToUpdate);
             const updatedUser = await user.save();
-            res.status(200).send({ user: updatedUser });
+        
+            return res.status(200).send({ message: `Successfully updated the following values: ${columnNamesToUpdate.join(', ')}`, updatedValues: columnNamesToUpdate, user: cleanUserObject(updatedUser.dataValues) });
         }
     } catch (err) {
-        res.status(err.status || 500).send(`Could not update. An error occurred while trying to save user with id: ${id}`);
+        console.log(err);
+        res.status(err.status || 500).send({ message: `Could not update. An error occurred while trying to update user with id: ${id}` });
     }
 };
 

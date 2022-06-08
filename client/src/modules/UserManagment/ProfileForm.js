@@ -1,39 +1,58 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import {AppContext} from "../../store/AppContext";
-import {Box, Button, Container, CssBaseline, InputAdornment, TextField, Typography} from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import {useNavigate} from "react-router";
-import {DraftsOutlined} from "@mui/icons-material";
-
+import { AppContext } from "../../store/AppContext";
+import { useNavigate } from "react-router";
+import { formatCardNumber } from 'creditcardutils'
+import useToken from "../../helpers/useToken";
+import { toast } from "react-toastify";
 const ProfileForm = () => {
     const navigate = useNavigate();
-    const [{user}] = useContext(AppContext);
+    const [{ user }] = useContext(AppContext);
     const [, dispatch] = useContext(AppContext);
-    const [photo, setPhoto] = useState('');
+    const { token } = useToken();
+    const [photo, setPhoto] = useState(user.photo);
     const [username, setUsername] = useState(user.username);
+    const [email, setEmail] = useState(user.email);
+    const [cardNumber, setCardNumber] = useState("");
+    const [expirationMonth, setExpirationMonth] = useState("");
+    const [expirationYear, setExpirationYear] = useState("");
 
-    const handleUpdate = async () => {
-        const {id} = user;
+    const handleSave = () => {
+        const { id } = user;
 
-        const {data} = await axios.put(`http://localhost:8000/users`, {id, photo});
-        dispatch({
-            type: "SET_GENERAL_STATE",
-            payload: {
-                user: data.user,
-            },
+        axios.put(`http://localhost:8000/users`,
+            { email, username, photo, cardNumber, expirationMonth, expirationYear }, {
+            headers: {
+                token
+            }
+        }).then((res) => {
+            const data = res.data;
+            if (data.updatedValues.length == 0) return;
+            
+            toast.success(data.message, {
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true
+            });
+            dispatch({
+                type: "SET_GENERAL_STATE",
+                payload: {
+                    user: res.data.user,
+                },
+            });
+        }).catch((e) => {
+
+            toast.error(e.response.data.message, {
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true
+            });
         });
     };
-
-    const handleUpdateUsername = async () => {
-        const {id} = user;
-
-        await axios.post(`http://localhost:8000/users/update-username`, {id, username});
-    };
-
-    useEffect(async () => {
-        await handleUpdate();
-    }, [photo]);
 
     const handlePhotoUpload = async (e) => {
         const file = e.target.files[0];
@@ -55,53 +74,101 @@ const ProfileForm = () => {
     };
 
     return (
-        <div className={'flex w-1/2 h-full pt-1/2 px-12 items-center justify-center'}>
-            <div className={'flex-1 w-full flex flex-col items-center relative'}>
-                <img
-                    className={'w-40 h-40 rounded-full'}
-                    src={user.photo || 'emptyProfileIcon.jpeg'}
-                />
-                <label
-                    htmlFor="photo"
-                    className={'mt-6 text-sm text-blue-500 cursor-pointer decoration-blue-500'}
-                >
-                    Change profile photo
-                </label>
-                <input
-                    type="file"
-                    id="photo"
-                    accept=".jpeg, .png, .jpg"
-                    className={'h-0 w-0'}
-                    onChange={handlePhotoUpload}
-                />
+        <div className={'md:w-3/4 lg:w-1/2 xl:w-1/2 2xl:w-1/2 h-full'}>
+            <div className="mb-12 self-center">
+                <span className="font-semibold self-center text-6xl text-primary">
+                    Edit Profile
+                </span>
             </div>
-            <div className={'flex-1 !w-1/2 flex flex-col items-center relative'}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    value={username}
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
-                    autoFocus
-                    onChange={(event) => setUsername(event.target.value)}
-                />
-                <div>
-                    <label
-                        className={'btn mt-6 mx-2 text-sm cursor-pointer decoration-blue-500'}
-                        onClick={() => handleUpdateUsername()}
-                    >
-                        set username
+            <div className={'flex pt-1/2 space-x-2'}>
+                <div className={'flex !w-1/4 flex-col items-center mt-16 relative'}>
+                    <img
+                        className={'w-32 h-32 rounded-full'}
+                        src={photo || 'emptyProfileIcon.jpeg'}
+                    />
+                    <label htmlFor="photo"
+                        className={'btn btn-primary btn-sm mt-4'}>
+                        Choose photo
                     </label>
-                    <label
-                        className={'btn mt-6 text-sm cursor-pointer decoration-blue-500'}
-                        onClick={() => navigate('/reset-password')}
-                    >
-                        reset password
-                    </label>
+                    <input
+                        type="file"
+                        id="photo"
+                        accept=".jpeg, .png, .jpg"
+                        className={'h-0 w-0'}
+                        onChange={handlePhotoUpload}
+                    />
+                </div>
+                <div className={'flex-1 !w-1/2'}>
+                    <div>
+                        <label className="block mb-2 text-lg !justify-left font-medium text-primary">
+                            Email Address
+                        </label>
+                        <input className="input input-bordered 2xl:select-md font-normal w-full text-secondary"
+                            required
+                            value={email}
+                            placeholder="Enter email..."
+                            onChange={(event) => setEmail(event.target.value)}
+                        />
+                    </div>
+                    <div className={"mt-5"}>
+                        <label className="block mb-2 text-lg !justify-left font-medium text-primary">
+                            Username
+                        </label>
+                        <input className="input input-bordered 2xl:select-md font-normal w-full text-secondary"
+                            value={username}
+                            placeholder="Enter username..."
+                            onChange={(event) => setUsername(event.target.value)}
+                        />
+                    </div>
+                    <div className="flex mt-4 select-none justify-between">
+                        <div className="w-full">
+                            <label className="block mb-2 text-lg font-medium text-primary">
+                                Card Number
+                            </label>
+                            <input className="input input-bordered 2xl:select-md font-normal w-full text-secondary"
+                                placeholder={'XXXX XXXX XXXX XXXX'}
+                                value={formatCardNumber(cardNumber)}
+                                onChange={(e) => { setCardNumber(e.target.value) }}
+                            />
+                        </div>
+                        <div className="ml-6">
+                            <label className="block mb-2 text-lg font-medium text-primary">
+                                Expiration
+                            </label>
+                            <div className="flex">
+                                <div className="w-1/2">
+                                    <input
+                                        minLength={2}
+                                        maxLength={2}
+                                        className="input input-bordered 2xl:select-md font-normal w-full text-secondary"
+                                        value={expirationMonth.replace(/[^\d]/, '')}
+                                        onChange={(e) => { setExpirationMonth(e.target.value) }}
+                                        placeholder={'MM'}
+                                    />
+                                </div>
+                                <div className="w-1/2 ml-6">
+                                    <input
+                                        minLength={2}
+                                        maxLength={2}
+                                        className="input input-bordered 2xl:select-md font-normal w-full text-secondary"
+                                        value={expirationYear.replace(/[^\d]/, '')}
+                                        onChange={(e) => { setExpirationYear(e.target.value) }}
+                                        placeholder={'YY'}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex !justify-center !items-center space-x-2">
+                        <button className={'btn btn-primary mt-6 text-sm cursor-pointer decoration-blue-500'}
+                            onClick={() => handleSave()}>
+                            Save
+                        </button>
+                        <button className={'btn btn-secondary text-white mt-6 text-sm cursor-pointer decoration-blue-500'}
+                            onClick={() => navigate('/reset-password')}>
+                            reset password
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
