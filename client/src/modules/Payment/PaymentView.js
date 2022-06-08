@@ -80,7 +80,7 @@ function PaymentView() {
 
     const getTotalPrice = () => {
         const numOfRentingHours = Math.abs(new Date(rentingDetails.startdate) - new Date(rentingDetails.enddate)) / (1000 * 3600);
-        return (costPerHour * numOfRentingHours);
+        return (costPerHour * numOfRentingHours * rentingDetails.capacity);
     }
 
     return (
