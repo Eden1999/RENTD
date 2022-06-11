@@ -205,7 +205,7 @@ const editUser = async (req, res) => {
                 ...shouldUpdate(expirationYear, user.card_expiration_year) && { card_expiration_year: expirationYear }
             }
             const columnNamesToUpdate = Object.keys(valuesToUpdate);
-            if (columnNamesToUpdate.length == 0) return res.status(200).send({ message: `No values were updated`, updatedValues: columnNamesToUpdate });
+            if (columnNamesToUpdate.length === 0) return res.status(200).send({ message: `No values were updated`, updatedValues: columnNamesToUpdate });
             user.set(valuesToUpdate);
             const updatedUser = await user.save();
         
@@ -293,6 +293,38 @@ const updateUsername = async (req, res) => {
     });
 };
 
+const changePassword = async (req, res) => {
+    // Check to see we're authorized
+    const { currentPassword, newPassword, token } = req.body;
+    const id = jwt.verify(token, process.env.SECRET_KEY);
+
+    sequelize.models.users.findOne({ where: { id } }).then((user) => {
+        if (user) {
+            bcrypt.compare(currentPassword, user.password, (err, result) => {
+                //Comparing the hashed password
+                if (err) {
+                    return res.status(500).send({message: "Internal server error"});
+                } else if (result === true) {
+                    const saltRounds = 10;
+                    bcrypt.genSalt(saltRounds, (err, salt) => {
+                        bcrypt.hash(newPassword, salt, async (err, hash) => {
+                            user.set({ password: hash });
+                            await user.save();
+                            return res.status(200).send({message: 'Password successfully updated!'});
+                        });
+                    });
+
+                } else {
+                    //Declaring the errors
+                    return res.status(403).send({message: "The supplied (current) password is incorrect!"});
+                }
+            });
+
+        } else {
+            return res.status(400).send({message: 'Invalid user ID!'});
+        }
+    });
+};
 const uploadProfilePhoto = async (req, res) => {
     const { id, photo } = req.body;
 
@@ -400,6 +432,7 @@ module.exports = {
     registerNewUser,
     signIn,
     editUser,
+    changePassword,
     resetPassword,
     updatePassword,
     validateToken,
