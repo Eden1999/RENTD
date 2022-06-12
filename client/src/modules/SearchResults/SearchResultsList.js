@@ -68,11 +68,10 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
   }, []);
 
   return (
-    <div className={"flex h-full"}>
-      <FormGroup
-        className={"w-1/4 text-primary px-8 pt-6 bg-secondary/30 rounded-lg h-max"}
-      >
+    <div className={"h-full"}>
+      <FormGroup sx={{ flexDirection: 'row' }} className={"w-2/5 flex mb-5 m-auto text-primary px-8 py-4 bg-secondary/30 rounded-lg"}>
         {Object.values(filters).map(({ label, value, key }) => (
+          <div>
           <FormControlLabel
             label={label}
             key={key}
@@ -84,9 +83,10 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
               />
             }
           />
+          </div>
         ))}
       </FormGroup>
-      <div className={"w-4/5 px-12"}>
+      <div className={"w-full px-12"}>
         <WorkspacesList
           workspaces={filteredWorkspaces}
           workspaceCardBody={ workspaceListType.general}
