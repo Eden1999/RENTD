@@ -20,7 +20,7 @@ const ProfileForm = () => {
     const handleSave = () => {
         const { id } = user;
 
-        axios.put(`http://localhost:8000/users`,
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/users`,
             { email, username, photo, cardNumber, expirationMonth, expirationYear }, {
             headers: {
                 token

@@ -27,7 +27,7 @@ const Login = () => {
     const query = { email, password };
 
     axios
-      .post("http://localhost:8000/users/signIn", query)
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/signIn`, query)
       .then((res) => {
         if (res.data.token) {
           setToken(res.data.token);

@@ -12,7 +12,7 @@ const FavoriteWorkspaces = () => {
 
   useEffect(async () => {
     try {
-      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/userFavoriteWorkspaces`, {
+      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/workspaces/userFavoriteWorkspaces`, {
           headers : {
               token
           }

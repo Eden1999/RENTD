@@ -36,7 +36,7 @@ const WorkspacePage = () => {
   // Get workspace's host
   useEffect(async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/users/${workspace.host_id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/${workspace.host_id}`, {
         headers: {
           token,
         }
@@ -55,7 +55,7 @@ const WorkspacePage = () => {
   }, []);
 
   const onDeleteClick = useCallback((e, workspace) => {
-    axios.delete(`http://localhost:8000/workspaces/${workspace.id}`, 
+    axios.delete(`${process.env.REACT_APP_SERVER_URL}/workspaces/${workspace.id}`,
     {headers: {
       token,
     }},)
@@ -72,7 +72,7 @@ const WorkspacePage = () => {
   }, []);
   
   const onFavoriteClick = useCallback((workspace) => {
-    axios.post('http://localhost:8000/users/addWorkspaceToFavorites', {workspaceId : workspace.id}, {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/users/addWorkspaceToFavorites`, {workspaceId : workspace.id}, {
       headers: {
         token,
       }
@@ -97,7 +97,7 @@ const WorkspacePage = () => {
   }, []);
 
   const onRemoveFavoriteClick = useCallback((workspace) => {
-    axios.post('http://localhost:8000/users/removeFavoriteWorkspace', {workspaceId : workspace.id}, {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/users/removeFavoriteWorkspace`, {workspaceId : workspace.id}, {
       headers: {
         token,
       }
