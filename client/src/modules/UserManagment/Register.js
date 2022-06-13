@@ -1,10 +1,7 @@
 import React, { useState, useCallback, useContext } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
-import { Container, CssBaseline, Box, Typography, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { AppContext } from "../../store/AppContext";
-import Checkbox from "@mui/material/Checkbox";
 import useToken from "../../helpers/useToken";
 import { formatCardNumber } from 'creditcardutils'
 import { toast } from "react-toastify";
@@ -27,7 +24,7 @@ const Register = () => {
     const query = { username, password, email, isHost, photo, cardNumber, expirationMonth, expirationYear, saveCardInfo };
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/users/register`, query)
+      .post("http://localhost:8000/users/register", query)
       .then((res) => {
         if (res.data.token) {
           setToken(res.data.token);
@@ -187,8 +184,14 @@ const Register = () => {
           onChange={handlePhotoUpload}
         />
       </div>
-      <div className="flex mb-6 justify-end">
-        <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
+      <div className="flex mb-6 justify-center">
+          <button
+              type="button"
+              className={"btn btn-lg btn-secondary text-white"}
+              onClick={() => navigate("/login")}>
+              Back to login
+          </button>
+          <button type="button" className={"btn btn-lg btn-primary ml-8"} onClick={handleRegister}>Register</button>
       </div>
     </div>
   );

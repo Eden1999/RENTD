@@ -14,7 +14,7 @@ function WorkspaceForm() {
   useEffect(async () => {
     try {
       const query = {};
-      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/spacetypes`, query);
+      const res = await Axios.get("http://localhost:8000/spacetypes", query);
       setSpaceTypes(res.data);
       setSpaceType(res.data[0]);
     } catch (err) {

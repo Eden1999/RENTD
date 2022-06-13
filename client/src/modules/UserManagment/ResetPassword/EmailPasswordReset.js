@@ -17,7 +17,7 @@ const EmailPasswordReset = () => {
     const [token, setToken] = useState('');
 
     const handleSendMail = async () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/users/reset-password`, {email})
+        axios.post("http://localhost:8000/users/reset-password", {email})
             .then(({data}) => {
                 setVerificationData(data);
                 setMailStatus(200);
@@ -28,11 +28,11 @@ const EmailPasswordReset = () => {
     };
 
     const handleReset = async () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/users/validate-token`,
+        axios.post("http://localhost:8000/users/validate-token",
             {id: verificationData.id, token},
             {headers: {token: verificationData.token}})
             .then(() => {
-                axios.post(`${process.env.REACT_APP_SERVER_URL}/users/update-password`,
+                axios.post("http://localhost:8000/users/update-password",
                     {id: verificationData.id, password},
                     {headers: {token: verificationData.token}})
                     .then(() => {

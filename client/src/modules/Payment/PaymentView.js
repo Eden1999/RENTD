@@ -41,7 +41,7 @@ function PaymentView() {
     }, [useSavedCardInfo]);
 
     const getSavedCardInfo = () => {
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/users/getCardInfo`,
+        axios.get('http://localhost:8000/users/getCardInfo',
             {
                 headers: { token: token }
             })
@@ -55,7 +55,7 @@ function PaymentView() {
     };
 
     const onSubmit = () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/orders/create`, rentingDetails)
+        axios.post('http://localhost:8000/orders/create', rentingDetails)
             .then((res) => {
                 toast.success('Your order has been confirmed!', {
                     autoClose: 2000,

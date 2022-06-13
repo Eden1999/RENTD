@@ -58,7 +58,7 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
 
   useEffect(async () => {
     try {
-      const res = await Axios.post(`${process.env.REACT_APP_SERVER_URL}/workspaces/search`, null, {
+      const res = await Axios.post("http://localhost:8000/workspaces/search", null, {
         params: { city: city.name, capacity, space_type_id },
       });
       setWorkspaces(res.data);
@@ -68,10 +68,11 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
   }, []);
 
   return (
-    <div className={"h-full"}>
-      <FormGroup sx={{ flexDirection: 'row' }} className={"w-2/5 flex mb-5 m-auto text-primary px-8 py-4 bg-secondary/30 rounded-lg"}>
+    <div className={"flex h-full"}>
+      <FormGroup
+        className={"w-1/4 text-primary px-8 pt-6 bg-secondary/30 rounded-lg h-max"}
+      >
         {Object.values(filters).map(({ label, value, key }) => (
-          <div>
           <FormControlLabel
             label={label}
             key={key}
@@ -83,10 +84,9 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
               />
             }
           />
-          </div>
         ))}
       </FormGroup>
-      <div className={"w-full px-12"}>
+      <div className={"w-4/5 px-12"}>
         <WorkspacesList
           workspaces={filteredWorkspaces}
           workspaceCardBody={ workspaceListType.general}

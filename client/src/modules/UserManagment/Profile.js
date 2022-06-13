@@ -21,7 +21,7 @@ const Profile = () => {
     const [workspaces, setWorkspaces] = useState([])
 
     const getWorkspaceAvailabilities = async () => {
-        await axios.get(`${process.env.REACT_APP_SERVER_URL}/availabilities/${user.id}?date=${date}`, {
+        await axios.get(`http://localhost:8000/availabilities/${user.id}?date=${date}`, {
         })
         .then((res) => {
             console.log("success")
@@ -34,7 +34,7 @@ const Profile = () => {
     }
 
     const getHostWorkspaces = async () => {
-        const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/workspaces/hosts/${user.id}`, {});
+        const { data } = await axios.get(`http://localhost:8000/workspaces/hosts/${user.id}`, {});
     }
 
     useEffect(async () => {

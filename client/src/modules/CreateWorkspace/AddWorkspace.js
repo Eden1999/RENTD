@@ -70,7 +70,7 @@ const AddWorkspace = () => {
   useEffect(async () => {
     try {
       const query = {};
-      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/spacetypes`, query);
+      const res = await Axios.get("http://localhost:8000/spacetypes", query);
       setSpaceTypes(res.data);
       setWorkspace((workspace) => ({ ...workspace, spaceType: res.data[0] }));
     } catch (err) {
@@ -116,7 +116,7 @@ const AddWorkspace = () => {
       if (isInCreateMode) {
         axios
           .post(
-            `${process.env.REACT_APP_SERVER_URL}/workspaces/create`,
+            "http://localhost:8000/workspaces/create",
             { workspace },
             {
               headers: {
@@ -135,7 +135,7 @@ const AddWorkspace = () => {
       } else {
         axios
           .put(
-            `${process.env.REACT_APP_SERVER_URL}/workspaces/edit/${workspace.id}`,
+            `http://localhost:8000/workspaces/edit/${workspace.id}`,
             { workspace },
             {
               headers: {

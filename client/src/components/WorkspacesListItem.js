@@ -30,7 +30,7 @@ const WorkspacesListItem = ({
     // Get cheapest asset price
     useEffect(async () => {
         try {
-            const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/assets/workspaceId/${currentWorkspace.id}`);
+            const res = await Axios.get(`http://localhost:8000/assets/workspaceId/${currentWorkspace.id}`);
 
             const orderedAssets = res.data.sort((a,b) => {
                 return a.cost_per_hour - b.cost_per_hour;
@@ -45,7 +45,7 @@ const WorkspacesListItem = ({
     useEffect(async () => {
         try {
             if(order) {
-                const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/assets/${order.asset_id}`);
+                const res = await Axios.get(`http://localhost:8000/assets/${order.asset_id}`);
                 setCurrentAsset(res.data);
             }
         } catch (err) {
@@ -72,7 +72,7 @@ const WorkspacesListItem = ({
   }, [setHoveredWorkspaceId]);
 
     const onFavoriteClick = useCallback((workspace) => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/users/addWorkspaceToFavorites`, {workspaceId : workspace.id}, {
+        axios.post('http://localhost:8000/users/addWorkspaceToFavorites', {workspaceId : workspace.id}, {
             headers: {
                 token,
             }
@@ -97,7 +97,7 @@ const WorkspacesListItem = ({
     }, []);
 
     const onRemoveFavoriteClick = useCallback((workspace) => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/users/removeFavoriteWorkspace`, {workspaceId : workspace.id}, {
+        axios.post('http://localhost:8000/users/removeFavoriteWorkspace', {workspaceId : workspace.id}, {
             headers: {
                 token,
             }
@@ -124,7 +124,7 @@ const WorkspacesListItem = ({
     }
 
   return (
-      <div className="flex mx-auto">
+      <div className="flex">
         <div className={`card card-compact w-80 rounded-3xl ${hoveredOnMap ? "hover" : ""} hover:drop-shadow-2xl hover:cursor-pointer mb-6`}
              onMouseEnter={() => onItemHover(currentWorkspace.id)}
              onMouseLeave={onItemStopHover}

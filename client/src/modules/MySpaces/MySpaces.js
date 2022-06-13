@@ -14,7 +14,7 @@ const MySpaces = () => {
 
   useEffect(async () => {
     try {
-      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/workspaces/hosts/${user.id}`);
+      const res = await Axios.get(`http://localhost:8000/workspaces/hosts/${user.id}`);
       setWorkspaces(res.data);
       setMapMarkers(res.data);
     } catch (err) {

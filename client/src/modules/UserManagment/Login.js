@@ -1,24 +1,12 @@
 import React, { useState, useCallback, useContext } from "react";
 import axios from "axios";
-import {
-  Container,
-  CssBaseline,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  InputAdornment,
-} from "@mui/material";
-import Register from "./Register";
 import useToken from "../../helpers/useToken";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../store/AppContext";
-import { DraftsOutlined } from "@mui/icons-material";
 
 const Login = () => {
   const navigate = useNavigate();
   const [, dispatch] = useContext(AppContext);
-  const [registerMode, setRegisterMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { token, setToken } = useToken();
@@ -27,7 +15,7 @@ const Login = () => {
     const query = { email, password };
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/users/signIn`, query)
+      .post("http://localhost:8000/users/signIn", query)
       .then((res) => {
         if (res.data.token) {
           setToken(res.data.token);
@@ -75,26 +63,22 @@ const Login = () => {
         />
       </div>
       <span
-        className={"mb-6 text-md text-blue-500 cursor-pointer underline decoration-blue-500"}
+        className="text-md text-blue-500 cursor-pointer underline decoration-blue-500"
         onClick={() => navigate("/reset-password")}
       >
         Forgot password
       </span>
-      <div className="flex mb-6 justify-center">
-        <div>
+      <div className="flex my-6 justify-center">
           <button type="button" className={"btn btn-lg btn-primary"} onClick={handleLogin}>
             Login
           </button>
-        </div>
-        <div className="ml-8">
           <button
             type="button"
-            className={"btn btn-lg btn-secondary text-white"}
+            className={"btn btn-lg btn-secondary text-white ml-8"}
             onClick={handleRegister}
           >
             Register
           </button>
-        </div>
       </div>
     </div>
   );
