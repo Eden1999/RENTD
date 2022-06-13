@@ -25,7 +25,7 @@ const Review = ({open, setOpen, workspace_id}) => {
       rating
     }
 
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/ratings/create`, query, {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}ratings/create`, query, {
       headers: {
         token,
       }

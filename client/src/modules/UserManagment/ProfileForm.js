@@ -20,7 +20,7 @@ const ProfileForm = () => {
     const handleSave = () => {
         const { id } = user;
 
-        axios.put(`${process.env.REACT_APP_SERVER_URL}/users`,
+        axios.put(`${process.env.REACT_APP_SERVER_URL}users`,
             { email, username, photo, cardNumber, expirationMonth, expirationYear }, {
             headers: {
                 token
@@ -166,7 +166,7 @@ const ProfileForm = () => {
                         </button>
                         <button className={'btn btn-secondary text-white mt-6 text-sm cursor-pointer decoration-blue-500'}
                             onClick={() => navigate('/reset-password')}>
-                            reset password
+                            change password
                         </button>
                     </div>
                 </div>

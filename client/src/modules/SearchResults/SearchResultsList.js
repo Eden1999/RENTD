@@ -58,7 +58,7 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
 
   useEffect(async () => {
     try {
-      const res = await Axios.post(`${process.env.REACT_APP_SERVER_URL}/workspaces/search`, null, {
+      const res = await Axios.post(`${process.env.REACT_APP_SERVER_URL}workspaces/search`, null, {
         params: { city: city.name, capacity, space_type_id },
       });
       setWorkspaces(res.data);

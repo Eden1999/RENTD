@@ -25,7 +25,7 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
   useEffect(async () => {
     try {
       const query = {};
-      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/assetTypes`, query);
+      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}assetTypes`, query);
       setAssetTypes(res.data);
     } catch (err) {
       console.log(`Failed to fetch spaceTypes ${err.message}`);

@@ -27,7 +27,7 @@ const Register = () => {
     const query = { username, password, email, isHost, photo, cardNumber, expirationMonth, expirationYear, saveCardInfo };
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/users/register`, query)
+      .post(`${process.env.REACT_APP_SERVER_URL}users/register`, query)
       .then((res) => {
         if (res.data.token) {
           setToken(res.data.token);

@@ -17,7 +17,7 @@ const OrdersHistory = () => {
   useEffect(async () => {
     try {
       const query = {};
-      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}/orders/user/${user.id}`, query);
+      const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}orders/user/${user.id}`, query);
       console.log(res.data);
       setOrders(res.data);
     } catch (err) {

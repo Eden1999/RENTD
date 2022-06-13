@@ -41,7 +41,7 @@ const Orders = ({ workspace }) => {
 
   const getOrders = async (workspace_id) => {
     await axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/orders/${workspace_id}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}orders/${workspace_id}`)
       .then((res) => {
         console.log("get all orders successfully");
         setOrders(res.data);
@@ -59,7 +59,7 @@ const Orders = ({ workspace }) => {
   useEffect(async () => {
     try {
       const query = {};
-      const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/assetTypes`, query);
+      const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}assetTypes`, query);
       setAssetTypes(res.data);
     } catch (err) {
       console.log(`Failed to fetch spaceTypes ${err.message}`);
@@ -80,7 +80,7 @@ const Orders = ({ workspace }) => {
 
   const continueToPayment = useCallback(async (e) => {
     let costPerHour = await axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/assets/${e.appointmentData.asset_id}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}assets/${e.appointmentData.asset_id}`)
       .then((res) => {
         return res.data.cost_per_hour;
       })
@@ -115,7 +115,7 @@ const Orders = ({ workspace }) => {
     const query = newOrder;
 
     axios
-      .put(`${process.env.REACT_APP_SERVER_URL}/orders/${newOrder.id}`, query)
+      .put(`${process.env.REACT_APP_SERVER_URL}orders/${newOrder.id}`, query)
       .then((res) => {
         console.log("successfully updates");
       })
@@ -130,7 +130,7 @@ const Orders = ({ workspace }) => {
     console.log(`try delete id ${id}`);
 
     axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/orders/${id}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}orders/${id}`)
       .then((res) => {
         console.log("successfully deleted");
       })

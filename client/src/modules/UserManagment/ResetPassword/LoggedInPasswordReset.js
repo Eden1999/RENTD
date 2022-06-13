@@ -38,7 +38,7 @@ function LoggedInPasswordReset() {
     const handleSubmit = () => {
         if (!verifyInputs()) return;
         
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/users/change-password`, {token, newPassword, currentPassword})
+        axios.post(`${process.env.REACT_APP_SERVER_URL}users/change-password`, {token, newPassword, currentPassword})
             .then((res) => {
                 toast.success("Password successfully changed!", {
                     autoClose: 2000,
