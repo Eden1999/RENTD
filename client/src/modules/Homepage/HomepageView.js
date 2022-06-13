@@ -10,7 +10,7 @@ function HomepageView() {
   
     useEffect(async () => {
         try {
-        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/workspaces/recommendations/${user.id}`);
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/recommendations/${user.id}`);
         setrecommendations(res.data);
         } catch (err) {
         console.log(`Failed to fetch recommendations ${err.message}`);
