@@ -187,9 +187,15 @@ const Register = () => {
           onChange={handlePhotoUpload}
         />
       </div>
-      <div className="flex mb-6 justify-end">
-        <button type="button" className={"btn btn-lg btn-primary"} onClick={handleRegister}>Register</button>
-      </div>
+        <div className="flex mb-6 justify-center">
+            <button
+                type="button"
+                className={"btn btn-lg btn-secondary text-white"}
+                onClick={() => navigate("/login")}>
+                Back to login
+            </button>
+            <button type="button" className={"btn btn-lg btn-primary ml-8"} onClick={handleRegister}>Register</button>
+        </div>
     </div>
   );
 };
