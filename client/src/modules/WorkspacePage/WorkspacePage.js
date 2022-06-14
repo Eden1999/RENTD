@@ -18,7 +18,7 @@ import {
 import Orders from "../Orders/Orders";
 
 import "./WorkspacePage.scss";
-import {Dialog, DialogContent, DialogTitle, ImageList, ImageListItem, ListItemIcon, Rating} from "@mui/material";
+import {Dialog, Rating} from "@mui/material";
 import { AppContext } from "store/AppContext";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -126,7 +126,7 @@ const WorkspacePage = () => {
           <span>
             <button
                 id="editIcon"
-                className="btn btn-ghost btn-circle text-error"
+                className="btn btn-ghost btn-circle text-primary"
                 onClick={(e) => onEditClick(e, workspace)}>
               <EditIcon fontSize="large" />
             </button>

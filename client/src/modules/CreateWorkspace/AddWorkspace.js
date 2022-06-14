@@ -331,7 +331,7 @@ const AddWorkspace = () => {
         );
       case 3:
         return (
-          <div className="mb-6 pl-44 pr-44 mt-10 text-center h-screen">
+          <div className="mb-6 pl-44 pr-44 mt-10 text-center">
             <a className="text-primary text-2xl font-medium">
               Choose images to show your space, please select at least 5
             </a>
@@ -360,7 +360,7 @@ const AddWorkspace = () => {
   }
 
   return isInCreateMode ? (
-    <div>
+    <div className={'mx-36 my-4'}>
       <ul className="steps steps-vertical lg:steps-horizontal w-full mt-5">
         <li
           className={`step step-primary`}
@@ -406,7 +406,7 @@ const AddWorkspace = () => {
       {renderSwitch()}
       {step !== 0 && (
         <button
-          className="btn btn-lg btn-primary ml-20 sticky bottom-5 left-0"
+          className="btn btn-lg btn-primary ml-20 bottom-5 left-0 mt-8"
           onClick={() => {
             setStep((step) => step - 1);
           }}
@@ -415,7 +415,7 @@ const AddWorkspace = () => {
         </button>
       )}
       <button
-        className="btn btn-lg btn-primary mr-20 sticky bottom-5 float-right"
+        className="btn btn-lg btn-primary mr-20 bottom-5 float-right mt-8"
         onClick={() => {
           step === 4 ? handleSave() : setStep((step) => step + 1);
         }}
