@@ -3,7 +3,7 @@ import WorkspacesListItem from "./WorkspacesListItem";
 const WorkspacesList = ({ workspaces, workspaceCardBody, orders, setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
 
     return (
-        <div className={`flex grid auto-cols-auto  ${setMapMarkers ? "grid-cols-2" : "grid-cols-4 gap-4"}`}>
+        <div className={`flex grid ${setMapMarkers ? "grid-cols-2" : "grid-cols-4 gap-4"}`}>
             {workspaces &&
             workspaces.map((workspace) => (
                 <WorkspacesListItem

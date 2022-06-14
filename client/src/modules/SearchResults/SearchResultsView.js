@@ -21,8 +21,8 @@ const SearchResultsView = () => {
 
   return (
     <div className="h-full flex flex-row flex-1">
-      <div className="flex w-2/3 flex-col">
-            <div className={"ml-[17.5rem] my-8 text-primary text-4xl text-left font-medium"}>
+      <div className="flex w-1/2 flex-col">
+            <div className={"m-8 text-primary text-4xl text-left font-medium"}>
               We found multiple options for you
             </div>
             <SearchResultsList
@@ -31,8 +31,7 @@ const SearchResultsView = () => {
               setHoveredWorkspaceId={setHoveredWorkspaceId}
             />
       </div>
-      <div className="flex w-1/3 min-h-full mr-24 my-8">
-        <div className="w-full">
+        <div className="w-1/2 mr-24 my-8">
           <Map
             onMarkerHover={onMarkerHover}
             hoveredMarkerId={hoveredWorkspaceId}
@@ -51,7 +50,6 @@ const SearchResultsView = () => {
             })}
           />
         </div>
-      </div>
     </div>
   );
 };

@@ -124,7 +124,7 @@ const WorkspacesListItem = ({
     }
 
   return (
-      <div className="flex mx-auto">
+      <div className="flex">
         <div className={`card card-compact w-80 rounded-3xl ${hoveredOnMap ? "hover" : ""} hover:drop-shadow-2xl hover:cursor-pointer mb-6`}
              onMouseEnter={() => onItemHover(currentWorkspace.id)}
              onMouseLeave={onItemStopHover}

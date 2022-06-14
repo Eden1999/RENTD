@@ -68,8 +68,8 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
   }, []);
 
   return (
-    <div className={"h-full"}>
-      <FormGroup sx={{ flexDirection: 'row' }} className={"w-2/5 flex mb-5 m-auto text-primary px-8 py-4 bg-secondary/30 rounded-lg"}>
+    <div>
+      <FormGroup sx={{ flexDirection: 'row' }} className={"mx-8 flex mb-5 m-auto text-primary px-8 py-4 bg-secondary/10 rounded-lg"}>
         {Object.values(filters).map(({ label, value, key }) => (
           <div>
           <FormControlLabel
