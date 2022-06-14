@@ -29,7 +29,7 @@ const UploadImages = ({ workspace, handlePhotoUpload, handleImageDelete }) => {
       <label
         htmlFor="photos"
         id="button"
-        class="mt-10 rounded-sm px-3 py-1 btn btn-primary hover:bg-gray-300 focus:shadow-outline focus:outline-none"
+        class="mt-10 rounded-sm px-3 py-1 btn btn-primary focus:shadow-outline focus:outline-none"
       >
         Upload photos
       </label>
