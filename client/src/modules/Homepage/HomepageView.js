@@ -3,15 +3,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "store/AppContext";
 import WorkspaceForm from "./WorkspaceForm";
 import RecommendationCarousel from "./RecommendationCarousel";
+import {BeatLoader} from "react-spinners";
 
 function HomepageView() {
     const [recommendations, setrecommendations] = useState([]);
     const [{ user }] = useContext(AppContext);
+    let [loading, setLoading] = useState(true);
   
     useEffect(async () => {
         try {
         const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/recommendations/${user.id}`);
         setrecommendations(res.data);
+        setLoading(false)
         } catch (err) {
         console.log(`Failed to fetch recommendations ${err.message}`);
         }
@@ -29,9 +32,14 @@ function HomepageView() {
                 </div>
             </div>
             <div className="flex-1 flex-col flex ml-36">
-                {recommendations.length && <span className="text-secondary text-3xl font-medium italic">Recommended Workspaces - Just For You!</span>}
+                {recommendations.length ? <span className="text-secondary text-3xl font-medium italic">Recommended Workspaces - Just For You!</span> : <span/>}
                 <div className="mt-4 flex-grow">
-                    <RecommendationCarousel recommendations={recommendations} />
+                    {loading ?
+                        <div className="text-center mt-48">
+                            <BeatLoader color="#818cf8" css={{textAlign: 'center'}} size={25}/>
+                        </div> :
+                        <RecommendationCarousel recommendations={recommendations}/>
+                    }
                 </div>
             </div>
         </div>

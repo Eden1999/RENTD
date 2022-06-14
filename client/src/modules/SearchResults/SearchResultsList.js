@@ -8,6 +8,7 @@ import {workspaceListType} from "../../helpers/consts";
 const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId }) => {
   const [workspaces, setWorkspaces] = useState([]);
 
+  let [loading, setLoading] = useState(true);
   const { state } = useLocation();
   const { capacity, space_type_id } = state;
   let { city } = state;
@@ -62,6 +63,7 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
         params: { city: city.name, capacity, space_type_id },
       });
       setWorkspaces(res.data);
+      setLoading(false);
     } catch (err) {
       console.log(`Failed to fetch workspaces ${err.message}`);
     }
@@ -93,6 +95,7 @@ const SearchResultsList = ({ setMapMarkers, hoveredMarkerId, setHoveredWorkspace
           setMapMarkers={setMapMarkers}
           hoveredMarkerId={hoveredMarkerId}
           setHoveredWorkspaceId={setHoveredWorkspaceId}
+          loading={loading}
         />
       </div>
     </div>

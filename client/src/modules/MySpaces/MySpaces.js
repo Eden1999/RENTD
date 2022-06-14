@@ -11,12 +11,14 @@ const MySpaces = () => {
   const [workspaces, setWorkspaces] = useState([]);
   const [mapMarkers, setMapMarkers] = useState();
   const [{ user }] = useContext(AppContext);
+  let [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     try {
       const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/hosts/${user.id}`);
       setWorkspaces(res.data);
       setMapMarkers(res.data);
+      setLoading(false)
     } catch (err) {
       console.log(`Failed to fetch workspaces ${err.message}`);
     }
@@ -38,6 +40,7 @@ const MySpaces = () => {
             <WorkspacesList
                 workspaces={workspaces}
                 workspaceCardBody={workspaceListType.general}
+                loading={loading}
             />
           </div>
         </div>

@@ -13,6 +13,7 @@ const OrdersHistory = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [{ user }] = useContext(AppContext);
+  let [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     try {
@@ -20,6 +21,7 @@ const OrdersHistory = () => {
       const res = await Axios.get(`${process.env.REACT_APP_SERVER_URL}orders/user/${user.id}`, query);
       console.log(res.data);
       setOrders(res.data);
+      setLoading(false)
     } catch (err) {
       console.log(`Failed to fetch orders ${err.message}`);
     }
@@ -31,6 +33,7 @@ const OrdersHistory = () => {
       <WorkspacesList
           orders={orders}
           workspaceCardBody={workspaceListType.history}
+          loading={loading}
       />
     </div>
   );

@@ -9,6 +9,7 @@ const FavoriteWorkspaces = () => {
   const navigate = useNavigate();
   const [workspaces, setWorkspaces] = useState([]);
   const { token } = useToken();
+  let [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     try {
@@ -18,6 +19,7 @@ const FavoriteWorkspaces = () => {
           }
       });
       setWorkspaces(res.data);
+      setLoading(false)
     } catch (err) {
       console.log(`Failed to fetch orders ${err.message}`);
     }
@@ -33,6 +35,7 @@ const FavoriteWorkspaces = () => {
       <WorkspacesList
           workspaces={workspaces}
           workspaceCardBody={workspaceListType.general}
+          loading={loading}
       />
     </div>
   );
