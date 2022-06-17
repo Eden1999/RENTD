@@ -200,7 +200,7 @@ const WorkspacePage = () => {
               {workspace.disabled_access && (
                 <p> <Accessible /> Disabled accessible </p>
               )}
-              {workspace.smoke_friendly ? (
+              {!workspace.smoke_friendly ? (
                 <p>
                   <SmokeFree /> Smoking forbidden
                 </p>
