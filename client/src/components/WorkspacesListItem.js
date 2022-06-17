@@ -14,6 +14,8 @@ import {Wifi, SmokeFree, SmokingRooms, Accessible } from "@mui/icons-material";
 const WorkspacesListItem = ({
   workspace,
   order,
+  orders,
+  setOrders,
   workspaceCardBody,
   hoveredOnMap,
   setHoveredWorkspaceId,
@@ -199,7 +201,7 @@ const WorkspacesListItem = ({
             }
           </div>
         </div>
-        <Review open={isReviewDialogOpen} setOpen={setIsReviewDialogOpen} workspace_id={currentWorkspace.id}/>
+        <Review orders={orders} setOrders={setOrders} open={isReviewDialogOpen} setOpen={setIsReviewDialogOpen} workspace_id={currentWorkspace.id}/>
       </div>
   );
 };
