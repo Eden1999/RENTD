@@ -169,7 +169,7 @@ const WorkspacesListItem = ({
                     </div>
                     )}
                     <div className="text-md text-secondary smoking">
-                    {workspace.smoke_friendly ? (
+                    {!workspace.smoke_friendly ? (
                         <span>
                         <SmokeFree /> Smoking forbidden
                         </span>
