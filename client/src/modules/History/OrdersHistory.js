@@ -32,6 +32,7 @@ const OrdersHistory = () => {
       <div className="flex text-primary text-5xl font-medium mb-6">Here are the orders you've been made!</div>
       <WorkspacesList
           orders={orders}
+          setOrders={setOrders}
           workspaceCardBody={workspaceListType.history}
           loading={loading}
       />

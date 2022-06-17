@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public.ratings
     rating INTEGER NOT NULL,
     comment character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT ratings_pkey PRIMARY KEY (id)
+    UNIQUE (workspace_id, user_id)
 )
 
 TABLESPACE pg_default;

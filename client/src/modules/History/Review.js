@@ -4,8 +4,9 @@ import useToken from "../../helpers/useToken";
 import PropTypes from "prop-types";
 
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField } from "@mui/material";
+import { toast } from "react-toastify";
 
-const Review = ({open, setOpen, workspace_id}) => {
+const Review = ({open, setOpen, workspace_id, orders, setOrders}) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const { token, setToken } = useToken();
@@ -31,14 +32,17 @@ const Review = ({open, setOpen, workspace_id}) => {
       }
     })
     .then((res) => {
-      // let updatedOrders = orders.map((order) => {
-      //   if(order.workspace.id === workspace_id ) {
-      //     order.workspace.ratings = [...order.workspace.ratings, res?.data]
-      //   }
-      //
-      //   return order
-      // })
-      // setOrders(updatedOrders)
+      toast(res.data?.message)
+      if(res?.data?.addedRating) { 
+        let updatedOrders = orders.map((order) => {
+          if(order.workspace.id === workspace_id ) {
+            order.workspace.ratings = [...order.workspace.ratings, res.data.addedRating]
+          }
+        
+          return order
+        })
+        setOrders(updatedOrders)
+      }
     })
     .catch(err =>{
       alert(err.response.data)

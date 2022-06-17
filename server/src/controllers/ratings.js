@@ -52,11 +52,12 @@ const createNewRating = (req, res) => {
           .create(newRating)
           .then((addedRating) => {
             addedRating.dataValues.user = user.dataValues;
-            return res.status(200).send(addedRating);
+            return res.status(200).send({message : 'Review successfully added!', addedRating});
           })
           .catch((err) => {
             console.log(err);
-            return res.status(err.status || 500).send(err.message || err.errors[0].message);
+            return res.status(err?.message === 'Validation error' ? 200 : (err.status || 500)).send(err?.message === 'Validation error' ? 
+             {message : 'You already reviewed this place!'} : (err.message || err.errors[0].message));
           });
       } else {
         let err = "user not found";

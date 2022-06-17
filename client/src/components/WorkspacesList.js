@@ -7,7 +7,7 @@ const override = {
     textAlign: "center"
 };
 
-const WorkspacesList = ({ workspaces, workspaceCardBody, orders, setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId, loading }) => {
+const WorkspacesList = ({ workspaces, workspaceCardBody, orders, setOrders, setMapMarkers, hoveredMarkerId, setHoveredWorkspaceId, loading }) => {
 
     return (
         !loading ? <div className={`flex grid gap-4 sweet-loading ${setMapMarkers ? "grid-cols-2" : "grid-cols-4"}`}>
@@ -26,6 +26,8 @@ const WorkspacesList = ({ workspaces, workspaceCardBody, orders, setMapMarkers, 
                 <WorkspacesListItem
                     key={order.id}
                     order={order}
+                    orders={orders}
+                    setOrders={setOrders}
                     workspaceCardBody={workspaceCardBody}
                 />
             ))}
