@@ -78,16 +78,13 @@ const WorkspacesListItem = ({
             }
         })
             .then((res) => {
-                toast(res.data)
-                let updatedUser = {...user, favorite_workspaces : (user.favorite_workspaces ?
-                        [...user.favorite_workspaces, workspace.id] :
-                        [workspace.id])};
+                toast(res.data.message)
+                sessionStorage.setItem('user', JSON.stringify(res.data.user));
 
-                sessionStorage.setItem('user', JSON.stringify(updatedUser));
                 dispatch({
                     type: "SET_GENERAL_STATE",
                     payload: {
-                        user: updatedUser
+                        user: res.data.user
                     },
                 })
             })
@@ -103,13 +100,13 @@ const WorkspacesListItem = ({
             }
         })
             .then((res) => {
-                toast(res.data)
-                let updatedUser = {...user, favorite_workspaces : user.favorite_workspaces.filter((id) => id != workspace.id)}
-                sessionStorage.setItem('user', JSON.stringify(updatedUser));
+                toast(res.data.message)
+                sessionStorage.setItem('user', JSON.stringify(res.data.user));
+                
                 dispatch({
                     type: "SET_GENERAL_STATE",
                     payload: {
-                        user: updatedUser
+                        user: res.data.user
                     },
                 })
             })
