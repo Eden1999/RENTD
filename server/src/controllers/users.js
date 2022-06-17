@@ -350,11 +350,13 @@ const addWorkspaceToFavorites = async (req, res) => {
         .then(async (user) => {
             if (user) {
                 try {
+                    let newUser = {...user.dataValues};
                     await user.update({
                         favorite_workspaces: sequelize.fn('array_append',
                             sequelize.col('favorite_workspaces'), workspaceId)
                     });
-                    return res.status(200).send('Added to favorites successfully!');
+                    newUser.favorite_workspaces.push(workspaceId)
+                    return res.status(200).send({message : 'Added to favorites successfully!', user : newUser});
                 } catch (err) {
                     return res.status(500).send('Something went wrong! Workspace was not added to list');
                 }
@@ -382,11 +384,16 @@ const RemoveWorkspaceFromFavorites = async (req, res) => {
         .then(async (user) => {
             if (user) {
                 try {
+                    let newUser = {...user.dataValues};
                     await user.update({
                         favorite_workspaces: sequelize.fn('array_remove',
                             sequelize.col('favorite_workspaces'), workspaceId)
                     });
-                    return res.status(200).send('Workspace was removed from favorites successfully!');
+
+                    newUser.favorite_workspaces = newUser.favorite_workspaces.filter((item) => 
+                        item !== workspaceId
+                    )
+                    return res.status(200).send({message : 'Workspace was removed from favorites successfully!', user : newUser});
                 } catch (err) {
                     return res.status(500).send('Something went wrong! Workspace was not removed from list');
                 }
