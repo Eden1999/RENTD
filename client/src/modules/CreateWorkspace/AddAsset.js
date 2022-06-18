@@ -42,7 +42,7 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                 <label className="block mb-2 text-lg font-medium text-primary">
                     capacity:
                 </label>
-                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                <input type="number" min="1" className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
                        value={capacity}
                        onChange={(event) => {
                            setCapacity(event.target.value)
@@ -55,7 +55,7 @@ const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
                 <label className="block mb-2 text-lg font-medium text-primary">
                     cost per hour:
                 </label>
-                <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
+                <input type="number" min="0" className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
                        value={cost_per_hour}
                        onChange={(event) => {
                            setCost(event.target.value);

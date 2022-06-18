@@ -87,11 +87,19 @@ const AddWorkspace = () => {
       isFormValid = false;
       errors = errors + "name cannot be empty, ";
       setErrorMessage(errors);
+    } else if (typeof workspace.name != "string") {
+      isFormValid = false;
+      errors = errors + "name must be a string, ";
+      setErrorMessage(errors);
     }
 
     if (!workspace.city) {
       isFormValid = false;
       errors = errors + "city cannot be empty, ";
+      setErrorMessage(errors);
+    } else if (typeof workspace.city != "string") {
+      isFormValid = false;
+      errors = errors + "city must be a string, ";
       setErrorMessage(errors);
     }
 
@@ -99,11 +107,19 @@ const AddWorkspace = () => {
       isFormValid = false;
       errors = errors + "address cannot be empty, ";
       setErrorMessage(errors);
+    } else if (typeof workspace.address != "string") {
+      isFormValid = false;
+      errors = errors + "address must be a string, ";
+      setErrorMessage(errors);
     }
 
     if (!workspace.description) {
       isFormValid = false;
       errors = errors + "description cannot be empty, ";
+      setErrorMessage(errors);
+    } else if (typeof workspace.description != "string") {
+      isFormValid = false;
+      errors = errors + "description must be a string, ";
       setErrorMessage(errors);
     }
 
