@@ -19,7 +19,7 @@ const AddWorkspace = () => {
   let location = useLocation();
   const navigate = useNavigate();
   const [{ user }] = useContext(AppContext);
-  const [errorMessage, setErrorMessage] = useState("erros: ");
+  const [errorMessage, setErrorMessage] = useState("");
   const [workspace, setWorkspace] = useState({
     name: "",
     host_id: user.host_id,
@@ -85,7 +85,44 @@ const AddWorkspace = () => {
     //Name
     if (!workspace.name) {
       isFormValid = false;
-      errors = errors + " name cannot be empty ";
+      errors = errors + "name cannot be empty, ";
+      setErrorMessage(errors);
+    }
+
+    if (!workspace.city) {
+      isFormValid = false;
+      errors = errors + "city cannot be empty, ";
+      setErrorMessage(errors);
+    }
+
+    if (!workspace.address) {
+      isFormValid = false;
+      errors = errors + "address cannot be empty, ";
+      setErrorMessage(errors);
+    }
+
+    if (!workspace.description) {
+      isFormValid = false;
+      errors = errors + "description cannot be empty, ";
+      setErrorMessage(errors);
+    }
+
+    if (workspace.photos.length < 5) {
+      isFormValid = false;
+      errors = errors + "must have at least 5 photos, ";
+      setErrorMessage(errors);
+    }
+
+    if (workspace.assets.length < 1) {
+      isFormValid = false;
+      errors = errors + "must have at least 1 asset, ";
+      setErrorMessage(errors);
+    }
+
+    const isOpenInOneDay = workspace.opening_days.find(({ open} ) => open)
+    if (!isOpenInOneDay) {
+      isFormValid = false;
+      errors = errors + "workspace must be open on at least 1 day";
       setErrorMessage(errors);
     }
 
@@ -152,8 +189,6 @@ const AddWorkspace = () => {
             alert(err.response.data);
           });
       }
-    } else {
-      alert(`${errorMessage}`);
     }
   });
 
@@ -361,6 +396,7 @@ const AddWorkspace = () => {
 
   return isInCreateMode ? (
     <div className={'my-4 mx-20 text-center'}>
+      {errorMessage && <span className="text-red-500 font-bold">{errorMessage}</span>}
       <ul className="steps steps-vertical lg:steps-horizontal w-full mt-5">
         <li
           className={`step step-primary`}
