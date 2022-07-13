@@ -1,4 +1,5 @@
 const { sequelize } = require("../config/sequelize");
+const { getWorkspaceWithoutPhotos } = require("./workspaces");
 
 const getOrdersByWorkspaceId = (req, res) => {
   const { workspaceId, date } = req.params;
@@ -54,29 +55,31 @@ const getOrdersByUserId = (req, res) => {
     })
     .then(async (orders) => {
       if (orders) {
+        
         orders.map((order) => order.dataValues);
 
         orders = await Promise.all(
           orders.map(async ({ dataValues: order }) => {
+            const workspace = (await getWorkspaceWithoutPhotos(order.workspace_id))[0];
             const ratings = await sequelize.models.ratings.findAll({
-              where: { workspace_id: order.workspace.dataValues.id },
+              where: { workspace_id: workspace.id },
               include: {
                 model: sequelize.models.users,
               },
             });
             const host = await sequelize.models.users.findOne({
-              where: { id: order.workspace.dataValues.host_id },
+              where: { id: workspace.host_id },
             });
             const spaceType = await sequelize.models.space_types.findOne({
-              where: { id: order.workspace.dataValues.space_type_id },
+              where: { id: workspace.space_type_id },
             });
             const assets = await sequelize.models.assets.findAll({
-              where: { workspace_id: order.workspace.id },
+              where: { workspace_id: workspace.id },
             });
 
             return {
               ...order,
-              workspace: { ...order.workspace.dataValues, ratings, host, spaceType, assets },
+              workspace: { ...workspace, ratings, host, spaceType, assets },
             };
           })
         );

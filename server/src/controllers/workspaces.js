@@ -1,7 +1,9 @@
 const { sequelize } = require("../config/sequelize");
-const { Op } = require("@sequelize/core");
+const { Op, QueryTypes } = require("@sequelize/core");
 const jwt = require("jsonwebtoken");
 const { mostFrequent } = require("../helpers");
+const sharp = require('sharp');
+
 
 const getWorkspacesList = (req, res) => {
   sequelize.models.workspaces
@@ -21,45 +23,89 @@ const getWorkspacesList = (req, res) => {
       return res.status(err.status || 500).send(err);
     });
 };
+const getWorkspaceWithoutPhotos = async (id, previewPhoto = true) => {
+  let result = "";
+  if (previewPhoto) {
+    result = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces WHERE id = :workspaceId`, {
+      replacements: { workspaceId: id },
+      type: QueryTypes.SELECT
+    });
+  }
+  else {
+    result = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count FROM public.workspaces WHERE id = :workspaceId`, {
+      replacements: { workspaceId: workspaceId },
+      type: QueryTypes.SELECT
+    });
+  }
+
+  return result;
+}
+const getWorkspacePhotoById = async (workspaceId, photoId) => {
+  const result = await sequelize.query(`SELECT photos[:photoId] AS photo FROM public.workspaces WHERE id = :workspaceId`, {
+    replacements: { photoId: photoId, workspaceId: workspaceId },
+    type: QueryTypes.SELECT
+  });
+  return result[0]?.photo;
+};
+const getWorkspacesWithoutPhotos = async (previewPhoto = true) => {
+
+  let result = "";
+  if (previewPhoto) {
+    result = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces`, {
+      type: QueryTypes.SELECT
+    });
+  }
+  else {
+    result = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count FROM public.workspaces`, {
+      type: QueryTypes.SELECT
+    });
+  }
+
+  return result;
+}
 
 const getWorkspacesByHostId = async (req, res) => {
   const { hostId } = req.params;
 
-  sequelize.models.workspaces
-    .findAll({ where: { host_id: hostId } })
-    .then(async (workspaces) => {
-      if (workspaces) {
-        const fullWorkspaces = await Promise.all(
-          workspaces.map(async ({ dataValues: workspace }) => {
-            const ratings = await sequelize.models.ratings.findAll({
-              where: { workspace_id: workspace.id },
-              include: {
-                model: sequelize.models.users,
-              },
-            });
-            const host = await sequelize.models.users.findOne({
-              where: { id: workspace.host_id },
-            });
-            const spaceType = await sequelize.models.space_types.findOne({
-              where: { id: workspace.space_type_id },
-            });
-            const assets = await sequelize.models.assets.findAll({
-              where: { workspace_id: workspace.id },
-            });
-            return { ...workspace, ratings, host, spaceType, assets };
-          })
-        );
-        return res.status(200).send(fullWorkspaces);
-      } else {
-        let err = "workspaces not found";
-        console.log(err);
-        return res.status(500).send(err);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(err.status || 500).send(err);
+  try {
+    const workspaces = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces WHERE host_id = :hostId`, {
+      replacements: { hostId: hostId },
+      type: QueryTypes.SELECT
     });
+
+
+    if (workspaces) {
+      const fullWorkspaces = await Promise.all(
+        workspaces.map(async (workspace) => {
+          const ratings = await sequelize.models.ratings.findAll({
+            where: { workspace_id: workspace.id },
+            include: {
+              model: sequelize.models.users,
+            },
+          });
+          const host = await sequelize.models.users.findOne({
+            where: { id: workspace.host_id },
+          });
+          const spaceType = await sequelize.models.space_types.findOne({
+            where: { id: workspace.space_type_id },
+          });
+          const assets = await sequelize.models.assets.findAll({
+            where: { workspace_id: workspace.id },
+          });
+          return { ...workspace, ratings, host, spaceType, assets };
+        })
+      );
+      return res.status(200).send(fullWorkspaces);
+    } else {
+      let err = "workspaces not found";
+      return res.status(200).send(err);
+    }
+  }
+  catch (e) {
+    console.log(e);
+    return res.status(e.status || 500).send(e);
+  };
+
 };
 
 const getUserFavoriteWorkspaces = (req, res) => {
@@ -72,41 +118,46 @@ const getUserFavoriteWorkspaces = (req, res) => {
     .findOne({ where: { id: decodeId } })
     .then(async (user) => {
       if (user) {
-        sequelize.models.workspaces
-          .findAll({ where: { id: { [Op.in]: user?.dataValues?.favorite_workspaces || [] } } })
-          .then(async (workspaces) => {
-            if (workspaces) {
-              const fullWorkspaces = await Promise.all(
-                workspaces.map(async ({ dataValues: workspace }) => {
-                  const ratings = await sequelize.models.ratings.findAll({
-                    where: { workspace_id: workspace.id },
-                    include: {
-                      model: sequelize.models.users,
-                    },
-                  });
-                  const host = await sequelize.models.users.findOne({
-                    where: { id: workspace.host_id },
-                  });
-                  const spaceType = await sequelize.models.space_types.findOne({
-                    where: { id: workspace.space_type_id },
-                  });
-                  const assets = await sequelize.models.assets.findAll({
-                    where: { workspace_id: workspace.id },
-                  });
-                  return { ...workspace, ratings, host, spaceType, assets };
-                })
-              );
-              return res.status(200).send(fullWorkspaces);
-            } else {
-              let err = "workspaces not found";
-              console.log(err);
-              return res.status(500).send(err);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.status(err.status || 500).send(err);
+        try {
+          let workspaces = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces WHERE id IN(:workspaceIds)`, {
+            replacements: {
+              workspaceIds: user?.dataValues?.favorite_workspaces || []
+            },
+            type: QueryTypes.SELECT
           });
+          if (workspaces) {
+            const fullWorkspaces = await Promise.all(
+              workspaces.map(async (workspace) => {
+                const ratings = await sequelize.models.ratings.findAll({
+                  where: { workspace_id: workspace.id },
+                  include: {
+                    model: sequelize.models.users,
+                  },
+                });
+                const host = await sequelize.models.users.findOne({
+                  where: { id: workspace.host_id },
+                });
+                const spaceType = await sequelize.models.space_types.findOne({
+                  where: { id: workspace.space_type_id },
+                });
+                const assets = await sequelize.models.assets.findAll({
+                  where: { workspace_id: workspace.id },
+                });
+                return { ...workspace, ratings, host, spaceType, assets };
+              })
+            );
+            return res.status(200).send(fullWorkspaces);
+          } else {
+            let err = "workspaces not found";
+            console.log(err);
+            return res.status(500).send(err);
+          }
+        }
+        catch (e) {
+          console.log(e);
+          return res.status(e.status || 500).send(e);
+        };
+
       } else {
         let err = "user not found";
         console.log(err);
@@ -119,10 +170,8 @@ const getUserFavoriteWorkspaces = (req, res) => {
     });
 };
 
-// Should validate the user is host
-const getWorkspacesByUserId = (req, res) => {};
 
-const createNewWorkspace = (req, res) => {
+const createNewWorkspace = async (req, res) => {
   const { token } = req.headers;
   const { workspace } = req.body;
 
@@ -134,9 +183,19 @@ const createNewWorkspace = (req, res) => {
   // check if user is already exist
   sequelize.models.users
     .findOne({ where: { id: decodeId } })
-    .then((user) => {
+    .then(async (user) => {
       if (user) {
         workspace.host_id = user.id;
+
+        // Compress photos
+        await Promise.all(workspace.photos.map(async (photo, id) => {
+          const buffer = Buffer.from(photo.split(',')[1], 'base64');
+          try {
+            let newPhoto = "data:image/jpeg;base64," + (await sharp(buffer).jpeg({ progressive: true, quality: 70, force: true }).toBuffer()).toString('base64');
+            workspace.photos[id] = newPhoto.length < photo.length ? newPhoto : photo;
+          } catch { }
+        }));
+
         sequelize.models.workspaces
           .create(workspace)
           .then((addedWorkspace) => {
@@ -153,13 +212,15 @@ const createNewWorkspace = (req, res) => {
                     return res.status(err.status || 500).send(err.message || err.errors[0].message);
                   });
               });
-              return res.status(200).send();
+              return res.status(400).send();
             }
           })
           .catch((err) => {
             console.log(err);
             return res.status(err.status || 500).send(err.message || err.errors[0].message);
           });
+
+
       } else {
         let err = "user not found";
         console.log(err);
@@ -170,6 +231,28 @@ const createNewWorkspace = (req, res) => {
       console.log(err);
       return res.status(err.status || 500).send(err);
     });
+};
+
+const getWorkspacePhotos = async (req, res) => {
+  const { workspaceId, photoId } = req.params;
+
+  if (!Number.isInteger(parseInt(photoId))) return res.status(400).send("INVALID_ID")
+  try {
+    const result = await sequelize.query(`SELECT photos[:photoId] AS photos FROM public.workspaces WHERE id = :workspaceId`, {
+      replacements: { photoId: photoId, workspaceId: workspaceId },
+      type: QueryTypes.SELECT
+    });
+    if (!result || !result[0].photos) return res.status(404).send();
+
+    const photo = result[0].photos;
+    return res.status(200).send(photo);
+  }
+  catch (e) {
+    console.log(e);
+    return res.status(e.status || 500).send(e);
+  };
+
+
 };
 
 const editWorkspace = (req, res) => {
@@ -185,10 +268,10 @@ const editWorkspace = (req, res) => {
 
   let assetsArray = assets
     ? assets
-        .filter((asset) => asset.id)
-        .map((x) => {
-          return x.id;
-        })
+      .filter((asset) => asset.id)
+      .map((x) => {
+        return x.id;
+      })
     : [];
 
   // check if user is already exist
@@ -272,16 +355,18 @@ const searchWorkspaces = async (req, res) => {
       });
     }
 
-    let workspaces = await sequelize.models.workspaces.findAll({
-      where: {
-        city: city,
-        space_type_id: space_type_id,
-        id: { [Op.in]: workspacesIds },
-      },
-    });
+      let workspaces = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces WHERE city=:city AND space_type_id=:space_type_id AND id IN(:workspaceIds)`, {
+        replacements: {
+          city: city,
+          space_type_id: space_type_id,
+          workspaceIds: workspacesIds
+        },
+        type: QueryTypes.SELECT
+      });
+    if (!workspaces)  res.status(200).send();
 
     workspaces = await Promise.all(
-      workspaces.map(async ({ dataValues: workspace }) => {
+      workspaces.map(async (workspace) => {
         const ratings = await sequelize.models.ratings.findAll({
           where: { workspace_id: workspace.id },
           include: {
@@ -342,7 +427,6 @@ const deleteWorkspace = async (req, res) => {
 
 const getUserRecommendations = async (req, res) => {
   const { userId } = req.params;
-
   sequelize.models.orders
     .findAll({
       include: [
@@ -397,17 +481,15 @@ const getUserRecommendations = async (req, res) => {
         });
 
         priorities.sort((a, b) => a.count - b.count);
-
-        let workspaces = await sequelize.models.workspaces.findAll();
-
+        let workspaces = await getWorkspacesWithoutPhotos(previewPhoto = false);
         let ranks = [];
 
         // Rank each workspace according to wether he has the most ordered elements, and by priority
         workspaces.forEach((workspace) => {
           let rank = 0;
-          !visitedWorkspaces.includes(workspace.dataValues.id) &&
+          !visitedWorkspaces.includes(workspace.id) &&
             priorities.forEach((priority, index) => {
-              if (workspace.dataValues[priority.name] == priority.value) {
+              if (workspace[priority.name] == priority.value) {
                 rank += index;
               }
             });
@@ -419,7 +501,6 @@ const getUserRecommendations = async (req, res) => {
         ranks = ranks.map((rank) => rank.workspace);
 
         workspaces = await workspaceStructure(ranks.slice(0, 3));
-
         return res.status(200).send(workspaces);
       } else {
         let workspaces = await sequelize.models.workspaces.findAll({ limit: 3 });
@@ -434,7 +515,8 @@ const getUserRecommendations = async (req, res) => {
 
 const workspaceStructure = async (workspaces) => {
   return await Promise.all(
-    workspaces.map(async ({ dataValues: workspace }) => {
+    workspaces.map(async (workspace) => {
+      workspace.preview_photo = await getWorkspacePhotoById(workspace.id, 1);
       const ratings = await sequelize.models.ratings.findAll({
         where: { workspace_id: workspace.id },
         include: {
@@ -456,12 +538,13 @@ const workspaceStructure = async (workspaces) => {
 };
 module.exports = {
   getWorkspacesList,
-  getWorkspacesByUserId,
   createNewWorkspace,
   editWorkspace,
+  getWorkspacePhotos,
   searchWorkspaces,
   getWorkspacesByHostId,
   deleteWorkspace,
   getUserFavoriteWorkspaces,
   getUserRecommendations,
+  getWorkspaceWithoutPhotos
 };

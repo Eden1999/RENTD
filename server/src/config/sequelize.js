@@ -9,6 +9,7 @@ const database=process.env.PG_DATABASE,
 
 const sequelize = new Sequelize(database, username, password, {
   host,
+  logging: false,
   port,
   dialect: "postgres",
   define: {

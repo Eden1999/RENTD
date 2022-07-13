@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-const WorkspaceHero = ({workspace}) => {
+const WorkspaceHero = ({ workspace }) => {
     const navigate = useNavigate();
 
     const onItemClick = useCallback((workspace) => {
@@ -10,7 +10,7 @@ const WorkspaceHero = ({workspace}) => {
 
     return (
         <div className="hero"
-             style={{backgroundImage: `url(` + workspace.photos?.[0] + `)`}}>
+            style={{ backgroundImage: `url(` + workspace?.preview_photo + `)` }}>
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">
