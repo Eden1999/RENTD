@@ -130,7 +130,7 @@ const WorkspacesListItem = ({
              id="listItem"
              onClick={(e) => onItemClick(e, currentWorkspace)}
         >
-          <img className="rounded-3xl w-80 h-80 object-cover" src={currentWorkspace.photos?.[0]} alt={currentWorkspace.name}/>
+          <img className="rounded-3xl w-80 h-80 object-cover" src={currentWorkspace.preview_photo} alt={currentWorkspace.name}/>
             <div className="flex absolute self-end p-4">
                 {!user?.is_host && user?.favorite_workspaces?.includes(currentWorkspace.id) ?
                     <button className="btn btn-ghost btn-sm bg-black/50 btn-circle text-error" onClick={(event) => {

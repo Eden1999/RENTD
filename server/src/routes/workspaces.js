@@ -18,4 +18,7 @@ router.put("/edit/:workspaceId", WorkspacesController.editWorkspace);
 
 router.delete("/:id", WorkspacesController.deleteWorkspace);
 
+router.get("/:workspaceId/photos/:photoId", WorkspacesController.getWorkspacePhotos);
+
+
 module.exports = router;

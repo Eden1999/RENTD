@@ -135,7 +135,7 @@ const AddWorkspace = () => {
       setErrorMessage(errors);
     }
 
-    const isOpenInOneDay = workspace.opening_days.find(({ open} ) => open)
+    const isOpenInOneDay = workspace.opening_days.find(({ open }) => open)
     if (!isOpenInOneDay) {
       isFormValid = false;
       errors = errors + "workspace must be open on at least 1 day";
@@ -457,24 +457,24 @@ const AddWorkspace = () => {
       </ul>
       {renderSwitch()}
       <div className={`flex px-20 ${step === 0 ? "justify-end" : "justify-between"}`}>
-      {step !== 0 && (
-            <button
-              className="btn btn-lg btn-secondary text-white mt-8"
-              onClick={() => {
-                setStep((step) => step - 1);
-              }}
-            >
-              Back
-            </button>
-          )}
+        {step !== 0 && (
           <button
-            className="btn btn-lg btn-primary mt-8 flex self-right"
+            className="btn btn-lg btn-secondary text-white mt-8"
             onClick={() => {
-              step === 4 ? handleSave() : setStep((step) => step + 1);
+              setStep((step) => step - 1);
             }}
           >
-            {step === 4 ? "Create workspace" : "Next"}
+            Back
           </button>
+        )}
+        <button
+          className="btn btn-lg btn-primary mt-8 flex self-right"
+          onClick={() => {
+            step === 4 ? handleSave() : setStep((step) => step + 1);
+          }}
+        >
+          {step === 4 ? "Create workspace" : "Next"}
+        </button>
       </div>
     </div>
   ) : (
@@ -523,8 +523,8 @@ const AddWorkspace = () => {
       </ul>
       {renderSwitch()}
       <button
-          className="btn btn-lg btn-primary mr-20 bottom-5 float-right mt-8"
-          onClick={handleSave}>
+        className="btn btn-lg btn-primary mr-20 bottom-5 float-right mt-8"
+        onClick={handleSave}>
         Edit workspace
       </button>
     </div>

@@ -1,4 +1,5 @@
 const express = require("express");
+const compression = require('compression')
 var cors = require("cors");
 var swaggerJsdoc = require("swagger-jsdoc")
 var swaggerUi = require("swagger-ui-express");
@@ -24,6 +25,7 @@ async function assertDatabaseConnectionOk() {
 }
 
 const app = express();
+app.use(compression());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 app.use(bodyParser.json({ limit: "50mb" }));
