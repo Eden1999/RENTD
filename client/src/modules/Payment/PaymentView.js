@@ -4,6 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import useToken from "../../helpers/useToken";
 import { formatCardNumber } from 'creditcardutils'
+import { CreditCard } from "@mui/icons-material";
 
 function PaymentView() {
     const { token } = useToken();
@@ -20,7 +21,54 @@ function PaymentView() {
     const [expirationMonth, setExpirationMonth] = useState('');
     const [expirationYear, setExpirationYear] = useState('');
     const [savedCardInfo, setSavedCardInfo] = useState({})
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+
+    const handleValidations = () => {
+        let errors = "";
+        let isFormValid = true;
+    
+        if (!fullName) {
+          isFormValid = false;
+          errors = errors + "full name cannot be empty, ";
+          setErrorMessage(errors);
+        } 
+        if(!phoneNumber.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
+          isFormValid = false;
+          errors = errors + "phone number not valid, ";
+          setErrorMessage(errors);
+        }
+        if(!email.match(/^\S+@\S+\.\S+$/)) {
+            isFormValid = false;
+            errors = errors + "email not valid, ";
+            setErrorMessage(errors);
+        }
+
+        if(!cardNumber) {
+            isFormValid = false;
+            errors = errors + "credit card number not valid, ";
+            setErrorMessage(errors);
+        }
+
+        if(!(expirationMonth <= 12 && expirationMonth > 1)) {
+            isFormValid = false;
+            errors = errors + "expiration month invalid, ";
+            setErrorMessage(errors);
+        } 
+        if(!(expirationYear >= 22 && expirationYear <= 99)) {
+            isFormValid = false;
+            errors = errors + "expiration year invalid, ";
+            setErrorMessage(errors);
+        } 
+
+        if(!securityCode.match(/[0-9]{3}/) || securityCode.length !== 3) { 
+            isFormValid = false;
+            errors = errors + "security code invalid ";
+            setErrorMessage(errors);
+        } 
+    
+        return isFormValid;
+    };
 
     useEffect(() => {
         getSavedCardInfo();
@@ -54,28 +102,31 @@ function PaymentView() {
             })
     };
 
-    const onSubmit = () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}orders/create`, rentingDetails)
-            .then((res) => {
-                toast.success('Your order has been confirmed!', {
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: false,
-                    pauseOnHover: false,
-                    draggable: true,
-                    onClose: () => navigate('/homepage')
-                });
-            })
-            .catch(err => {
-                toast.error('Error! something went wrong with the order', {
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: false,
-                    pauseOnHover: false,
-                    draggable: true,
-                });
-                console.log(err.response.data);
-            })
+    const onSubmit = (e) => {
+        if(handleValidations()) {
+            setErrorMessage("");
+            axios.post(`${process.env.REACT_APP_SERVER_URL}orders/create`, rentingDetails)
+                .then((res) => {
+                    toast.success('Your order has been confirmed!', {
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: false,
+                        draggable: true,
+                        onClose: () => navigate('/homepage')
+                    });
+                })
+                .catch(err => {
+                    toast.error('Error! something went wrong with the order', {
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: false,
+                        draggable: true,
+                    });
+                    console.log(err.response.data);
+                })
+        }
     }
 
     const getTotalPrice = () => {
@@ -95,6 +146,7 @@ function PaymentView() {
                             </label>
                             <input className="input input-bordered 2xl:select-lg font-normal w-full text-secondary"
                                 placeholder={'First Last'}
+                                type="text"
                                 value={fullName}
                                 onChange={(e) => { setFullName(e.target.value) }}
                             />
@@ -195,6 +247,7 @@ function PaymentView() {
                             onChange={(e) => { setSecurityCode(e.target.value) }}
                         />
                     </div>
+                    {errorMessage && <span className="text-red-500 font-bold">{errorMessage}</span>}
                     <div className="flex mb-6 justify-end">
                         <button type="button" className={"btn btn-lg btn-primary"} onClick={onSubmit}>Book Now</button>
                     </div>

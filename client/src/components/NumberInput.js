@@ -31,7 +31,7 @@ function NumberInput(props) {
                type="number"
                value={value}
                required
-               min={0}
+               min={1}
                className="input input-bordered 2xl:input-lg w-full text-secondary text-center"
                onChange={(event) => {
                  setValue(event.target.value);
