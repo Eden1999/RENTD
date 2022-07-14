@@ -16,42 +16,78 @@ const ProfileForm = () => {
     const [cardNumber, setCardNumber] = useState("");
     const [expirationMonth, setExpirationMonth] = useState("");
     const [expirationYear, setExpirationYear] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleValidations = () => {
+        let errors = "";
+        let isFormValid = true;
+    
+        if (!username) {
+          isFormValid = false;
+          errors = errors + "username cannot be empty, ";
+        } 
+        if(!email.match(/^\S+@\S+\.\S+$/)) {
+            isFormValid = false;
+            errors = errors + "email not valid, ";
+        }
+
+        if(Boolean(cardNumber || expirationMonth || expirationYear)) {
+            if(!cardNumber) {
+                isFormValid = false;
+                errors = errors + "credit card number not valid, ";
+            }
+
+            if(!(expirationMonth <= 12 && expirationMonth > 1)) {
+                isFormValid = false;
+                errors = errors + "expiration month invalid, ";
+            } 
+            if(!(expirationYear >= 22 && expirationYear <= 99)) {
+                isFormValid = false;
+                errors = errors + "expiration year invalid, ";
+            } 
+        }
+        
+        setErrorMessage(errors);
+        return isFormValid;
+    };
 
     const handleSave = () => {
-        const { id } = user;
-
-        axios.put(`${process.env.REACT_APP_SERVER_URL}users`,
-            { email, username, photo, cardNumber, expirationMonth, expirationYear }, {
-            headers: {
-                token
-            }
-        }).then((res) => {
-            const data = res.data;
-            if (data.updatedValues.length == 0) return;
-            
-            toast.success(data.message, {
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: true
+        if(handleValidations()) {
+            const { id } = user;
+    
+            axios.put(`${process.env.REACT_APP_SERVER_URL}users`,
+                { email, username, photo, cardNumber, expirationMonth, expirationYear }, {
+                headers: {
+                    token
+                }
+            }).then((res) => {
+                const data = res.data;
+                if (data.updatedValues.length == 0) return;
+                
+                toast.success(data.message, {
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: true
+                });
+                dispatch({
+                    type: "SET_GENERAL_STATE",
+                    payload: {
+                        user: res.data.user,
+                    },
+                });
+            }).catch((e) => {
+    
+                toast.error(e.response.data.message, {
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: true
+                });
             });
-            dispatch({
-                type: "SET_GENERAL_STATE",
-                payload: {
-                    user: res.data.user,
-                },
-            });
-        }).catch((e) => {
-
-            toast.error(e.response.data.message, {
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: true
-            });
-        });
+        }
     };
 
     const handlePhotoUpload = async (e) => {
@@ -159,6 +195,7 @@ const ProfileForm = () => {
                             </div>
                         </div>
                     </div>
+                    {errorMessage && <span className="text-red-500 font-bold">{errorMessage}</span>}
                     <div className="flex !justify-center !items-center space-x-2">
                         <button className={'btn btn-primary mt-6 text-sm cursor-pointer decoration-blue-500'}
                             onClick={() => handleSave()}>

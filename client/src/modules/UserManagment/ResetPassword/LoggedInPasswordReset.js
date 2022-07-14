@@ -32,6 +32,16 @@ function LoggedInPasswordReset() {
             });
             return false;
         }
+        if (newPassword.length < 6) {
+            toast.error('Password must contain at least 6 characters!', {
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+            });
+            return false;
+        }
         return true;
     }
 
