@@ -9,13 +9,21 @@ function WorkspaceForm() {
   const [city, setCity] = useState({});
   const [capacity, setCapacity] = useState(1);
   const [spaceType, setSpaceType] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleValidations = () => {
+    let errors = "";
     let isFormValid = true;
 
-    if (!city?.name || capacity < 1) {
+    if (!city?.name) {
       isFormValid = false;
+      errors = errors + "city cannot be empty, ";
+      setErrorMessage(errors);
+    } else if(capacity < 1) {
+      isFormValid = false;
+      errors = errors + "capacity needs to be greater than 1 ";
+      setErrorMessage(errors);
     }
 
     return isFormValid;
@@ -61,6 +69,7 @@ function WorkspaceForm() {
 
   return (
     <form autoComplete="off">
+      {errorMessage && <span className="text-red-500 font-bold">{errorMessage}</span>}
       <div className="mb-6">
         <label
           htmlFor="location"
@@ -110,7 +119,7 @@ function WorkspaceForm() {
         </div>
         <div>
           <button
-            type="submit"
+            type="button"
             onClick={(e) => {
               if (handleValidations()) {
                 navigate("/search", {
