@@ -3,7 +3,6 @@ const { sequelize } = require("../config/sequelize");
 const getAssetById = (req, res) => {
     const {id} = req.params;
 
-    console.log(id);
     sequelize.models.assets
         .findOne({where: {id}})
         .then((asset) => {
@@ -25,7 +24,6 @@ const getAssetById = (req, res) => {
 const getAssetsByWorkspaceId = (req, res) => {
     const {id} = req.params;
 
-    console.log(id);
     sequelize.models.assets
         .findAll({where: {workspace_id: id}})
         .then((assets) => {

@@ -479,6 +479,7 @@ const AddWorkspace = () => {
     </div>
   ) : (
     <div className="mx-20 my-4 text-center">
+      {errorMessage && <span className="text-red-500 font-bold">{errorMessage}</span>}
       <ul className="steps steps-vertical lg:steps-horizontal w-full mt-5">
         <li
           className={`step ${step === 0 ? "step-primary" : ""}`}
