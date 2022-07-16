@@ -21,7 +21,6 @@ module.exports = async (email, token) => {
     };
 
     return await mail.sendMail(mailOptions, function(error, info) {
-        console.log(324324)
         if (error) {
             console.log(error)
             return 1;
