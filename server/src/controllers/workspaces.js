@@ -119,12 +119,12 @@ const getUserFavoriteWorkspaces = (req, res) => {
     .then(async (user) => {
       if (user) {
         try {
-          let workspaces = await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces WHERE id IN(:workspaceIds)`, {
+          let workspaces = user?.dataValues?.favorite_workspaces?.length ? await sequelize.query(`SELECT id,name,city,address,host_id,location_x,location_y,description,wifi,disabled_access,space_type_id,opening_days,smoke_friendly,CARDINALITY(photos) AS photo_count,photos[1] AS preview_photo FROM public.workspaces WHERE id IN(:workspaceIds)`, {
             replacements: {
               workspaceIds: user?.dataValues?.favorite_workspaces || []
             },
             type: QueryTypes.SELECT
-          });
+          }) : [];
           if (workspaces) {
             const fullWorkspaces = await Promise.all(
               workspaces.map(async (workspace) => {
@@ -193,7 +193,9 @@ const createNewWorkspace = async (req, res) => {
           try {
             let newPhoto = "data:image/jpeg;base64," + (await sharp(buffer).jpeg({ progressive: true, quality: 70, force: true }).toBuffer()).toString('base64');
             workspace.photos[id] = newPhoto.length < photo.length ? newPhoto : photo;
-          } catch { }
+          } catch (err) {
+              console.log(err)
+           }
         }));
 
         sequelize.models.workspaces
@@ -212,7 +214,7 @@ const createNewWorkspace = async (req, res) => {
                     return res.status(err.status || 500).send(err.message || err.errors[0].message);
                   });
               });
-              return res.status(400).send();
+              return res.status(200).send();
             }
           })
           .catch((err) => {
