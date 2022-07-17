@@ -43,7 +43,7 @@ const WorkspacePage = () => {
 
         Array(numPhotos).fill(1).map(async (x, y) => {
           let index = x + y;
-          const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/${workspace.host_id}/photos/${index}`, {
+          const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/${workspace.id}/photos/${index}`, {
             headers: {
               token,
             }
