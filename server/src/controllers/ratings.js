@@ -28,7 +28,6 @@ const getRatingsByWorkspaceId = (req, res) => {
 const createNewRating = (req, res) => {
     const { token } = req.headers;
   const {
-    user_id,
     workspace_id,
     rating,
     comment
