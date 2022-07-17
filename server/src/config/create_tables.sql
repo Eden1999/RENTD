@@ -24,12 +24,11 @@ ALTER TABLE IF EXISTS public.orders
 CREATE TABLE IF NOT EXISTS public.ratings
 (
     id SERIAL,
-    workspace_id bigint NOT NULL,
-    user_id bigint NOT NULL,
+    workspace_id bigint NOT NULL UNIQUE,
+    user_id bigint NOT NULL UNIQUE,
     rating INTEGER NOT NULL,
     comment character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT ratings_pkey PRIMARY KEY (id)
-    UNIQUE (workspace_id, user_id)
 )
 
 TABLESPACE pg_default;

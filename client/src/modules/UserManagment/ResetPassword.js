@@ -14,9 +14,4 @@ const ResetPassword = () => {
     }
 };
 
-ResetPassword.propTypes = {
-    // setToken: PropTypes.func.isRequired,
-    // setRegisterMode: PropTypes.func.isRequired,
-};
-
 export default ResetPassword;

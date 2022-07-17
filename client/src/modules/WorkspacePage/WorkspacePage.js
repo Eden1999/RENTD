@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import useToken from "../../helpers/useToken";
@@ -14,7 +14,6 @@ import {
   SmokingRooms,
   Accessible,
   Star,
-  Workspaces
 } from "@mui/icons-material";
 import Orders from "../Orders/Orders";
 
@@ -43,7 +42,7 @@ const WorkspacePage = () => {
 
         Array(numPhotos).fill(1).map(async (x, y) => {
           let index = x + y;
-          const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/${workspace.host_id}/photos/${index}`, {
+          const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}workspaces/${workspace.id}/photos/${index}`, {
             headers: {
               token,
             }

@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { AppContext } from "../../store/AppContext";
 import { defaultRoutes, userTypes } from "../consts";
-import useToken from '../useToken';
 
 const classifyUser = (user) => {
     if(Object.keys(user).length) {

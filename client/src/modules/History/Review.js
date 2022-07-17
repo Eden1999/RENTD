@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const Review = ({open, setOpen, workspace_id, orders, setOrders}) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const { token, setToken } = useToken();
+  const { token } = useToken();
 
   const handleClose = () => {
     setRating(0);

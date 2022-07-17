@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useContext} from "react";
+import React, {useState, useContext} from "react";
 import axios from "axios";
 import {Container, CssBaseline, Box, Typography, TextField, Button} from "@mui/material";
 import {useNavigate} from "react-router";
@@ -7,9 +7,7 @@ import {AppContext} from "../../../store/AppContext";
 
 const EmailPasswordReset = () => {
     const navigate = useNavigate();
-    const [, dispatch] = useContext(AppContext);
     const [email, setEmail] = useState("");
-    const [id, setId] = useState("");
     const [mailStatus, setMailStatus] = useState(0);
     const [tokenStatus, setTokenStatus] = useState(0);
     const [password, setPassword] = useState("");

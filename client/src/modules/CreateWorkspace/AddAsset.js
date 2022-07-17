@@ -1,17 +1,6 @@
-import React, { useState, useCallback, useContext, useEffect } from "react";
-import {
-    Container,
-    CssBaseline,
-    Box,
-    TextField,
-    Button,
-    Autocomplete,
-    OutlinedInput,
-    IconButton,
-  } from "@mui/material";
+import React, { useState, useEffect } from "react";
   import DeleteIcon from '@mui/icons-material/Delete';
   import Axios from "axios";
-import {Add} from "@mui/icons-material";
 
 const AddAsset = ({ asset, handleChange, index, handleDelete }) => {
   const [assetTypes, setAssetTypes] = useState([{ id: 1, name: "" }]);

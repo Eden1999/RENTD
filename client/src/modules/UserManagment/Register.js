@@ -1,10 +1,7 @@
 import React, { useState, useCallback, useContext } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
-import { Container, CssBaseline, Box, Typography, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { AppContext } from "../../store/AppContext";
-import Checkbox from "@mui/material/Checkbox";
 import useToken from "../../helpers/useToken";
 import { formatCardNumber } from 'creditcardutils'
 import { toast } from "react-toastify";
