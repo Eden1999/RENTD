@@ -12,8 +12,6 @@ const Map = ({ hoveredMarkerId, onMarkerHover, markers, center_location }) => {
     onMarkerHover(null);
   };
 
-  console.log(markers);
-
   return (
     <div className="h-full w-full">
       <GoogleMapReact
