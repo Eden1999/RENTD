@@ -7,6 +7,8 @@ router.get('/', UsersController.getUsersList);
 
 router.get('/:id(\\d+)', UsersController.getUserById);
 
+router.get('/getCardInfo', UsersController.getCreditCardInfo);
+
 router.post('/register', UsersController.registerNewUser);
 
 router.post('/signIn', UsersController.signIn);
@@ -28,7 +30,5 @@ router.post('/change-password', UsersController.changePassword);
 router.post('/update-username', UsersController.updateUsername);
 
 router.post('/upload-profile-image', UsersController.uploadProfilePhoto);
-
-router.get('/getCardInfo', UsersController.getCreditCardInfo);
 
 module.exports = router;

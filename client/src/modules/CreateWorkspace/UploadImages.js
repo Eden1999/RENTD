@@ -7,7 +7,7 @@ const UploadImages = ({ workspace, handlePhotoUpload, handleImageDelete }) => {
       <div className="flex flex-row flex-wrap justify-center mt-10">
         {workspace.photos?.map((photo, index) => {
           return (
-            <div class="mask w-44 h-44 mb-8 mr-5">
+            <div class="mask w-44 h-44 mb-8 mr-5" key={index}>
                 <img className="h-36" src={photo} />
                 <button className="btn btn-circle" onClick={() => {handleImageDelete(index)}}>
                     <DeleteIcon />
