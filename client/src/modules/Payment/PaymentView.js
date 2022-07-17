@@ -93,7 +93,6 @@ function PaymentView() {
                 headers: { token: token }
             })
             .then((res) => {
-                console.log(res);
                 if (res.status == 200) {
                     setSavedCardInfo({ cardNumber: res.data.card_number, expirationMonth: res.data.expiration_month, expirationYear: res.data.expiration_year });
                     setCardInfoAvailable(true);
@@ -209,7 +208,7 @@ function PaymentView() {
                                 placeholder={'XXXX XXXX XXXX XXXX'}
                                 value={useSavedCardInfo ? cardNumber : formatCardNumber(cardNumber)}
                                 readOnly={useSavedCardInfo}
-                                onChange={(e) => { console.log("triggered"); setCardNumber(e.target.value) }}
+                                onChange={(e) => { setCardNumber(e.target.value) }}
                             />
                         </div>
                         <div className="w-1/2 ml-6">

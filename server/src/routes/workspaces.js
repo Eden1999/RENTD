@@ -7,18 +7,17 @@ router.get("/userFavoriteWorkspaces", WorkspacesController.getUserFavoriteWorksp
 
 router.get("/hosts/:hostId", WorkspacesController.getWorkspacesByHostId);
 
-router.post("/create", WorkspacesController.createNewWorkspace);
-
-router.post("/search", WorkspacesController.searchWorkspaces);
+router.get("/:workspaceId/photos/:photoId", WorkspacesController.getWorkspacePhotos);
 
 router.get("/recommendations/:userId", WorkspacesController.getUserRecommendations);
 
 router.post("/create", WorkspacesController.createNewWorkspace);
+
+router.post("/search", WorkspacesController.searchWorkspaces);
+
 router.put("/edit/:workspaceId", WorkspacesController.editWorkspace);
 
 router.delete("/:id", WorkspacesController.deleteWorkspace);
-
-router.get("/:workspaceId/photos/:photoId", WorkspacesController.getWorkspacePhotos);
 
 
 module.exports = router;

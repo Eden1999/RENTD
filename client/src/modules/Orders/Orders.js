@@ -69,7 +69,6 @@ const Orders = ({ workspace }) => {
   useEffect(() => {
     let assets = workspace.assets.map((asset) => {
       let assetType = assetTypes.find((type) => type.id.toString() === asset.asset_id);
-      console.log(asset)
       if (assetType) {
         asset.text = assetType.name + ` ${asset.cost_per_hour}₪ per 1 hour/person`;
       }
@@ -110,15 +109,10 @@ const Orders = ({ workspace }) => {
       id: e.appointmentData.id,
     };
 
-    console.log(newOrder);
-
     const query = newOrder;
 
     axios
       .put(`${process.env.REACT_APP_SERVER_URL}orders/${newOrder.id}`, query)
-      .then((res) => {
-        console.log("successfully updates");
-      })
       .catch((err) => {
         alert(err.response.data);
       });
@@ -127,13 +121,8 @@ const Orders = ({ workspace }) => {
   const HandalingDeleteOrder = useCallback(async (e) => {
     let id = e.appointmentData.id;
 
-    console.log(`try delete id ${id}`);
-
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}orders/${id}`)
-      .then((res) => {
-        console.log("successfully deleted");
-      })
       .catch((err) => {
         alert(err.response.data);
       });

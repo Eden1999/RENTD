@@ -178,7 +178,6 @@ const AddWorkspace = () => {
             }
           )
           .then((res) => {
-            console.log("success");
             navigate("/my-spaces");
             // navigate(-1)
           })
@@ -197,7 +196,6 @@ const AddWorkspace = () => {
             }
           )
           .then(() => {
-            console.log("success");
             navigate("/my-spaces");
             // navigate(-1, { state: { workspace }, replace: true })
           })
@@ -245,7 +243,6 @@ const AddWorkspace = () => {
   };
 
   const onAddAssetClick = useCallback(async (e) => {
-    console.log("hey");
     let newArray = [...workspace.assets];
     let asset = {
       capacity: 2,

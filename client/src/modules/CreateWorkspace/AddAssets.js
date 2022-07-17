@@ -7,7 +7,6 @@ const AddAssets = ({ workspace, handleChangeAsset, handleDeleteAsset, onAddAsset
     <div className="flex flex-row text-center flex-wrap">
       {workspace.assets &&
         workspace.assets.map((curAsset, index) => {
-          console.log(curAsset)
           return (
             <AddAsset
               key={curAsset.id}

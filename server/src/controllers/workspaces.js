@@ -193,7 +193,10 @@ const createNewWorkspace = async (req, res) => {
           try {
             let newPhoto = "data:image/jpeg;base64," + (await sharp(buffer).jpeg({ progressive: true, quality: 70, force: true }).toBuffer()).toString('base64');
             workspace.photos[id] = newPhoto.length < photo.length ? newPhoto : photo;
-          } catch { }
+          } catch(err) {
+            console.log(`failed to compress photos: ` + err);
+            return res.status(err.status || 500).send(err.message || err.errors[0].message);
+          }
         }));
 
         sequelize.models.workspaces
@@ -212,7 +215,7 @@ const createNewWorkspace = async (req, res) => {
                     return res.status(err.status || 500).send(err.message || err.errors[0].message);
                   });
               });
-              return res.status(400).send();
+              return res.status(200).send();
             }
           })
           .catch((err) => {

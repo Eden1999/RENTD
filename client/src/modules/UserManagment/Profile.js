@@ -12,7 +12,6 @@ const Profile = () => {
         await axios.get(`${process.env.REACT_APP_SERVER_URL}availabilities/${user.id}?date=${date}`, {
         })
         .then((res) => {
-            console.log("success")
             setWorkspaces(res.data)
         })
         .catch(err =>{
