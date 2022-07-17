@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import useToken from "../../helpers/useToken";
 import { formatCardNumber } from 'creditcardutils'
-import { CreditCard } from "@mui/icons-material";
 
 function PaymentView() {
     const { token } = useToken();

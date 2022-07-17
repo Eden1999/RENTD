@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import useToken from "../../helpers/useToken";
@@ -14,7 +14,6 @@ import {
   SmokingRooms,
   Accessible,
   Star,
-  Workspaces
 } from "@mui/icons-material";
 import Orders from "../Orders/Orders";
 

@@ -8,7 +8,7 @@ function LoggedInPasswordReset() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordRepeat, setNewPasswordRepeat] = useState("");
-    const { token, setToken } = useToken();
+    const { token } = useToken();
     const navigate = useNavigate();
 
     const verifyInputs = () => {
